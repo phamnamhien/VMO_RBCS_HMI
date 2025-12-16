@@ -9,36 +9,35 @@
 #ifndef UI_SUPPORT_H
 #define UI_SUPPORT_H
 
+#include <stdarg.h>
 #include <stdbool.h>
-#include "lvgl.h"
-#include "ui_support.h"
+#include <stdio.h>
+#include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
-#include "esp_log.h"
-#include <stdarg.h>
-#include <stdio.h>
+#include "lvgl.h"
+#include "ui_support.h"
 
 #include "ui.h"
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // LCD Configuration
-#define LCD_NUM_FB                  1  // Double buffer for maximum speed
-#define LCD_H_RES                   800
-#define LCD_V_RES                   480
+#define LCD_NUM_FB                 1 // Double buffer for maximum speed
+#define LCD_H_RES                  800
+#define LCD_V_RES                  480
 
 // LVGL Task Configuration
-#define LCD_LVGL_TICK_PERIOD_MS     1
-#define LCD_LVGL_TASK_MAX_DELAY_MS  500
-#define LCD_LVGL_TASK_MIN_DELAY_MS  1
-#define LCD_LVGL_TASK_STACK_SIZE    (4 * 1024)
-#define LCD_LVGL_TASK_PRIORITY      2
+#define LCD_LVGL_TICK_PERIOD_MS    1
+#define LCD_LVGL_TASK_MAX_DELAY_MS 500
+#define LCD_LVGL_TASK_MIN_DELAY_MS 1
+#define LCD_LVGL_TASK_STACK_SIZE   (4 * 1024)
+#define LCD_LVGL_TASK_PRIORITY     2
 
-#define BTN_COLOR_NORMAL 0xECECEC
-#define BTN_COLOR_ACTIVE 0xD5FFCD
+#define BTN_COLOR_NORMAL           0xECECEC
+#define BTN_COLOR_ACTIVE           0xD5FFCD
 // ============================================
 // LVGL Thread Safety
 // ============================================
@@ -80,7 +79,7 @@ void ui_unlock(void);
  * @example
  * ui_load_screen(ui_Screen1);
  */
-bool ui_load_screen(lv_obj_t *screen);
+bool ui_load_screen(lv_obj_t* screen);
 
 /**
  * @brief Load screen with fade animation
@@ -90,14 +89,13 @@ bool ui_load_screen(lv_obj_t *screen);
  * @param delay Delay before animation starts (ms)
  * @return true if successful, false otherwise
  */
-bool ui_load_screen_fade(lv_obj_t *screen, uint32_t fade_time, uint32_t delay);
+bool ui_load_screen_fade(lv_obj_t* screen, uint32_t fade_time, uint32_t delay);
 
 /**
  * @brief Load screen with slide animation
  */
-bool ui_load_screen_slide(lv_obj_t *screen, lv_scr_load_anim_t anim_type, 
-                          uint32_t time, uint32_t delay);
-                          
+bool ui_load_screen_slide(lv_obj_t* screen, lv_scr_load_anim_t anim_type, uint32_t time, uint32_t delay);
+
 /**
  * @brief Get current active screen
  * 
@@ -116,7 +114,7 @@ lv_obj_t* ui_get_current_screen(void);
  * @param text New text string
  * @return true if successful, false otherwise
  */
-bool ui_label_set_text(lv_obj_t *label, const char *text);
+bool ui_label_set_text(lv_obj_t* label, const char* text);
 
 /**
  * @brief Update label with formatted text
@@ -129,7 +127,7 @@ bool ui_label_set_text(lv_obj_t *label, const char *text);
  * @example
  * ui_label_set_text_fmt(ui_Label1, "Temp: %d°C", temperature);
  */
-bool ui_label_set_text_fmt(lv_obj_t *label, const char *fmt, ...);
+bool ui_label_set_text_fmt(lv_obj_t* label, const char* fmt, ...);
 
 /**
  * @brief Update image source safely
@@ -138,7 +136,7 @@ bool ui_label_set_text_fmt(lv_obj_t *label, const char *fmt, ...);
  * @param src Image source (pointer or path)
  * @return true if successful, false otherwise
  */
-bool ui_image_set_src(lv_obj_t *img, const void *src);
+bool ui_image_set_src(lv_obj_t* img, const void* src);
 
 /**
  * @brief Update arc value safely
@@ -147,7 +145,7 @@ bool ui_image_set_src(lv_obj_t *img, const void *src);
  * @param value New value
  * @return true if successful, false otherwise
  */
-bool ui_arc_set_value(lv_obj_t *arc, int16_t value);
+bool ui_arc_set_value(lv_obj_t* arc, int16_t value);
 
 /**
  * @brief Update bar value safely
@@ -157,7 +155,7 @@ bool ui_arc_set_value(lv_obj_t *arc, int16_t value);
  * @param anim Enable animation (true/false)
  * @return true if successful, false otherwise
  */
-bool ui_bar_set_value(lv_obj_t *bar, int32_t value, bool anim);
+bool ui_bar_set_value(lv_obj_t* bar, int32_t value, bool anim);
 
 /**
  * @brief Update slider value safely
@@ -167,7 +165,7 @@ bool ui_bar_set_value(lv_obj_t *bar, int32_t value, bool anim);
  * @param anim Enable animation (true/false)
  * @return true if successful, false otherwise
  */
-bool ui_slider_set_value(lv_obj_t *slider, int32_t value, bool anim);
+bool ui_slider_set_value(lv_obj_t* slider, int32_t value, bool anim);
 
 // ============================================
 // Object Visibility
@@ -180,7 +178,7 @@ bool ui_slider_set_value(lv_obj_t *slider, int32_t value, bool anim);
  * @param visible true to show, false to hide
  * @return true if successful, false otherwise
  */
-bool ui_object_set_visible(lv_obj_t *obj, bool visible);
+bool ui_object_set_visible(lv_obj_t* obj, bool visible);
 
 /**
  * @brief Enable/disable object safely
@@ -189,7 +187,7 @@ bool ui_object_set_visible(lv_obj_t *obj, bool visible);
  * @param enabled true to enable, false to disable
  * @return true if successful, false otherwise
  */
-bool ui_object_set_enabled(lv_obj_t *obj, bool enabled);
+bool ui_object_set_enabled(lv_obj_t* obj, bool enabled);
 
 // ============================================
 // Event Callbacks (Run in LVGL task)
@@ -200,7 +198,7 @@ bool ui_object_set_enabled(lv_obj_t *obj, bool enabled);
  * 
  * @param user_data User-provided data pointer
  */
-typedef void (*ui_callback_t)(void *user_data);
+typedef void (*ui_callback_t)(void* user_data);
 
 /**
  * @brief Execute callback in LVGL task context
@@ -221,7 +219,7 @@ typedef void (*ui_callback_t)(void *user_data);
  * int temperature = 25;
  * ui_execute_callback(update_ui, &temperature);
  */
-bool ui_execute_callback(ui_callback_t callback, void *user_data);
+bool ui_execute_callback(ui_callback_t callback, void* user_data);
 
 // ============================================
 // Initialization
@@ -236,7 +234,7 @@ bool ui_execute_callback(ui_callback_t callback, void *user_data);
  * @param lvgl_mutex Pointer to LVGL mutex (SemaphoreHandle_t)
  * @return true if successful, false otherwise
  */
-bool ui_support_init(void *lvgl_mutex);
+bool ui_support_init(void* lvgl_mutex);
 
 /**
  * @brief Set background color cho button bất kỳ
@@ -244,14 +242,13 @@ bool ui_support_init(void *lvgl_mutex);
  * @param button Pointer đến button object (ui_btMainSlot1 -> ui_btMainSlot5)
  * @param color Mã màu HEX (ví dụ: 0xFF0000 cho đỏ)
  */
-void ui_set_button_color(lv_obj_t *button, uint32_t color);
+void ui_set_button_color(lv_obj_t* button, uint32_t color);
 
 /**
  * @brief Hiển thị slot serial detail
  * 
  * @param slot_number 0 = tắt tất cả, 1-5 = hiển thị slot tương ứng (ẩn các slot khác)
  */
-
 
 #ifdef __cplusplus
 }

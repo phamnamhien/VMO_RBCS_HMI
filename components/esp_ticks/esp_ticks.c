@@ -5,24 +5,24 @@
  */
 
 #include <string.h>
+#include "esp_log.h"
 #include "esp_ticks.h"
 #include "esp_timer.h"
-#include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 
-static const char *TAG = "ticks";
+static const char* TAG = "ticks";
 
 /**
  * @brief Internal timer structure
  */
 typedef struct tick_s {
-    tick_callback_t callback;   /*!< Callback function */
-    tick_type_t type;           /*!< Timer type */
-    void *arg;                  /*!< User argument */
-    uint32_t period_ms;         /*!< Period in milliseconds */
-    uint32_t countdown_ms;      /*!< Remaining milliseconds */
-    bool is_active;             /*!< Active flag */
+    tick_callback_t callback; /*!< Callback function */
+    tick_type_t type;         /*!< Timer type */
+    void* arg;                /*!< User argument */
+    uint32_t period_ms;       /*!< Period in milliseconds */
+    uint32_t countdown_ms;    /*!< Remaining milliseconds */
+    bool is_active;           /*!< Active flag */
 } tick_t;
 
 /**
@@ -41,27 +41,27 @@ static ticks_manager_t s_ticks_mgr = {0};
 /**
  * @brief Process all active timers (called every 1ms)
  */
-static void ticks_process_timers(void)
-{
+static void
+ticks_process_timers(void) {
     if (xSemaphoreTake(s_ticks_mgr.mutex, 0) != pdTRUE) {
-        return;  // Skip if mutex is busy
+        return; // Skip if mutex is busy
     }
 
     s_ticks_mgr.system_ticks++;
 
     for (uint8_t i = 0; i < CONFIG_TICKS_MAX_TIMERS; i++) {
-        tick_t *timer = &s_ticks_mgr.timers[i];
-        
+        tick_t* timer = &s_ticks_mgr.timers[i];
+
         if (timer->is_active && timer->callback) {
             if (--timer->countdown_ms == 0) {
                 // Timer expired
                 if (timer->type == TICK_ONCE) {
                     timer->is_active = false;
                 }
-                
+
                 // Call callback
                 timer->callback(timer->arg);
-                
+
                 // Reload for periodic timers
                 if (timer->type == TICK_PERIODIC) {
                     timer->countdown_ms = timer->period_ms;
@@ -76,13 +76,13 @@ static void ticks_process_timers(void)
 /**
  * @brief ESP timer callback (1ms periodic)
  */
-static void ticks_esp_timer_callback(void *arg)
-{
+static void
+ticks_esp_timer_callback(void* arg) {
     ticks_process_timers();
 }
 
-esp_err_t ticks_init(void)
-{
+esp_err_t
+ticks_init(void) {
     if (s_ticks_mgr.initialized) {
         ESP_LOGW(TAG, "Already initialized");
         return ESP_OK;
@@ -99,13 +99,11 @@ esp_err_t ticks_init(void)
     }
 
     // Create ESP timer (1ms periodic)
-    const esp_timer_create_args_t timer_args = {
-        .callback = ticks_esp_timer_callback,
-        .arg = NULL,
-        .dispatch_method = ESP_TIMER_TASK,
-        .name = "ticks_timer",
-        .skip_unhandled_events = true
-    };
+    const esp_timer_create_args_t timer_args = {.callback = ticks_esp_timer_callback,
+                                                .arg = NULL,
+                                                .dispatch_method = ESP_TIMER_TASK,
+                                                .name = "ticks_timer",
+                                                .skip_unhandled_events = true};
 
     esp_err_t err = esp_timer_create(&timer_args, &s_ticks_mgr.esp_timer);
     if (err != ESP_OK) {
@@ -125,12 +123,12 @@ esp_err_t ticks_init(void)
 
     s_ticks_mgr.initialized = true;
     ESP_LOGI(TAG, "Initialized successfully");
-    
+
     return ESP_OK;
 }
 
-esp_err_t ticks_deinit(void)
-{
+esp_err_t
+ticks_deinit(void) {
     if (!s_ticks_mgr.initialized) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -150,15 +148,12 @@ esp_err_t ticks_deinit(void)
 
     s_ticks_mgr.initialized = false;
     ESP_LOGI(TAG, "Deinitialized");
-    
+
     return ESP_OK;
 }
 
-esp_err_t ticks_create(tick_handle_t *out_handle, 
-                       tick_callback_t callback,
-                       tick_type_t type, 
-                       void *arg)
-{
+esp_err_t
+ticks_create(tick_handle_t* out_handle, tick_callback_t callback, tick_type_t type, void* arg) {
     if (!s_ticks_mgr.initialized) {
         ESP_LOGE(TAG, "Not initialized");
         return ESP_ERR_INVALID_STATE;
@@ -200,8 +195,8 @@ esp_err_t ticks_create(tick_handle_t *out_handle,
     return ESP_OK;
 }
 
-esp_err_t ticks_start(tick_handle_t handle, uint32_t timeout_ms)
-{
+esp_err_t
+ticks_start(tick_handle_t handle, uint32_t timeout_ms) {
     if (!s_ticks_mgr.initialized) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -219,12 +214,12 @@ esp_err_t ticks_start(tick_handle_t handle, uint32_t timeout_ms)
     handle->is_active = true;
 
     xSemaphoreGive(s_ticks_mgr.mutex);
-    
+
     return ESP_OK;
 }
 
-esp_err_t ticks_stop(tick_handle_t handle)
-{
+esp_err_t
+ticks_stop(tick_handle_t handle) {
     if (!s_ticks_mgr.initialized) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -240,12 +235,12 @@ esp_err_t ticks_stop(tick_handle_t handle)
     handle->is_active = false;
 
     xSemaphoreGive(s_ticks_mgr.mutex);
-    
+
     return ESP_OK;
 }
 
-esp_err_t ticks_delete(tick_handle_t handle)
-{
+esp_err_t
+ticks_delete(tick_handle_t handle) {
     if (!s_ticks_mgr.initialized) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -266,17 +261,17 @@ esp_err_t ticks_delete(tick_handle_t handle)
     handle->type = TICK_ONCE;
 
     xSemaphoreGive(s_ticks_mgr.mutex);
-    
+
     return ESP_OK;
 }
 
-uint32_t ticks_get(void)
-{
+uint32_t
+ticks_get(void) {
     return s_ticks_mgr.system_ticks;
 }
 
-bool ticks_is_active(tick_handle_t handle)
-{
+bool
+ticks_is_active(tick_handle_t handle) {
     if (!s_ticks_mgr.initialized || handle == NULL) {
         return false;
     }

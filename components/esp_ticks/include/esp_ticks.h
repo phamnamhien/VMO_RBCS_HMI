@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include "esp_err.h"
 #include "sdkconfig.h"
 
@@ -22,24 +22,24 @@ extern "C" {
  * @brief Timer mode: one-shot or periodic
  */
 typedef enum {
-    TICK_ONCE = 0,      /*!< One-shot timer mode */
-    TICK_PERIODIC = 1   /*!< Periodic timer mode */
+    TICK_ONCE = 0,    /*!< One-shot timer mode */
+    TICK_PERIODIC = 1 /*!< Periodic timer mode */
 } tick_type_t;
 
 /**
  * @brief Opaque timer handle structure
  */
-typedef struct tick_s *tick_handle_t;
+typedef struct tick_s* tick_handle_t;
 
 /**
  * @brief Timer callback function type
  * 
  * @param arg User argument passed to callback
  */
-typedef void (*tick_callback_t)(void *arg);
+typedef void (*tick_callback_t)(void* arg);
 
 #ifndef CONFIG_TICKS_MAX_TIMERS
-#define CONFIG_TICKS_MAX_TIMERS 8  /*!< Maximum concurrent timers */
+#define CONFIG_TICKS_MAX_TIMERS 8 /*!< Maximum concurrent timers */
 #endif
 
 /**
@@ -79,10 +79,7 @@ esp_err_t ticks_deinit(void);
  *     - ESP_ERR_INVALID_ARG: Invalid parameter
  *     - ESP_ERR_NO_MEM: No free timer slots available
  */
-esp_err_t ticks_create(tick_handle_t *out_handle, 
-                       tick_callback_t callback,
-                       tick_type_t type, 
-                       void *arg);
+esp_err_t ticks_create(tick_handle_t* out_handle, tick_callback_t callback, tick_type_t type, void* arg);
 
 /**
  * @brief Start or restart a timer
