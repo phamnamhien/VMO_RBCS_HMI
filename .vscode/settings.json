@@ -11,10 +11,10 @@
     "ESP_ROM_ELF_DIR": "e:\\Espressif\\tools\\esp-rom-elfs\\20230320/",
     "IDF_TARGET": "esp32s3"
   },
-  "clangd.path": "e:\\Espressif\\tools\\esp-clang\\esp-19.1.2_20250312\\esp-clang\\bin\\clangd.exe",
+  "clangd.path": "C:\\Users\\phamnamhien\\.espressif\\tools\\esp-clang\\esp-19.1.2_20250312\\esp-clang\\bin\\clangd.exe",
   "clangd.arguments": [
     "--background-index",
-    "--query-driver=e:\\Espressif\\tools\\xtensa-esp-elf\\esp-14.2.0_20241119\\xtensa-esp-elf\\bin\\xtensa-esp32s3-elf-gcc.exe",
-    "--compile-commands-dir=d:\\Documents\\GitHub\\vinmotion\\RobotBatteryChargingStation\\02_Firmwares\\RBCS_HMI\\build"
+    "--query-driver=C:\\Users\\phamnamhien\\.espressif\\tools\\xtensa-esp-elf\\esp-14.2.0_20241119\\xtensa-esp-elf\\bin\\xtensa-esp32s3-elf-gcc.exe",
+    "--compile-commands-dir=c:\\Users\\phamnamhien\\Documents\\GitHub\\vinmotion\\VMO_RBCS\\02_Firmwares\\VMO_RBCS_HMI\\build"
   ]
 }
