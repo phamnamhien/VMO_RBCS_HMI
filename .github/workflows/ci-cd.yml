@@ -52,4 +52,9 @@ jobs:
         idf.py set-target esp32s3
 
     - name: Build project
-      run: idf.py build
+      run: |
+        rm -f dependencies.lock
+        rm -rf build
+        idf.py set-target esp32s3
+        idf.py update-dependencies
+        idf.py build
