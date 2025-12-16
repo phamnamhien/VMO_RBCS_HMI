@@ -27,49 +27,42 @@ SOFTWARE.
 
 #if HSM_FEATURE_DEBUG_NESTED_CALL
 uint8_t gucHsmNestLevel;
-const char * const apucHsmNestIndent[] = { "", "", "\t", "\t\t", "\t\t\t", "\t\t\t\t"};
+const char* const apucHsmNestIndent[] = {"", "", "\t", "\t\t", "\t\t\t", "\t\t\t\t"};
 #endif // HSM_FEATURE_DEBUG_NESTED_CALL
 
-HSM_EVENT HSM_RootHandler(HSM *This, HSM_EVENT event, void *param)
-{
+HSM_EVENT
+HSM_RootHandler(HSM* This, HSM_EVENT event, void* param) {
 #ifdef HSM_DEBUG_EVT2STR
-    HSM_DEBUG("\tEvent:%s dropped, No Parent handling of %s[%s] param %lx",
-              HSM_DEBUG_EVT2STR(event), This->name, This->curState->name, (unsigned long)param);
+    HSM_DEBUG("\tEvent:%s dropped, No Parent handling of %s[%s] param %lx", HSM_DEBUG_EVT2STR(event), This->name,
+              This->curState->name, (unsigned long)param);
 #else
-    HSM_DEBUG("\tEvent:%lx dropped, No Parent handling of %s[%s] param %lx",
-              (unsigned long)event, This->name, This->curState->name, (unsigned long)param);
+    HSM_DEBUG("\tEvent:%lx dropped, No Parent handling of %s[%s] param %lx", (unsigned long)event, This->name,
+              This->curState->name, (unsigned long)param);
 #endif // HSM_DEBUG_EVT2STR
     return HSME_NULL;
 }
 
-HSM_STATE const HSM_ROOT =
-{
-    .parent = ((void *)0),
-    .handler = HSM_RootHandler,
-    .name = ":ROOT:",
-    .level = 0
-};
+HSM_STATE const HSM_ROOT = {.parent = ((void*)0), .handler = HSM_RootHandler, .name = ":ROOT:", .level = 0};
 
-void HSM_STATE_Create(HSM_STATE *This, const char *name, HSM_FN handler, HSM_STATE *parent)
-{
-    if (((void *)0) == parent)
-    {
-        parent = (HSM_STATE *)&HSM_ROOT;
+void
+HSM_STATE_Create(HSM_STATE* This, const char* name, HSM_FN handler, HSM_STATE* parent) {
+    if (((void*)0) == parent) {
+        parent = (HSM_STATE*)&HSM_ROOT;
     }
     This->name = name;
     This->handler = handler;
     This->parent = parent;
     This->level = parent->level + 1;
-    if (This->level >= HSM_MAX_DEPTH)
-    {
+    if (This->level >= HSM_MAX_DEPTH) {
         HSM_DEBUG("Please increase HSM_MAX_DEPTH > %d", This->level);
         // assert(0, "Please increase HSM_MAX_DEPTH");
-        while(1);
+        while (1)
+            ;
     }
 }
 
-void HSM_Create(HSM *This, const char *name, HSM_STATE *initState)
-{
+void
+HSM_Create(HSM* This, const char* name, HSM_STATE* initState) {
     // Setup debug
 #if HSM_FEATURE_DEBUG_ENABLE
     This->name = name;
@@ -89,20 +82,18 @@ void HSM_Create(HSM *This, const char *name, HSM_STATE *initState)
     This->curState->handler(This, HSME_INIT, 0);
 }
 
-HSM_STATE *HSM_GetState(HSM *This)
-{
+HSM_STATE*
+HSM_GetState(HSM* This) {
     // This returns the current HSM state
     return This->curState;
 }
 
-uint8_t HSM_IsInState(HSM *This, HSM_STATE *state)
-{
-    HSM_STATE *curState;
+uint8_t
+HSM_IsInState(HSM* This, HSM_STATE* state) {
+    HSM_STATE* curState;
     // Traverse the parents to find the matching state.
-    for (curState = This->curState; curState; curState = curState->parent)
-    {
-        if (state == curState)
-        {
+    for (curState = This->curState; curState; curState = curState->parent) {
+        if (state == curState) {
             // Match found, HSM is in state or parent state
             return 1;
         }
@@ -111,8 +102,8 @@ uint8_t HSM_IsInState(HSM *This, HSM_STATE *state)
     return 0;
 }
 
-void HSM_Run(HSM *This, HSM_EVENT event, void *param)
-{
+void
+HSM_Run(HSM* This, HSM_EVENT event, void* param) {
 #if HSM_FEATURE_DEBUG_ENABLE && HSM_FEATURE_DEBUG_NESTED_CALL
     // Increment the nesting count
     gucHsmNestLevel++;
@@ -120,18 +111,18 @@ void HSM_Run(HSM *This, HSM_EVENT event, void *param)
 
     // This runs the state's event handler and forwards unhandled events to
     // the parent state
-    HSM_STATE *state = This->curState;
+    HSM_STATE* state = This->curState;
 #ifdef HSM_DEBUG_EVT2STR
-    HSM_DEBUGC1("Run %s[%s](evt:%s, param:%08lx)", This->name, state->name, HSM_DEBUG_EVT2STR(event), (unsigned long)param);
+    HSM_DEBUGC1("Run %s[%s](evt:%s, param:%08lx)", This->name, state->name, HSM_DEBUG_EVT2STR(event),
+                (unsigned long)param);
 #else
-    HSM_DEBUGC1("Run %s[%s](evt:%lx, param:%08lx)", This->name, state->name, (unsigned long)event, (unsigned long)param);
+    HSM_DEBUGC1("Run %s[%s](evt:%lx, param:%08lx)", This->name, state->name, (unsigned long)event,
+                (unsigned long)param);
 #endif // HSM_DEBUG_EVT2STR
-    while (event)
-    {
+    while (event) {
         event = state->handler(This, event, param);
         state = state->parent;
-        if (event)
-        {
+        if (event) {
 #ifdef HSM_DEBUG_EVT2STR
             HSM_DEBUGC1("  evt:%s unhandled, passing to %s[%s]", HSM_DEBUG_EVT2STR(event), This->name, state->name);
 #else
@@ -143,8 +134,7 @@ void HSM_Run(HSM *This, HSM_EVENT event, void *param)
     // Restore debug back to the configured debug
     This->hsmDebug = This->hsmDebugCfg;
 #if HSM_FEATURE_DEBUG_NESTED_CALL
-    if (gucHsmNestLevel)
-    {
+    if (gucHsmNestLevel) {
         // Decrement the nesting count
         gucHsmNestLevel--;
     }
@@ -152,22 +142,21 @@ void HSM_Run(HSM *This, HSM_EVENT event, void *param)
 #endif // HSM_FEATURE_DEBUG_ENABLE
 }
 
-void HSM_Tran(HSM *This, HSM_STATE *nextState, void *param, void (*method)(HSM *This, void *param))
-{
+void
+HSM_Tran(HSM* This, HSM_STATE* nextState, void* param, void (*method)(HSM* This, void* param)) {
 #if HSM_FEATURE_SAFETY_CHECK
     // [optional] Check for illegal call to HSM_Tran in HSME_ENTRY or HSME_EXIT
-    if (This->hsmTran)
-    {
-        HSM_DEBUG("!!!!Illegal call of HSM_Tran[%s -> %s] in HSME_ENTRY or HSME_EXIT Handler!!!!",
-            This->curState->name, nextState->name);
+    if (This->hsmTran) {
+        HSM_DEBUG("!!!!Illegal call of HSM_Tran[%s -> %s] in HSME_ENTRY or HSME_EXIT Handler!!!!", This->curState->name,
+                  nextState->name);
         return;
     }
     // Guard HSM_Tran() from certain recursive calls
     This->hsmTran = 1;
 #endif // HSM_FEATURE_SAFETY_CHECK
 
-    HSM_STATE *list_exit[HSM_MAX_DEPTH];
-    HSM_STATE *list_entry[HSM_MAX_DEPTH];
+    HSM_STATE* list_exit[HSM_MAX_DEPTH];
+    HSM_STATE* list_entry[HSM_MAX_DEPTH];
     uint8_t cnt_exit = 0;
     uint8_t cnt_entry = 0;
     uint8_t idx;
@@ -175,47 +164,39 @@ void HSM_Tran(HSM *This, HSM_STATE *nextState, void *param, void (*method)(HSM *
     // Bulk of the work handles the exit and entry event during transitions
     HSM_DEBUGC2("Tran %s[%s -> %s]", This->name, This->curState->name, nextState->name);
     // 1) Find the lowest common parent state
-    HSM_STATE *src = This->curState;
-    HSM_STATE *dst = nextState;
+    HSM_STATE* src = This->curState;
+    HSM_STATE* dst = nextState;
     // 1a) Equalize the levels
-    while (src->level != dst->level)
-    {
-        if (src->level > dst->level)
-        {
+    while (src->level != dst->level) {
+        if (src->level > dst->level) {
             // source is deeper
             list_exit[cnt_exit++] = src;
             src = src->parent;
-        }
-        else
-        {
+        } else {
             // destination is deeper
             list_entry[cnt_entry++] = dst;
             dst = dst->parent;
         }
     }
     // 1b) find the common parent
-    while (src != dst)
-    {
+    while (src != dst) {
         list_exit[cnt_exit++] = src;
         src = src->parent;
         list_entry[cnt_entry++] = dst;
         dst = dst->parent;
     }
     // 2) Process all the exit events
-    for (idx = 0; idx < cnt_exit; idx++)
-    {
+    for (idx = 0; idx < cnt_exit; idx++) {
         src = list_exit[idx];
         HSM_DEBUGC3("  %s[%s](EXIT)", This->name, src->name);
         src->handler(This, HSME_EXIT, param);
     }
     // 3) Call the transitional method hook
-    if (method)
-    {
+    if (method) {
         method(This, param);
     }
     // 4) Process all the entry events
-    for (idx = 0; idx < cnt_entry; idx++)
-    {
+    for (idx = 0; idx < cnt_entry; idx++) {
         dst = list_entry[cnt_entry - idx - 1];
         HSM_DEBUGC3("  %s[%s](ENTRY)", This->name, dst->name);
         dst->handler(This, HSME_ENTRY, param);

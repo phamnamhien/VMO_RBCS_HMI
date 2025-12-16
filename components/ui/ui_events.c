@@ -5,12 +5,12 @@
 
 #include "ui.h"
 
-void fnMainChangeSettingClicked(lv_event_t * e)
-{
-	// Your code here
+void
+fnMainChangeSettingClicked(lv_event_t* e) {
+    // Your code here
 }
 
-void fnSettingBackToMainClicked(lv_event_t * e)
-{
-	// Your code here
+void
+fnSettingBackToMainClicked(lv_event_t* e) {
+    // Your code here
 }

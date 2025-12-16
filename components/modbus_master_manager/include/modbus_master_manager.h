@@ -1,9 +1,9 @@
 #ifndef MODBUS_MASTER_MANAGER_H
 #define MODBUS_MASTER_MANAGER_H
 
-#include "esp_err.h"
+#include <stdbool.h>
 #include <stdint.h>
-#include <stdbool.h> 
+#include "esp_err.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,11 +13,11 @@ extern "C" {
  * @brief Modbus Master configuration structure
  */
 typedef struct {
-    int uart_port;          // UART port (UART_NUM_1, UART_NUM_2)
-    int tx_pin;             // TX GPIO pin
-    int rx_pin;             // RX GPIO pin
-    int rts_pin;            // RTS GPIO pin (DE/RE for RS485)
-    uint32_t baudrate;      // Baudrate (9600, 19200, 115200...)
+    int uart_port;     // UART port (UART_NUM_1, UART_NUM_2)
+    int tx_pin;        // TX GPIO pin
+    int rx_pin;        // RX GPIO pin
+    int rts_pin;       // RTS GPIO pin (DE/RE for RS485)
+    uint32_t baudrate; // Baudrate (9600, 19200, 115200...)
 } modbus_master_config_t;
 
 /**
@@ -29,8 +29,7 @@ typedef struct {
  * @param data Pointer to data
  * @param length Number of registers
  */
-typedef void (*modbus_master_data_callback_t)(uint8_t slave_addr, uint8_t reg_type, 
-                                              uint16_t reg_addr, uint16_t *data, 
+typedef void (*modbus_master_data_callback_t)(uint8_t slave_addr, uint8_t reg_type, uint16_t reg_addr, uint16_t* data,
                                               uint16_t length);
 
 /**
@@ -39,7 +38,7 @@ typedef void (*modbus_master_data_callback_t)(uint8_t slave_addr, uint8_t reg_ty
  * @param config Pointer to configuration
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_init(const modbus_master_config_t *config);
+esp_err_t modbus_master_init(const modbus_master_config_t* config);
 
 /**
  * @brief Deinitialize Modbus Master Manager
@@ -64,8 +63,8 @@ void modbus_master_register_callback(modbus_master_data_callback_t callback);
  * @param data Buffer to store read data
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_read_holding_registers(uint8_t slave_addr, uint16_t reg_addr, 
-                                               uint16_t reg_count, uint16_t *data);
+esp_err_t modbus_master_read_holding_registers(uint8_t slave_addr, uint16_t reg_addr, uint16_t reg_count,
+                                               uint16_t* data);
 
 /**
  * @brief Read Input Registers (FC 0x04)
@@ -76,8 +75,7 @@ esp_err_t modbus_master_read_holding_registers(uint8_t slave_addr, uint16_t reg_
  * @param data Buffer to store read data
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_read_input_registers(uint8_t slave_addr, uint16_t reg_addr, 
-                                             uint16_t reg_count, uint16_t *data);
+esp_err_t modbus_master_read_input_registers(uint8_t slave_addr, uint16_t reg_addr, uint16_t reg_count, uint16_t* data);
 
 /**
  * @brief Write Single Register (FC 0x06)
@@ -87,8 +85,7 @@ esp_err_t modbus_master_read_input_registers(uint8_t slave_addr, uint16_t reg_ad
  * @param value Value to write
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_write_single_register(uint8_t slave_addr, uint16_t reg_addr, 
-                                              uint16_t value);
+esp_err_t modbus_master_write_single_register(uint8_t slave_addr, uint16_t reg_addr, uint16_t value);
 
 /**
  * @brief Write Multiple Registers (FC 0x10)
@@ -99,8 +96,8 @@ esp_err_t modbus_master_write_single_register(uint8_t slave_addr, uint16_t reg_a
  * @param data Data to write
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_write_multiple_registers(uint8_t slave_addr, uint16_t reg_addr,
-                                                 uint16_t reg_count, uint16_t *data);
+esp_err_t modbus_master_write_multiple_registers(uint8_t slave_addr, uint16_t reg_addr, uint16_t reg_count,
+                                                 uint16_t* data);
 
 /**
  * @brief Read Coils (FC 0x01)
@@ -111,8 +108,7 @@ esp_err_t modbus_master_write_multiple_registers(uint8_t slave_addr, uint16_t re
  * @param data Buffer to store status (bit packed)
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_read_coils(uint8_t slave_addr, uint16_t coil_addr,
-                                   uint16_t coil_count, uint8_t *data);
+esp_err_t modbus_master_read_coils(uint8_t slave_addr, uint16_t coil_addr, uint16_t coil_count, uint8_t* data);
 
 /**
  * @brief Write Single Coil (FC 0x05)
@@ -122,8 +118,7 @@ esp_err_t modbus_master_read_coils(uint8_t slave_addr, uint16_t coil_addr,
  * @param value true=ON, false=OFF
  * @return ESP_OK if successful
  */
-esp_err_t modbus_master_write_single_coil(uint8_t slave_addr, uint16_t coil_addr,
-                                         bool value);
+esp_err_t modbus_master_write_single_coil(uint8_t slave_addr, uint16_t coil_addr, bool value);
 
 /**
  * @brief Check if Modbus Master Manager is running
@@ -137,4 +132,3 @@ bool modbus_master_is_running(void);
 #endif
 
 #endif // MODBUS_MASTER_MANAGER_H
-
