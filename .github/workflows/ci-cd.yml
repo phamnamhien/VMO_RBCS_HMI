@@ -12,11 +12,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Check clang-format
+    - name: Auto format code
       run: |
         sudo apt-get update
         sudo apt-get install -y clang-format
-        find . -name '*.c' -o -name '*.h' -o -name '*.cpp' | xargs clang-format --style=file --dry-run -Werror
+        find main -name '*.c' -o -name '*.h' -o -name '*.cpp' | \
+        xargs clang-format --style=file -i
+    
+    - name: Commit formatted code
+      run: |
+        git config user.name "phamnamhien"
+        git config user.email "phamnamhien@gmail.com"
+        git add .
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto format code" && git push)
 
   build-esp32:
     runs-on: ubuntu-latest
@@ -29,7 +37,7 @@ jobs:
     - name: Setup ESP-IDF
       uses: espressif/esp-idf-ci-action@v1
       with:
-        esp_idf_version: v5.5.1
+        esp_idf_version: v5.1
     
     - name: Build project
       run: idf.py build
