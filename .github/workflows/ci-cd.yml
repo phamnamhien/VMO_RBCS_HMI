@@ -46,5 +46,10 @@ jobs:
         esp_idf_version: v5.1
         target: esp32s3
     
+    - name: Install dependencies
+      run: |
+        idf.py reconfigure
+        idf.py set-target esp32s3
+
     - name: Build project
       run: idf.py build
