@@ -5,18 +5,16 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:v5.5.1
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
     
-    - name: Setup ESP-IDF
-      uses: espressif/esp-idf-ci-action@v1
-      with:
-        esp_idf_version: v5.5.1
-        target: esp32s3
-    
     - name: Build
       run: |
-        . $IDF_PATH/export.sh
+        . /opt/esp/idf/export.sh
         idf.py build
+
+        
