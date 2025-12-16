@@ -17,5 +17,6 @@ jobs:
         target: esp32s3
     
     - name: Build
-      run: idf.py build
-      
+      run: |
+        . $IDF_PATH/export.sh
+        idf.py build
