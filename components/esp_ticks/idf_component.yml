@@ -1,0 +1,5 @@
+version: "1.0.0"
+description: Software timer library for ESP-IDF
+url: https://github.com/yourname/ticks
+dependencies:
+  idf: ">=5.0"

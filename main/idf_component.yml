@@ -1,0 +1,17 @@
+## IDF Component Manager Manifest File
+dependencies:
+  idf:
+    version: '>=5.0.0'
+  
+  # LVGL graphics library 8.3.11
+  lvgl/lvgl:
+    version: "8.3.11"
+    public: true
+  
+  # ESP-MODBUS
+  espressif/esp-modbus:
+    version: "^2.1.0"
+    public: true
+  
+  espressif/esp_lcd_touch_gt911:
+      version: "^1.0"

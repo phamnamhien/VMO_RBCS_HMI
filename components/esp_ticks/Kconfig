@@ -1,0 +1,10 @@
+menu "Ticks Configuration"
+
+    config TICKS_MAX_TIMERS
+        int "Maximum number of concurrent timers"
+        default 8
+        range 1 32
+        help
+            Maximum number of software timers that can be created simultaneously.
+
+endmenu
