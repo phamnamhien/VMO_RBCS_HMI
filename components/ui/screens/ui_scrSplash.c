@@ -6,10 +6,10 @@
 #include "../ui.h"
 
 lv_obj_t * ui_scrSplash = NULL;
+lv_obj_t * ui_imgSplashBackground = NULL;
 lv_obj_t * ui_imgSplashIconLoading = NULL;
 lv_obj_t * ui_barSplashLoading = NULL;
 lv_obj_t * ui_lbSplashLoadProgress = NULL;
-lv_obj_t * ui_imgSplashBackground = NULL;
 // event funtions
 
 // build funtions
@@ -18,6 +18,14 @@ void ui_scrSplash_screen_init(void)
 {
     ui_scrSplash = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_scrSplash, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_imgSplashBackground = lv_img_create(ui_scrSplash);
+    lv_img_set_src(ui_imgSplashBackground, &ui_img_imgsplashbackground_png);
+    lv_obj_set_width(ui_imgSplashBackground, LV_SIZE_CONTENT);   /// 800
+    lv_obj_set_height(ui_imgSplashBackground, LV_SIZE_CONTENT);    /// 480
+    lv_obj_set_align(ui_imgSplashBackground, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_imgSplashBackground, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_imgSplashBackground, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_imgSplashIconLoading = lv_img_create(ui_scrSplash);
     lv_img_set_src(ui_imgSplashIconLoading, &ui_img_robot_4_png);
@@ -51,15 +59,6 @@ void ui_scrSplash_screen_init(void)
     lv_obj_set_y(ui_lbSplashLoadProgress, 200);
     lv_obj_set_align(ui_lbSplashLoadProgress, LV_ALIGN_CENTER);
     lv_label_set_text(ui_lbSplashLoadProgress, "system Initialization...");
-    lv_obj_add_flag(ui_lbSplashLoadProgress, LV_OBJ_FLAG_HIDDEN);     /// Flags
-
-    ui_imgSplashBackground = lv_img_create(ui_scrSplash);
-    lv_img_set_src(ui_imgSplashBackground, &ui_img_scrsplash_background_png);
-    lv_obj_set_width(ui_imgSplashBackground, LV_SIZE_CONTENT);   /// 800
-    lv_obj_set_height(ui_imgSplashBackground, LV_SIZE_CONTENT);    /// 480
-    lv_obj_set_align(ui_imgSplashBackground, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_imgSplashBackground, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_imgSplashBackground, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
 }
 
@@ -69,9 +68,9 @@ void ui_scrSplash_screen_destroy(void)
 
     // NULL screen variables
     ui_scrSplash = NULL;
+    ui_imgSplashBackground = NULL;
     ui_imgSplashIconLoading = NULL;
     ui_barSplashLoading = NULL;
     ui_lbSplashLoadProgress = NULL;
-    ui_imgSplashBackground = NULL;
 
 }

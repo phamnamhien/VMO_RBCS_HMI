@@ -67,11 +67,9 @@ app_state_loading_handler(HSM *This, HSM_EVENT event, void *param) {
     static uint8_t loading_count = 0;
     switch (event) {
         case HSME_ENTRY:
-            
+            ticks_start(tm_loading, 100);
             break;
         case HSME_INIT:
-            //ticks_start(tm_loading, 100);
-            // lv_obj_clear_flag(ui_lbSplashLoadProgress, LV_OBJ_FLAG_HIDDEN);
             break;
         case HSME_EXIT:
             loading_count = 0;
