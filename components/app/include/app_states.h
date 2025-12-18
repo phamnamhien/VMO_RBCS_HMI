@@ -58,10 +58,18 @@ typedef enum {
     // ... add more states if needed
 } BMS_Swap_State_t;
 
+typedef enum {
+    TIMER_STATE_IDLE = 0,
+    TIMER_STATE_ACTIVE,
+    TIMER_STATE_DELETING,
+} timer_state_t;
+
 typedef struct {
     TimerHandle_t handle;
     void (*callback)(void*);
     void* arg;
+    volatile timer_state_t state; 
+    SemaphoreHandle_t mutex; 
 } esp32_timer_t;
 
 typedef struct {

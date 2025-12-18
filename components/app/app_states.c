@@ -18,9 +18,6 @@ static void* esp32_timer_start(void (*callback)(void*), void* arg, uint32_t peri
 static void esp32_timer_stop(void* timer_handle);
 static uint32_t esp32_timer_get_ms(void);
 
-static void timer_loading_callback(void* arg);
-static void timer_blink_1s_callback(void* arg);
-
 /* States */
 static hsm_state_t app_state_loading;
 static hsm_state_t app_state_main_common;
@@ -63,29 +60,50 @@ static hsm_event_t
 app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t*)hsm;
     static uint8_t loading_count = 0;
+    
     switch (event) {
         case HSM_EVENT_ENTRY: 
+            loading_count = 0;  // ← RESET
             hsm_timer_create(&timer_loading, hsm, HEVT_TIMER_LOADING, LOADING_1PERCENT_MS, HSM_TIMER_PERIODIC);
             hsm_timer_start(timer_loading);
-        break;
+            ESP_LOGI(TAG, "Loading: ENTRY");
+            break;
+            
         case HSM_EVENT_EXIT:
+            ESP_LOGI(TAG, "Loading: EXIT");
             loading_count = 0;
             break;
+            
         case HEVT_TIMER_LOADING:
-            loading_count += 1;
+            // ← CRITICAL: Check nếu timer đã bị xóa
+            if (timer_loading == NULL) {
+                ESP_LOGW(TAG, "Timer callback after delete - IGNORED");
+                return HSM_EVENT_NONE;
+            }
+            
+            // ← CRITICAL: Check nếu không còn ở loading state
+            if (!hsm_is_in_state(hsm, &app_state_loading)) {
+                ESP_LOGW(TAG, "Timer fired in wrong state - IGNORED");
+                return HSM_EVENT_NONE;
+            }
+            
+            loading_count += 10;
+            
             if (loading_count > 100) {
+                ESP_LOGI(TAG, "Loading Done -> Main State");
                 hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
-                ESP_LOGI(TAG, "Loading Done, transitioning to Idle State");
             } else {
                 if (ui_lock(-1)) {
                     lv_bar_set_value(ui_barSplashLoading, loading_count, LV_ANIM_OFF);
                     ui_unlock();
                 }
             }
-            break;
-        default: return event;
+            return HSM_EVENT_NONE;  // ← HANDLED
+            
+        default: 
+            return event;
     }
-    return 0;
+    return HSM_EVENT_NONE;
 }
 
 static hsm_event_t
@@ -299,9 +317,19 @@ app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 static void 
 esp32_timer_callback(TimerHandle_t xTimer) {
     esp32_timer_t* timer = (esp32_timer_t*)pvTimerGetTimerID(xTimer);
-    if (timer && timer->callback) {
+    if (timer == NULL) return;
+    
+    /* Try to acquire mutex (non-blocking) */
+    if (xSemaphoreTake(timer->mutex, 0) != pdTRUE) {
+        return;  // ← Skip nếu đang delete
+    }
+    
+    /* Check state */
+    if (timer->state == TIMER_STATE_ACTIVE && timer->callback) {
         timer->callback(timer->arg);
     }
+    
+    xSemaphoreGive(timer->mutex);
 }
 
 static void* 
@@ -309,27 +337,66 @@ esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_
     esp32_timer_t* timer = malloc(sizeof(esp32_timer_t));
     if (!timer) return NULL;
 
-    timer->callback = callback;
-    timer->arg = arg;
-    timer->handle = xTimerCreate("hsm", pdMS_TO_TICKS(period_ms),
-                                  repeat ? pdTRUE : pdFALSE, timer, esp32_timer_callback);
-
-    if (!timer->handle || xTimerStart(timer->handle, 0) != pdPASS) {
-        if (timer->handle) xTimerDelete(timer->handle, 0);
+    /* Create mutex */
+    timer->mutex = xSemaphoreCreateMutex();
+    if (!timer->mutex) {
         free(timer);
         return NULL;
     }
+
+    timer->callback = callback;
+    timer->arg = arg;
+    timer->state = TIMER_STATE_ACTIVE;
+    
+    timer->handle = xTimerCreate("hsm", pdMS_TO_TICKS(period_ms),
+                                  repeat ? pdTRUE : pdFALSE, 
+                                  timer, esp32_timer_callback);
+
+    if (!timer->handle || xTimerStart(timer->handle, 0) != pdPASS) {
+        if (timer->handle) xTimerDelete(timer->handle, 0);
+        vSemaphoreDelete(timer->mutex);
+        free(timer);
+        return NULL;
+    }
+    
+    ESP_LOGD(TAG, "Timer started: %p", timer);
     return timer;
 }
 
 static void 
 esp32_timer_stop(void* timer_handle) {
     esp32_timer_t* timer = (esp32_timer_t*)timer_handle;
-    if (timer) {
-        xTimerStop(timer->handle, 0);
-        xTimerDelete(timer->handle, 0);
-        free(timer);
+    if (timer == NULL) return;
+    
+    ESP_LOGD(TAG, "Timer stopping: %p", timer);
+    
+    /* Acquire mutex để block callback */
+    if (xSemaphoreTake(timer->mutex, pdMS_TO_TICKS(100)) != pdTRUE) {
+        ESP_LOGE(TAG, "Failed to acquire mutex for deletion");
+        return;
     }
+    
+    /* Mark as deleting */
+    timer->state = TIMER_STATE_DELETING;
+    timer->callback = NULL;  // ← Clear callback
+    
+    xSemaphoreGive(timer->mutex);
+    
+    /* Stop timer */
+    if (timer->handle) {
+        xTimerStop(timer->handle, pdMS_TO_TICKS(100));
+        xTimerDelete(timer->handle, pdMS_TO_TICKS(100));
+        timer->handle = NULL;
+    }
+    
+    /* Đợi callback chạy xong (nếu đang chạy) */
+    vTaskDelay(pdMS_TO_TICKS(10));  // ← CRITICAL: Đợi callback finish
+    
+    /* Now safe to delete */
+    vSemaphoreDelete(timer->mutex);
+    free(timer);
+    
+    ESP_LOGD(TAG, "Timer deleted: %p", timer);
 }
 
 static uint32_t 
