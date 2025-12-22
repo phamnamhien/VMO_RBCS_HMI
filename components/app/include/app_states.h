@@ -18,7 +18,6 @@
 #include "modbus_master_manager.h"
 
 #include "app_common.h"
-#include "esp_ticks.h"
 #include "esp_timer.h"
 #include "hsm.h"
 #include "ui_support.h"
@@ -35,8 +34,9 @@
 extern "C" {
 #endif
 
-#define BMS_TIMEOUT_MAX_COUNT 3
+#define BMS_TIMEOUT_MAX_COUNT           3
 
+#define LOADING_1PERCENT_MS             100                     
 typedef enum {
     IDX_SLOT_1 = 0,
     IDX_SLOT_2,
@@ -57,6 +57,20 @@ typedef enum {
     SWAP_STATE_ROBOT_COMMING,
     // ... add more states if needed
 } BMS_Swap_State_t;
+
+typedef enum {
+    TIMER_STATE_IDLE = 0,
+    TIMER_STATE_ACTIVE,
+    TIMER_STATE_DELETING,
+} timer_state_t;
+
+typedef struct {
+    TimerHandle_t handle;
+    void (*callback)(void*);
+    void* arg;
+    volatile timer_state_t state; 
+    SemaphoreHandle_t mutex; 
+} esp32_timer_t;
 
 typedef struct {
     // BMS State Machine
@@ -113,57 +127,57 @@ typedef struct {
 } BMS_Information_t;
 
 typedef enum {
-    HSME_LOOP = HSME_START,
+    HEVT_LOOP = HSM_EVENT_USER,
 
-    HSME_LOADING_DONE,
+    HEVT_LOADING_DONE,
 
-    HSME_MODBUS_GET_SLOT_1_DATA,
-    HSME_MODBUS_GET_SLOT_2_DATA,
-    HSME_MODBUS_GET_SLOT_3_DATA,
-    HSME_MODBUS_GET_SLOT_4_DATA,
-    HSME_MODBUS_GET_SLOT_5_DATA,
-    HSME_MODBUS_GET_SLOT_DATA,
-    HSME_MODBUS_GET_STATION_STATE_DATA,
-    HSME_MODBUS_CONNECTED,
-    HSME_MODBUS_NOTCONNECTED,
+    HEVT_MODBUS_GET_SLOT_1_DATA,
+    HEVT_MODBUS_GET_SLOT_2_DATA,
+    HEVT_MODBUS_GET_SLOT_3_DATA,
+    HEVT_MODBUS_GET_SLOT_4_DATA,
+    HEVT_MODBUS_GET_SLOT_5_DATA,
+    HEVT_MODBUS_GET_SLOT_DATA,
+    HEVT_MODBUS_GET_STATION_STATE_DATA,
+    HEVT_MODBUS_CONNECTED,
+    HEVT_MODBUS_NOTCONNECTED,
 
-    HSME_CHANGE_SCR_MAIN_TO_SETTING,
-    HSME_CHANGE_SCR_SETTING_TO_MAIN,
-    HSME_MAIN_SLOT_1_CLICKED,
-    HSME_MAIN_SLOT_2_CLICKED,
-    HSME_MAIN_SLOT_3_CLICKED,
-    HSME_MAIN_SLOT_4_CLICKED,
-    HSME_MAIN_SLOT_5_CLICKED,
-    HSME_MAIN_MANUAL_SWAP_CLICKED,
+    HEVT_CHANGE_SCR_MAIN_TO_SETTING,
+    HEVT_CHANGE_SCR_SETTING_TO_MAIN,
+    HEVT_MAIN_SLOT_1_CLICKED,
+    HEVT_MAIN_SLOT_2_CLICKED,
+    HEVT_MAIN_SLOT_3_CLICKED,
+    HEVT_MAIN_SLOT_4_CLICKED,
+    HEVT_MAIN_SLOT_5_CLICKED,
+    HEVT_MAIN_MANUAL_SWAP_CLICKED,
 
-    HSME_MANUAL_MOTOR_1_MOVE,
-    HSME_MANUAL_MOTOR_2_MOVE,
-    HSME_MANUAL_MOTOR_3_MOVE,
+    HEVT_MANUAL_MOTOR_1_MOVE,
+    HEVT_MANUAL_MOTOR_2_MOVE,
+    HEVT_MANUAL_MOTOR_3_MOVE,
 
-    HSME_LOADING_COUNT_TIMER,
-    HSME_BLINK_1S_TIMER,
-} HSMEvent_t;
+    HEVT_TIMER_LOADING,
+    HEVT_TIMER_CUSTOM,
+} app_events_t;
 
 typedef struct {
-    HSM parent;
+    hsm_t parent;
 
     BMS_Data_t bms_data[TOTAL_SLOT];
     BMS_Information_t bms_info;
 
     uint8_t is_bms_not_connected;
-} DeviceHSM_t;
+} app_state_hsm_t;
 
-void app_state_hsm_init(DeviceHSM_t* me);
+void app_state_hsm_init(app_state_hsm_t* me);
 
-void ui_update_main_slot_voltage(DeviceHSM_t* me, int8_t slot_index);
-void ui_update_main_battery_percent(DeviceHSM_t* me, uint8_t slot_index);
-void ui_update_main_slot_capacity(DeviceHSM_t* me, int8_t slot_index);
-void ui_update_all_slots_display(DeviceHSM_t* me);
+void ui_update_main_slot_voltage(app_state_hsm_t* me, int8_t slot_index);
+void ui_update_main_battery_percent(app_state_hsm_t* me, uint8_t slot_index);
+void ui_update_main_slot_capacity(app_state_hsm_t* me, int8_t slot_index);
+void ui_update_all_slots_display(app_state_hsm_t* me);
 
 void ui_show_slot_serial_detail(uint8_t slot_number);
 void ui_show_slot_detail_panel(bool show);
 
-void ui_update_all_slot_details(DeviceHSM_t* me, uint8_t slot_index);
+void ui_update_all_slot_details(app_state_hsm_t* me, uint8_t slot_index);
 void ui_clear_all_slot_details(void);
 
 void ui_show_main_not_connect(bool show);

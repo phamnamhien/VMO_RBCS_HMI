@@ -17,7 +17,7 @@ static const char* TAG = "RBCS_HMI";
 // ============================================
 // Modbus & HSM Variables
 // ============================================
-DeviceHSM_t device;
+app_state_hsm_t device;
 
 modbus_master_config_t modbus_cfg = {
     .uart_port = APP_IO_UART_NUM,
@@ -44,42 +44,42 @@ static SemaphoreHandle_t sem_gui_ready;
 // ============================================
 static void
 fnMainSetting(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_CHANGE_SCR_MAIN_TO_SETTING, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_CHANGE_SCR_MAIN_TO_SETTING, NULL);
 }
 
 void
 fnSettingBackToMain(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_CHANGE_SCR_SETTING_TO_MAIN, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_CHANGE_SCR_SETTING_TO_MAIN, NULL);
 }
 
 void
 fnMainSlot1(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_MAIN_SLOT_1_CLICKED, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_1_CLICKED, NULL);
 }
 
 void
 fnMainSlot2(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_MAIN_SLOT_2_CLICKED, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_2_CLICKED, NULL);
 }
 
 void
 fnMainSlot3(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_MAIN_SLOT_3_CLICKED, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_3_CLICKED, NULL);
 }
 
 void
 fnMainSlot4(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_MAIN_SLOT_4_CLICKED, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_4_CLICKED, NULL);
 }
 
 void
 fnMainSlot5(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_MAIN_SLOT_5_CLICKED, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_5_CLICKED, NULL);
 }
 
 void
 fnMainManualSwap(lv_event_t* e) {
-    HSM_Run((HSM*)&device, HSME_MAIN_MANUAL_SWAP_CLICKED, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_MANUAL_SWAP_CLICKED, NULL);
 }
 
 // ============================================
@@ -94,7 +94,7 @@ modbus_data_received(uint8_t slave_addr, uint8_t reg_type, uint16_t reg_addr, ui
 }
 
 static void
-modbus_battery_sync_data(DeviceHSM_t* me, uint16_t* dat, uint8_t slot_index) {
+modbus_battery_sync_data(app_state_hsm_t* me, uint16_t* dat, uint8_t slot_index) {
     // ✅ THÊM LOG ĐỂ KIỂM TRA
     ESP_LOGI(TAG, "📥 Syncing data TO slot_index=%d", slot_index);
     ESP_LOGI(TAG, "   Raw data[0]=%d, data[8]=%d", dat[0], dat[8]);
@@ -161,7 +161,7 @@ modbus_battery_sync_data(DeviceHSM_t* me, uint16_t* dat, uint8_t slot_index) {
 }
 
 static void
-modbus_bms_information_sync_data(DeviceHSM_t* me, uint16_t* dat) {
+modbus_bms_information_sync_data(app_state_hsm_t* me, uint16_t* dat) {
     me->bms_info.manual_swap[IDX_SLOT_1] = dat[0];
     me->bms_info.manual_swap[IDX_SLOT_2] = dat[1];
     me->bms_info.manual_swap[IDX_SLOT_3] = dat[2];
@@ -193,7 +193,7 @@ modbus_poll_task(void* arg) {
             is_data_not_received[IDX_SLOT_1] = 0;
             consecutive_errors = 0; // ← RESET ĐẾM LỖI
             ESP_LOGI(TAG, "Slot 1 data synced");
-            HSM_Run((HSM*)&device, HSME_MODBUS_GET_SLOT_1_DATA, NULL);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_1_DATA, NULL);
         }
         // } else {
         //     ESP_LOGW(TAG, "Failed to read Slot 1 data: %s", esp_err_to_name(err));
@@ -232,7 +232,7 @@ modbus_poll_task(void* arg) {
             is_data_not_received[IDX_SLOT_2] = 0;
             consecutive_errors = 0;
             ESP_LOGI(TAG, "Slot 2 data synced");
-            HSM_Run((HSM*)&device, HSME_MODBUS_GET_SLOT_2_DATA, NULL);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_2_DATA, NULL);
         }
         // } else {
         //     ESP_LOGW(TAG, "Failed to read Slot 2 data: %s", esp_err_to_name(err));
@@ -270,7 +270,7 @@ modbus_poll_task(void* arg) {
             is_data_not_received[IDX_SLOT_3] = 0;
             consecutive_errors = 0;
             ESP_LOGI(TAG, "Slot 3 data synced");
-            HSM_Run((HSM*)&device, HSME_MODBUS_GET_SLOT_3_DATA, NULL);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_3_DATA, NULL);
         }
         // } else {
         //     ESP_LOGW(TAG, "Failed to read Slot 3 data: %s", esp_err_to_name(err));
@@ -308,7 +308,7 @@ modbus_poll_task(void* arg) {
             is_data_not_received[IDX_SLOT_4] = 0;
             consecutive_errors = 0;
             ESP_LOGI(TAG, "Slot 4 data synced");
-            HSM_Run((HSM*)&device, HSME_MODBUS_GET_SLOT_4_DATA, NULL);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_4_DATA, NULL);
         }
         // } else {
         //     ESP_LOGW(TAG, "Failed to read Slot 4 data: %s", esp_err_to_name(err));
@@ -346,7 +346,7 @@ modbus_poll_task(void* arg) {
             is_data_not_received[IDX_SLOT_5] = 0;
             consecutive_errors = 0;
             ESP_LOGI(TAG, "Slot 5 data synced");
-            HSM_Run((HSM*)&device, HSME_MODBUS_GET_SLOT_5_DATA, NULL);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_5_DATA, NULL);
         }
         // } else {
         //     ESP_LOGW(TAG, "Failed to read Slot 5 data: %s", esp_err_to_name(err));
@@ -384,7 +384,7 @@ modbus_poll_task(void* arg) {
             ESP_LOGI(TAG, "STATION STATE data synced");
             is_data_not_received[TOTAL_SLOT] = 0;
             consecutive_errors = 0;
-            HSM_Run((HSM*)&device, HSME_MODBUS_GET_STATION_STATE_DATA, NULL);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_STATION_STATE_DATA, NULL);
         }
         // } else {
         //     ESP_LOGW(TAG, "Failed to read STATION STATE data: %s", esp_err_to_name(err));
@@ -406,14 +406,14 @@ modbus_poll_task(void* arg) {
         //         bms_connect_counter = BMS_TIMEOUT_MAX_COUNT;
         //         device.is_bms_not_connected = 1;
         //         ESP_LOGW(TAG, "BMS not connected!");
-        //         HSM_Run((HSM *)&device, HSME_MODBUS_NOTCONNECTED, NULL);
+        //         hsm_dispatch((HSM *)&device, HEVT_MODBUS_NOTCONNECTED, NULL);
         //     }
         // } else {
         //     bms_connect_counter = 0;
         //     device.is_bms_not_connected = 0;
-        //     HSM_Run((HSM *)&device, HSME_MODBUS_CONNECTED, NULL);
+        //     hsm_dispatch((HSM *)&device, HEVT_MODBUS_CONNECTED, NULL);
         // }
-        // HSM_Run((HSM *)&device, HSME_MODBUS_GET_SLOT_DATA, NULL);
+        // hsm_dispatch((HSM *)&device, HEVT_MODBUS_GET_SLOT_DATA, NULL);
         // vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
@@ -841,8 +841,7 @@ app_main(void) {
     // Initialize HSM (State Machine)
     // ========================================
     ESP_LOGI(TAG, "Initializing HSM...");
-    memset(&device, 0, sizeof(DeviceHSM_t));
-    ESP_ERROR_CHECK(ticks_init());
+    memset(&device, 0, sizeof(app_state_hsm_t));
     app_state_hsm_init(&device);
     ESP_LOGI(TAG, "      HSM initialized");
 

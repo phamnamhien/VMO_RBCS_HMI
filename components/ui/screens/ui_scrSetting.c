@@ -5,39 +5,30 @@
 
 #include "../ui.h"
 
-lv_obj_t* ui_scrSetting = NULL;
-lv_obj_t* ui_imgSettingBackground = NULL;
-lv_obj_t* ui_lbSettingTitle = NULL;
-lv_obj_t* ui_ibtSettingBackToMain = NULL;
-
+lv_obj_t * ui_scrSetting = NULL;
+lv_obj_t * ui_imgSettingBackground = NULL;
+lv_obj_t * ui_lbSettingTitle = NULL;
+lv_obj_t * ui_ibtSettingBackToMain = NULL;
 // event funtions
-void
-ui_event_ibtSettingBackToMain(lv_event_t* e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if (event_code == LV_EVENT_CLICKED) {
-        fnSettingBackToMainClicked(e);
-    }
-}
 
 // build funtions
 
-void
-ui_scrSetting_screen_init(void) {
+void ui_scrSetting_screen_init(void)
+{
     ui_scrSetting = lv_obj_create(NULL);
-    lv_obj_clear_flag(ui_scrSetting, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_clear_flag(ui_scrSetting, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_imgSettingBackground = lv_img_create(ui_scrSetting);
     lv_img_set_src(ui_imgSettingBackground, &ui_img_imgsettingbackground_png);
-    lv_obj_set_width(ui_imgSettingBackground, LV_SIZE_CONTENT);  /// 800
-    lv_obj_set_height(ui_imgSettingBackground, LV_SIZE_CONTENT); /// 480
+    lv_obj_set_width(ui_imgSettingBackground, LV_SIZE_CONTENT);   /// 800
+    lv_obj_set_height(ui_imgSettingBackground, LV_SIZE_CONTENT);    /// 480
     lv_obj_set_align(ui_imgSettingBackground, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_imgSettingBackground, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
-    lv_obj_clear_flag(ui_imgSettingBackground, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_obj_add_flag(ui_imgSettingBackground, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_imgSettingBackground, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_lbSettingTitle = lv_label_create(ui_scrSetting);
-    lv_obj_set_width(ui_lbSettingTitle, LV_SIZE_CONTENT);  /// 1
-    lv_obj_set_height(ui_lbSettingTitle, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_width(ui_lbSettingTitle, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_lbSettingTitle, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_lbSettingTitle, 0);
     lv_obj_set_y(ui_lbSettingTitle, -215);
     lv_obj_set_align(ui_lbSettingTitle, LV_ALIGN_CENTER);
@@ -52,18 +43,16 @@ ui_scrSetting_screen_init(void) {
     lv_obj_set_y(ui_ibtSettingBackToMain, -212);
     lv_obj_set_align(ui_ibtSettingBackToMain, LV_ALIGN_CENTER);
 
-    lv_obj_add_event_cb(ui_ibtSettingBackToMain, ui_event_ibtSettingBackToMain, LV_EVENT_ALL, NULL);
 }
 
-void
-ui_scrSetting_screen_destroy(void) {
-    if (ui_scrSetting) {
-        lv_obj_del(ui_scrSetting);
-    }
+void ui_scrSetting_screen_destroy(void)
+{
+    if(ui_scrSetting) lv_obj_del(ui_scrSetting);
 
     // NULL screen variables
     ui_scrSetting = NULL;
     ui_imgSettingBackground = NULL;
     ui_lbSettingTitle = NULL;
     ui_ibtSettingBackToMain = NULL;
+
 }

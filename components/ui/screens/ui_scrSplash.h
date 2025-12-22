@@ -13,18 +13,10 @@ extern "C" {
 // SCREEN: ui_scrSplash
 extern void ui_scrSplash_screen_init(void);
 extern void ui_scrSplash_screen_destroy(void);
-<<<<<<< HEAD
 extern lv_obj_t * ui_scrSplash;
 extern lv_obj_t * ui_barSplashLoading;
 extern lv_obj_t * ui_lbSplashLoadProgress;
-extern lv_obj_t * ui_Image1;
-=======
-extern lv_obj_t* ui_scrSplash;
-extern lv_obj_t* ui_imgSplashBackground;
-extern lv_obj_t* ui_imgSplashIconLoading;
-extern lv_obj_t* ui_barSplashLoading;
-extern lv_obj_t* ui_lbSplashLoadProgress;
->>>>>>> parent of 7c27c3f (Merge pull request #7 from phamnamhien/20251218_cleancode)
+extern lv_obj_t * ui_vmoLogo;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
@@ -32,3 +24,4 @@ extern lv_obj_t* ui_lbSplashLoadProgress;
 #endif
 
 #endif
+
