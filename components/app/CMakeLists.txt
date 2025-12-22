@@ -6,7 +6,8 @@ idf_component_register(
                     REQUIRES        driver 
                                     nvs_flash
                                     esp_timer
-                                    HSM 
+                                    esp_ticks
+                                    hsm 
 
                                     modbus_master_manager
 

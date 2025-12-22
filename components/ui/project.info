@@ -1,9 +1,18 @@
 {
     "project_name": "SQUARELINE_RBCS_HMI.spj",
+<<<<<<< HEAD
     "datetime": "2025-12-22T14:32:19.6074434+07:00",
     "editor_version": "1.5.4",
     "project_version": 272,
     "user": "Shao Zana",
     "export_datetime": "2025-12-22T14:32:24.4911518+07:00",
     "export_user": "Shao Zana"
+=======
+    "datetime": "2025-12-04T14:15:22.0212823+07:00",
+    "editor_version": "1.5.4",
+    "project_version": 268,
+    "user": "Shao Za Na",
+    "export_datetime": "2025-12-04T14:15:24.5182797+07:00",
+    "export_user": "Shao Za Na"
+>>>>>>> parent of 7c27c3f (Merge pull request #7 from phamnamhien/20251218_cleancode)
 }

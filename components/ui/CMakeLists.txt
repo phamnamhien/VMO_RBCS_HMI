@@ -9,8 +9,14 @@ idf_component_register(
         "ui.c"
         "components/ui_comp_hook.c"
         "ui_helpers.c"
+<<<<<<< HEAD
         "images/ui_img_bg1_png.c"
         "images/ui_img_vmo_logo_png.c"
+=======
+        "ui_events.c"
+        "images/ui_img_imgsplashbackground_png.c"
+        "images/ui_img_robot_4_png.c"
+>>>>>>> parent of 7c27c3f (Merge pull request #7 from phamnamhien/20251218_cleancode)
         "images/ui_img_imgmainbackground_png.c"
         "images/ui_img_scrsettingicon_png.c"
         "images/ui_img_imgmainslotserialdetail_png.c"

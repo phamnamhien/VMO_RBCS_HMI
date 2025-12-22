@@ -14,8 +14,4 @@ dependencies:
     public: true
   
   espressif/esp_lcd_touch_gt911:
-    version: "^1.0"
-
-  phamnamhien/HSM:
-    git: https://github.com/phamnamhien/HSM.git
-    version: "*"
+      version: "^1.0"
