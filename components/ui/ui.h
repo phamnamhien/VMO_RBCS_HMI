@@ -30,7 +30,8 @@ extern "C" {
 extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
-LV_IMG_DECLARE(ui_img_imgsplashbackground_png);    // assets/imgSplashBackground.png
+LV_IMG_DECLARE(ui_img_bg1_png);    // assets/bg1.png
+LV_IMG_DECLARE(ui_img_vmo_logo_png);    // assets/vmo_logo.png
 LV_IMG_DECLARE(ui_img_imgmainbackground_png);    // assets/imgMainBackground.png
 LV_IMG_DECLARE(ui_img_scrsettingicon_png);    // assets/scrSettingIcon.png
 LV_IMG_DECLARE(ui_img_imgmainslotserialdetail_png);    // assets/imgMainSlotSerialDetail.png
@@ -50,6 +51,13 @@ LV_IMG_DECLARE(ui_img_scrmain_batteryicon_png);    // assets/scrMain_batteryIcon
 LV_IMG_DECLARE(ui_img_scrnotconnecticon_png);    // assets/scrNotConnectIcon.png
 LV_IMG_DECLARE(ui_img_imgsettingbackground_png);    // assets/imgSettingBackground.png
 LV_IMG_DECLARE(ui_img_imgsettingbackicon_png);    // assets/imgSettingBackIcon.png
+
+// FONTS
+LV_FONT_DECLARE(ui_font_Bold);
+LV_FONT_DECLARE(ui_font_H1);
+LV_FONT_DECLARE(ui_font_H2);
+LV_FONT_DECLARE(ui_font_Light);
+LV_FONT_DECLARE(ui_font_Number);
 
 // UI INIT
 void ui_init(void);
