@@ -31,7 +31,6 @@ static hsm_state_t app_state_setting;
 
 /* Timers */
 static hsm_timer_t *timer_loading;
-static hsm_timer_t *timer_blink_1s;
 
 void
 app_state_hsm_init(app_state_hsm_t* me) {
@@ -58,12 +57,12 @@ app_state_hsm_init(app_state_hsm_t* me) {
 
 static hsm_event_t
 app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     static uint8_t loading_count = 0;
     
     switch (event) {
         case HSM_EVENT_ENTRY: 
-            loading_count = 0;  // ← RESET
+            loading_count = 0; 
             hsm_timer_create(&timer_loading, hsm, HEVT_TIMER_LOADING, LOADING_1PERCENT_MS, HSM_TIMER_PERIODIC);
             hsm_timer_start(timer_loading);
             ESP_LOGI(TAG, "Loading: ENTRY");
@@ -75,20 +74,15 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             break;
             
         case HEVT_TIMER_LOADING:
-            // ← CRITICAL: Check nếu timer đã bị xóa
-            if (timer_loading == NULL) {
-                ESP_LOGW(TAG, "Timer callback after delete - IGNORED");
-                return HSM_EVENT_NONE;
-            }
-            
-            // ← CRITICAL: Check nếu không còn ở loading state
-            if (!hsm_is_in_state(hsm, &app_state_loading)) {
-                ESP_LOGW(TAG, "Timer fired in wrong state - IGNORED");
-                return HSM_EVENT_NONE;
-            }
-            
+            // if (timer_loading == NULL) {
+            //     ESP_LOGW(TAG, "Timer callback after delete - IGNORED");
+            //     return HSM_EVENT_NONE;
+            // }
+            // if (!hsm_is_in_state(hsm, &app_state_loading)) {
+            //     ESP_LOGW(TAG, "Timer fired in wrong state - IGNORED");
+            //     return HSM_EVENT_NONE;
+            // }
             loading_count += 10;
-            
             if (loading_count > 100) {
                 ESP_LOGI(TAG, "Loading Done -> Main State");
                 hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
@@ -108,7 +102,7 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_common_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY: break;
         case HSM_EVENT_EXIT: break;
@@ -126,7 +120,7 @@ app_state_main_common_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_load_screen(ui_scrMain);
@@ -159,7 +153,7 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_slot_1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_set_button_color(ui_btMainSlot1, BTN_COLOR_ACTIVE);
@@ -187,7 +181,7 @@ app_state_main_slot_1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_slot_2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_set_button_color(ui_btMainSlot2, BTN_COLOR_ACTIVE);
@@ -215,7 +209,7 @@ app_state_main_slot_2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_slot_3_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_set_button_color(ui_btMainSlot3, BTN_COLOR_ACTIVE);
@@ -243,7 +237,7 @@ app_state_main_slot_3_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_slot_4_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_set_button_color(ui_btMainSlot4, BTN_COLOR_ACTIVE);
@@ -271,7 +265,7 @@ app_state_main_slot_4_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_slot_5_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_set_button_color(ui_btMainSlot5, BTN_COLOR_ACTIVE);
@@ -299,7 +293,7 @@ app_state_main_slot_5_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t*)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_load_screen(ui_scrSetting);
@@ -318,17 +312,12 @@ static void
 esp32_timer_callback(TimerHandle_t xTimer) {
     esp32_timer_t* timer = (esp32_timer_t*)pvTimerGetTimerID(xTimer);
     if (timer == NULL) return;
-    
-    /* Try to acquire mutex (non-blocking) */
     if (xSemaphoreTake(timer->mutex, 0) != pdTRUE) {
-        return;  // ← Skip nếu đang delete
+        return; 
     }
-    
-    /* Check state */
     if (timer->state == TIMER_STATE_ACTIVE && timer->callback) {
         timer->callback(timer->arg);
     }
-    
     xSemaphoreGive(timer->mutex);
 }
 
@@ -336,14 +325,11 @@ static void*
 esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_t repeat) {
     esp32_timer_t* timer = malloc(sizeof(esp32_timer_t));
     if (!timer) return NULL;
-
-    /* Create mutex */
     timer->mutex = xSemaphoreCreateMutex();
     if (!timer->mutex) {
         free(timer);
         return NULL;
     }
-
     timer->callback = callback;
     timer->arg = arg;
     timer->state = TIMER_STATE_ACTIVE;
@@ -367,32 +353,21 @@ static void
 esp32_timer_stop(void* timer_handle) {
     esp32_timer_t* timer = (esp32_timer_t*)timer_handle;
     if (timer == NULL) return;
-    
     ESP_LOGD(TAG, "Timer stopping: %p", timer);
-    
-    /* Acquire mutex để block callback */
     if (xSemaphoreTake(timer->mutex, pdMS_TO_TICKS(100)) != pdTRUE) {
         ESP_LOGE(TAG, "Failed to acquire mutex for deletion");
         return;
     }
-    
-    /* Mark as deleting */
     timer->state = TIMER_STATE_DELETING;
-    timer->callback = NULL;  // ← Clear callback
+    timer->callback = NULL; 
     
     xSemaphoreGive(timer->mutex);
-    
-    /* Stop timer */
     if (timer->handle) {
         xTimerStop(timer->handle, pdMS_TO_TICKS(100));
         xTimerDelete(timer->handle, pdMS_TO_TICKS(100));
         timer->handle = NULL;
     }
-    
-    /* Đợi callback chạy xong (nếu đang chạy) */
-    vTaskDelay(pdMS_TO_TICKS(10));  // ← CRITICAL: Đợi callback finish
-    
-    /* Now safe to delete */
+    vTaskDelay(pdMS_TO_TICKS(10));  
     vSemaphoreDelete(timer->mutex);
     free(timer);
     
