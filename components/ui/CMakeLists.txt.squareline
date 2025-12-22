@@ -4,7 +4,8 @@ SET(SOURCES screens/ui_scrSplash.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c
-    images/ui_img_imgsplashbackground_png.c
+    images/ui_img_bg1_png.c
+    images/ui_img_vmo_logo_png.c
     images/ui_img_imgmainbackground_png.c
     images/ui_img_scrsettingicon_png.c
     images/ui_img_imgmainslotserialdetail_png.c
@@ -23,6 +24,11 @@ SET(SOURCES screens/ui_scrSplash.c
     images/ui_img_scrmain_batteryicon_png.c
     images/ui_img_scrnotconnecticon_png.c
     images/ui_img_imgsettingbackground_png.c
-    images/ui_img_imgsettingbackicon_png.c)
+    images/ui_img_imgsettingbackicon_png.c
+    fonts/ui_font_Bold.c
+    fonts/ui_font_H1.c
+    fonts/ui_font_H2.c
+    fonts/ui_font_Light.c
+    fonts/ui_font_Number.c)
 
 add_library(ui ${SOURCES})

@@ -14,9 +14,9 @@ extern "C" {
 extern void ui_scrSplash_screen_init(void);
 extern void ui_scrSplash_screen_destroy(void);
 extern lv_obj_t * ui_scrSplash;
-extern lv_obj_t * ui_imgSplashBackground;
 extern lv_obj_t * ui_barSplashLoading;
 extern lv_obj_t * ui_lbSplashLoadProgress;
+extern lv_obj_t * ui_Image1;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
