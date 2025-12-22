@@ -12,43 +12,44 @@ extern "C" {
 
 #include "lvgl.h"
 
-#include "ui_events.h"
 #include "ui_helpers.h"
+#include "ui_events.h"
+
 
 ///////////////////// SCREENS ////////////////////
 
+#include "screens/ui_scrSplash.h"
 #include "screens/ui_scrMain.h"
 #include "screens/ui_scrSetting.h"
-#include "screens/ui_scrSplash.h"
 
 ///////////////////// VARIABLES ////////////////////
 
+
 // EVENTS
 
-extern lv_obj_t* ui____initial_actions0;
+extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
-LV_IMG_DECLARE(ui_img_imgsplashbackground_png);         // assets/imgSplashBackground.png
-LV_IMG_DECLARE(ui_img_robot_4_png);                     // assets/robot 4.png
-LV_IMG_DECLARE(ui_img_imgmainbackground_png);           // assets/imgMainBackground.png
-LV_IMG_DECLARE(ui_img_scrsettingicon_png);              // assets/scrSettingIcon.png
-LV_IMG_DECLARE(ui_img_imgmainslotserialdetail_png);     // assets/imgMainSlotSerialDetail.png
-LV_IMG_DECLARE(ui_img_scrmain_batteryempty_png);        // assets/scrMain_batteryEmpty.png
-LV_IMG_DECLARE(ui_img_scrmain_batterywarning_png);      // assets/scrMain_batteryWarning.png
-LV_IMG_DECLARE(ui_img_imgmainslotdetailbackground_png); // assets/imgMainSlotDetailBackground.png
-LV_IMG_DECLARE(ui_img_imgmainmanualswapbat_png);        // assets/imgMainManualSwapBat.png
-LV_IMG_DECLARE(ui_img_scrmain_robotlowbattery_png);     // assets/scrMain_robotLowBattery.png
+LV_IMG_DECLARE(ui_img_imgsplashbackground_png);    // assets/imgSplashBackground.png
+LV_IMG_DECLARE(ui_img_imgmainbackground_png);    // assets/imgMainBackground.png
+LV_IMG_DECLARE(ui_img_scrsettingicon_png);    // assets/scrSettingIcon.png
+LV_IMG_DECLARE(ui_img_imgmainslotserialdetail_png);    // assets/imgMainSlotSerialDetail.png
+LV_IMG_DECLARE(ui_img_scrmain_batteryempty_png);    // assets/scrMain_batteryEmpty.png
+LV_IMG_DECLARE(ui_img_scrmain_batterywarning_png);    // assets/scrMain_batteryWarning.png
+LV_IMG_DECLARE(ui_img_imgmainslotdetailbackground_png);    // assets/imgMainSlotDetailBackground.png
+LV_IMG_DECLARE(ui_img_imgmainmanualswapbat_png);    // assets/imgMainManualSwapBat.png
+LV_IMG_DECLARE(ui_img_scrmain_robotlowbattery_png);    // assets/scrMain_robotLowBattery.png
 LV_IMG_DECLARE(ui_img_scrmain_robotfullbattery_png);    // assets/scrMain_robotFullBattery.png
-LV_IMG_DECLARE(ui_img_scrmain_robotcharging_png);       // assets/scrMain_robotCharging.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot1_png);            // assets/imgMainRbToSlot1.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot2_png);            // assets/imgMainRbToSlot2.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot3_png);            // assets/imgMainRbToSlot3.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot4_png);            // assets/imgMainRbToSlot4.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot5_png);            // assets/imgMainRbToSlot5.png
-LV_IMG_DECLARE(ui_img_scrmain_batteryicon_png);         // assets/scrMain_batteryIcon.png
-LV_IMG_DECLARE(ui_img_scrnotconnecticon_png);           // assets/scrNotConnectIcon.png
-LV_IMG_DECLARE(ui_img_imgsettingbackground_png);        // assets/imgSettingBackground.png
-LV_IMG_DECLARE(ui_img_imgsettingbackicon_png);          // assets/imgSettingBackIcon.png
+LV_IMG_DECLARE(ui_img_scrmain_robotcharging_png);    // assets/scrMain_robotCharging.png
+LV_IMG_DECLARE(ui_img_imgmainrbtoslot1_png);    // assets/imgMainRbToSlot1.png
+LV_IMG_DECLARE(ui_img_imgmainrbtoslot2_png);    // assets/imgMainRbToSlot2.png
+LV_IMG_DECLARE(ui_img_imgmainrbtoslot3_png);    // assets/imgMainRbToSlot3.png
+LV_IMG_DECLARE(ui_img_imgmainrbtoslot4_png);    // assets/imgMainRbToSlot4.png
+LV_IMG_DECLARE(ui_img_imgmainrbtoslot5_png);    // assets/imgMainRbToSlot5.png
+LV_IMG_DECLARE(ui_img_scrmain_batteryicon_png);    // assets/scrMain_batteryIcon.png
+LV_IMG_DECLARE(ui_img_scrnotconnecticon_png);    // assets/scrNotConnectIcon.png
+LV_IMG_DECLARE(ui_img_imgsettingbackground_png);    // assets/imgSettingBackground.png
+LV_IMG_DECLARE(ui_img_imgsettingbackicon_png);    // assets/imgSettingBackIcon.png
 
 // UI INIT
 void ui_init(void);

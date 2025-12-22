@@ -10,9 +10,6 @@
 extern "C" {
 #endif
 
-void fnMainChangeSettingClicked(lv_event_t* e);
-void fnSettingBackToMainClicked(lv_event_t* e);
-
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

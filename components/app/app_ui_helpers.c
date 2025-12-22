@@ -17,7 +17,7 @@ static const char* TAG = "UI_HELPERS";
 /*--------------------------------------------------------------------*/
 
 void
-ui_update_all_slot_details(DeviceHSM_t* me, uint8_t slot_index) {
+ui_update_all_slot_details(app_state_hsm_t* me, uint8_t slot_index) {
     if (slot_index >= TOTAL_SLOT) {
         ESP_LOGE(TAG, "Invalid slot index: %d", slot_index);
         return;
@@ -224,7 +224,7 @@ ui_clear_all_slot_details(void) {
 /*--------------------------------------------------------------------*/
 
 void
-ui_update_main_slot_voltage(DeviceHSM_t* me, int8_t slot_index) {
+ui_update_main_slot_voltage(app_state_hsm_t* me, int8_t slot_index) {
     if (slot_index >= TOTAL_SLOT) {
         return;
     }
@@ -262,7 +262,7 @@ ui_update_main_slot_voltage(DeviceHSM_t* me, int8_t slot_index) {
 }
 
 void
-ui_update_main_battery_percent(DeviceHSM_t* me, uint8_t slot_index) {
+ui_update_main_battery_percent(app_state_hsm_t* me, uint8_t slot_index) {
     if (slot_index >= TOTAL_SLOT) {
         return;
     }
@@ -394,7 +394,7 @@ ui_update_main_battery_percent(DeviceHSM_t* me, uint8_t slot_index) {
 }
 
 void
-ui_update_main_slot_capacity(DeviceHSM_t* me, int8_t slot_index) {
+ui_update_main_slot_capacity(app_state_hsm_t* me, int8_t slot_index) {
     if (slot_index >= TOTAL_SLOT) {
         return;
     }
@@ -506,7 +506,7 @@ ui_show_main_not_connect(bool show) {
 /* OPTIMIZED BATCH UPDATE - ALL SLOTS AT ONCE */
 /*--------------------------------------------------------------------*/
 void
-ui_update_all_slots_display(DeviceHSM_t* me) {
+ui_update_all_slots_display(app_state_hsm_t* me) {
     if (!ui_lock(-1)) {
         ESP_LOGE(TAG, "Failed to lock UI");
         return;
