@@ -25,13 +25,13 @@ extern "C" {
 #endif
 
 // LCD Configuration
-#define LCD_NUM_FB                 1 // Double buffer for maximum speed
+#define LCD_NUM_FB                 2 // Double buffer for maximum speed
 #define LCD_H_RES                  800
 #define LCD_V_RES                  480
 
 // LVGL Task Configuration
 #define LCD_LVGL_TICK_PERIOD_MS    1
-#define LCD_LVGL_TASK_MAX_DELAY_MS 500
+#define LCD_LVGL_TASK_MAX_DELAY_MS 50
 #define LCD_LVGL_TASK_MIN_DELAY_MS 1
 #define LCD_LVGL_TASK_STACK_SIZE   (4 * 1024)
 #define LCD_LVGL_TASK_PRIORITY     2
