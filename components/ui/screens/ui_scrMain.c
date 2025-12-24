@@ -7,12 +7,6 @@
 
 lv_obj_t * ui_scrMain = NULL;
 lv_obj_t * ui_vmologo1 = NULL;
-lv_obj_t * ui_slotbatterysttcontainer = NULL;
-lv_obj_t * ui_slotbatterystt1 = NULL;
-lv_obj_t * ui_slotbatterystt2 = NULL;
-lv_obj_t * ui_slotbatterystt3 = NULL;
-lv_obj_t * ui_slotbatterystt4 = NULL;
-lv_obj_t * ui_slotbatterystt5 = NULL;
 lv_obj_t * ui_stateofchargecontainer = NULL;
 lv_obj_t * ui_stateofchargepanel = NULL;
 lv_obj_t * ui_stateofchargelabel = NULL;
@@ -84,66 +78,6 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_align(ui_vmologo1, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_vmologo1, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_vmologo1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-
-    ui_slotbatterysttcontainer = lv_obj_create(ui_scrMain);
-    lv_obj_remove_style_all(ui_slotbatterysttcontainer);
-    lv_obj_set_width(ui_slotbatterysttcontainer, 443);
-    lv_obj_set_height(ui_slotbatterysttcontainer, 38);
-    lv_obj_set_x(ui_slotbatterysttcontainer, -97);
-    lv_obj_set_y(ui_slotbatterysttcontainer, 438);
-    lv_obj_set_align(ui_slotbatterysttcontainer, LV_ALIGN_TOP_MID);
-    lv_obj_clear_flag(ui_slotbatterysttcontainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-
-    ui_slotbatterystt1 = lv_obj_create(ui_slotbatterysttcontainer);
-    lv_obj_set_width(ui_slotbatterystt1, 20);
-    lv_obj_set_height(ui_slotbatterystt1, 20);
-    lv_obj_set_x(ui_slotbatterystt1, -196);
-    lv_obj_set_y(ui_slotbatterystt1, -9);
-    lv_obj_set_align(ui_slotbatterystt1, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt1, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_set_style_shadow_color(ui_slotbatterystt1, lv_color_hex(0x000000), LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_slotbatterystt1, 255, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
-
-    ui_slotbatterystt2 = lv_obj_create(ui_slotbatterysttcontainer);
-    lv_obj_set_width(ui_slotbatterystt2, 20);
-    lv_obj_set_height(ui_slotbatterystt2, 20);
-    lv_obj_set_x(ui_slotbatterystt2, -166);
-    lv_obj_set_y(ui_slotbatterystt2, -9);
-    lv_obj_set_align(ui_slotbatterystt2, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt2, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_slotbatterystt3 = lv_obj_create(ui_slotbatterysttcontainer);
-    lv_obj_set_width(ui_slotbatterystt3, 20);
-    lv_obj_set_height(ui_slotbatterystt3, 20);
-    lv_obj_set_x(ui_slotbatterystt3, -136);
-    lv_obj_set_y(ui_slotbatterystt3, -9);
-    lv_obj_set_align(ui_slotbatterystt3, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt3, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt3, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_slotbatterystt4 = lv_obj_create(ui_slotbatterysttcontainer);
-    lv_obj_set_width(ui_slotbatterystt4, 20);
-    lv_obj_set_height(ui_slotbatterystt4, 20);
-    lv_obj_set_x(ui_slotbatterystt4, -106);
-    lv_obj_set_y(ui_slotbatterystt4, -9);
-    lv_obj_set_align(ui_slotbatterystt4, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt4, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt4, lv_color_hex(0xEE3A29), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_slotbatterystt5 = lv_obj_create(ui_slotbatterysttcontainer);
-    lv_obj_set_width(ui_slotbatterystt5, 20);
-    lv_obj_set_height(ui_slotbatterystt5, 20);
-    lv_obj_set_x(ui_slotbatterystt5, -76);
-    lv_obj_set_y(ui_slotbatterystt5, -9);
-    lv_obj_set_align(ui_slotbatterystt5, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt5, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_stateofchargecontainer = lv_obj_create(ui_scrMain);
     lv_obj_remove_style_all(ui_stateofchargecontainer);
@@ -575,12 +509,6 @@ void ui_scrMain_screen_destroy(void)
     // NULL screen variables
     ui_scrMain = NULL;
     ui_vmologo1 = NULL;
-    ui_slotbatterysttcontainer = NULL;
-    ui_slotbatterystt1 = NULL;
-    ui_slotbatterystt2 = NULL;
-    ui_slotbatterystt3 = NULL;
-    ui_slotbatterystt4 = NULL;
-    ui_slotbatterystt5 = NULL;
     ui_stateofchargecontainer = NULL;
     ui_stateofchargepanel = NULL;
     ui_stateofchargelabel = NULL;
