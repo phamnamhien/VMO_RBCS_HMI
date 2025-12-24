@@ -15,6 +15,10 @@ extern void ui_scrProcess_screen_init(void);
 extern void ui_scrProcess_screen_destroy(void);
 extern lv_obj_t * ui_scrProcess;
 extern lv_obj_t * ui_vmologo4;
+extern lv_obj_t * ui_runtimecontainer;
+extern lv_obj_t * ui_runtimepanel;
+extern lv_obj_t * ui_runtimetitle;
+extern lv_obj_t * ui_runtimevalue;
 extern lv_obj_t * ui_menucontainer1;
 extern lv_obj_t * ui_leftsidebar1;
 extern lv_obj_t * ui_batterycontainer1;
@@ -36,10 +40,6 @@ extern lv_obj_t * ui_slotbatterystt8;
 extern lv_obj_t * ui_slotbatterystt9;
 extern lv_obj_t * ui_slotbatterystt10;
 extern lv_obj_t * ui_robotandcharge1;
-extern lv_obj_t * ui_runtimecontainer;
-extern lv_obj_t * ui_runtimepanel;
-extern lv_obj_t * ui_runtimetitle;
-extern lv_obj_t * ui_runtimevalue;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

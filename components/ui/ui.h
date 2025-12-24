@@ -40,13 +40,13 @@ LV_IMG_DECLARE(ui_img_bg1_png);    // assets/bg1.png
 LV_IMG_DECLARE(ui_img_vmo_logo_png);    // assets/vmo_logo.png
 LV_IMG_DECLARE(ui_img_bg2_png);    // assets/bg2.png
 LV_IMG_DECLARE(ui_img_vmo_logo2_png);    // assets/vmo_logo2.png
+LV_IMG_DECLARE(ui_img_vmocharger_png);    // assets/vmocharger.png
+LV_IMG_DECLARE(ui_img_scrnotconnected_warningicon_png);    // assets/scrNotConnected_warningIcon.png
 LV_IMG_DECLARE(ui_img_left_side_2_png);    // assets/left_side 2.png
 LV_IMG_DECLARE(ui_img_battery_png);    // assets/battery.png
 LV_IMG_DECLARE(ui_img_setting_1_png);    // assets/setting 1.png
 LV_IMG_DECLARE(ui_img_help_1_png);    // assets/help 1.png
 LV_IMG_DECLARE(ui_img_manual_png);    // assets/manual.png
-LV_IMG_DECLARE(ui_img_vmocharger_png);    // assets/vmocharger.png
-LV_IMG_DECLARE(ui_img_scrnotconnected_warningicon_png);    // assets/scrNotConnected_warningIcon.png
 LV_IMG_DECLARE(ui_img_group_9_png);    // assets/Group 9.png
 LV_IMG_DECLARE(ui_img_143516147);    // assets/pastel-gray-oil-paint-textured 1.png
 LV_IMG_DECLARE(ui_img_1_blue_3_5_png);    // assets/1_Blue_3 5.png
@@ -57,10 +57,10 @@ LV_IMG_DECLARE(
 // FONTS
 LV_FONT_DECLARE(ui_font_Bold);
 LV_FONT_DECLARE(ui_font_H1);
+LV_FONT_DECLARE(ui_font_H11);
 LV_FONT_DECLARE(ui_font_H2);
 LV_FONT_DECLARE(ui_font_Light);
 LV_FONT_DECLARE(ui_font_Number);
-LV_FONT_DECLARE(ui_font_H11);
 
 // UI INIT
 void ui_init(void);
