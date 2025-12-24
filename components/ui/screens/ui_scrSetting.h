@@ -14,9 +14,6 @@ extern "C" {
 extern void ui_scrSetting_screen_init(void);
 extern void ui_scrSetting_screen_destroy(void);
 extern lv_obj_t * ui_scrSetting;
-extern lv_obj_t * ui_imgSettingBackground;
-extern lv_obj_t * ui_lbSettingTitle;
-extern lv_obj_t * ui_ibtSettingBackToMain;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

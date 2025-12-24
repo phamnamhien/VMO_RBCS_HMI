@@ -29,13 +29,19 @@ lv_obj_t * ui____initial_actions0;
 
 void ui_init(void)
 {
+    LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
+
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     ui_scrSplash_screen_init();
-    ui_scrMain_screen_init();
     ui_scrSetting_screen_init();
+    ui_scrMain_screen_init();
+    ui_scrProcess_screen_init();
+    ui_scrManualControl12_screen_init();
+    ui_scrManualControl22_screen_init();
+    ui_scrMainSlot_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_scrSplash);
 }
@@ -43,6 +49,10 @@ void ui_init(void)
 void ui_destroy(void)
 {
     ui_scrSplash_screen_destroy();
-    ui_scrMain_screen_destroy();
     ui_scrSetting_screen_destroy();
+    ui_scrMain_screen_destroy();
+    ui_scrProcess_screen_destroy();
+    ui_scrManualControl12_screen_destroy();
+    ui_scrManualControl22_screen_destroy();
+    ui_scrMainSlot_screen_destroy();
 }

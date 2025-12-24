@@ -824,15 +824,15 @@ app_main(void) {
     if (ui_lock(-1)) {
         ui_init();
 
-        // Register event callbacks
-        lv_obj_add_event_cb(ui_ibtMainToSetting, fnMainSetting, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_ibtSettingBackToMain, fnSettingBackToMain, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_btMainSlot1, fnMainSlot1, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_btMainSlot2, fnMainSlot2, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_btMainSlot3, fnMainSlot3, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_btMainSlot4, fnMainSlot4, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_btMainSlot5, fnMainSlot5, LV_EVENT_CLICKED, NULL);
-        lv_obj_add_event_cb(ui_ibtMainManualSwap, fnMainManualSwap, LV_EVENT_CLICKED, NULL);
+        // // Register event callbacks
+        // lv_obj_add_event_cb(ui_ibtMainToSetting, fnMainSetting, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_ibtSettingBackToMain, fnSettingBackToMain, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_btMainSlot1, fnMainSlot1, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_btMainSlot2, fnMainSlot2, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_btMainSlot3, fnMainSlot3, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_btMainSlot4, fnMainSlot4, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_btMainSlot5, fnMainSlot5, LV_EVENT_CLICKED, NULL);
+        // lv_obj_add_event_cb(ui_ibtMainManualSwap, fnMainManualSwap, LV_EVENT_CLICKED, NULL);
 
         ui_unlock();
     }

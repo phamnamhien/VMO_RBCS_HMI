@@ -13,14 +13,20 @@ extern "C" {
 #include "lvgl.h"
 
 #include "ui_helpers.h"
+#include "components/ui_comp.h"
+#include "components/ui_comp_hook.h"
 #include "ui_events.h"
 
 
 ///////////////////// SCREENS ////////////////////
 
 #include "screens/ui_scrSplash.h"
-#include "screens/ui_scrMain.h"
 #include "screens/ui_scrSetting.h"
+#include "screens/ui_scrMain.h"
+#include "screens/ui_scrProcess.h"
+#include "screens/ui_scrManualControl12.h"
+#include "screens/ui_scrManualControl22.h"
+#include "screens/ui_scrMainSlot.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -32,25 +38,21 @@ extern lv_obj_t * ui____initial_actions0;
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_bg1_png);    // assets/bg1.png
 LV_IMG_DECLARE(ui_img_vmo_logo_png);    // assets/vmo_logo.png
-LV_IMG_DECLARE(ui_img_imgmainbackground_png);    // assets/imgMainBackground.png
-LV_IMG_DECLARE(ui_img_scrsettingicon_png);    // assets/scrSettingIcon.png
-LV_IMG_DECLARE(ui_img_imgmainslotserialdetail_png);    // assets/imgMainSlotSerialDetail.png
-LV_IMG_DECLARE(ui_img_scrmain_batteryempty_png);    // assets/scrMain_batteryEmpty.png
-LV_IMG_DECLARE(ui_img_scrmain_batterywarning_png);    // assets/scrMain_batteryWarning.png
-LV_IMG_DECLARE(ui_img_imgmainslotdetailbackground_png);    // assets/imgMainSlotDetailBackground.png
-LV_IMG_DECLARE(ui_img_imgmainmanualswapbat_png);    // assets/imgMainManualSwapBat.png
-LV_IMG_DECLARE(ui_img_scrmain_robotlowbattery_png);    // assets/scrMain_robotLowBattery.png
-LV_IMG_DECLARE(ui_img_scrmain_robotfullbattery_png);    // assets/scrMain_robotFullBattery.png
-LV_IMG_DECLARE(ui_img_scrmain_robotcharging_png);    // assets/scrMain_robotCharging.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot1_png);    // assets/imgMainRbToSlot1.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot2_png);    // assets/imgMainRbToSlot2.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot3_png);    // assets/imgMainRbToSlot3.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot4_png);    // assets/imgMainRbToSlot4.png
-LV_IMG_DECLARE(ui_img_imgmainrbtoslot5_png);    // assets/imgMainRbToSlot5.png
-LV_IMG_DECLARE(ui_img_scrmain_batteryicon_png);    // assets/scrMain_batteryIcon.png
-LV_IMG_DECLARE(ui_img_scrnotconnecticon_png);    // assets/scrNotConnectIcon.png
-LV_IMG_DECLARE(ui_img_imgsettingbackground_png);    // assets/imgSettingBackground.png
-LV_IMG_DECLARE(ui_img_imgsettingbackicon_png);    // assets/imgSettingBackIcon.png
+LV_IMG_DECLARE(ui_img_bg2_png);    // assets/bg2.png
+LV_IMG_DECLARE(ui_img_vmo_logo2_png);    // assets/vmo_logo2.png
+LV_IMG_DECLARE(ui_img_left_side_2_png);    // assets/left_side 2.png
+LV_IMG_DECLARE(ui_img_battery_png);    // assets/battery.png
+LV_IMG_DECLARE(ui_img_setting_1_png);    // assets/setting 1.png
+LV_IMG_DECLARE(ui_img_help_1_png);    // assets/help 1.png
+LV_IMG_DECLARE(ui_img_manual_png);    // assets/manual.png
+LV_IMG_DECLARE(ui_img_vmocharger_png);    // assets/vmocharger.png
+LV_IMG_DECLARE(ui_img_scrnotconnected_warningicon_png);    // assets/scrNotConnected_warningIcon.png
+LV_IMG_DECLARE(ui_img_group_9_png);    // assets/Group 9.png
+LV_IMG_DECLARE(ui_img_143516147);    // assets/pastel-gray-oil-paint-textured 1.png
+LV_IMG_DECLARE(ui_img_1_blue_3_5_png);    // assets/1_Blue_3 5.png
+LV_IMG_DECLARE(ui_img_1_blue_3_8_png);    // assets/1_Blue_3 8.png
+LV_IMG_DECLARE(
+    ui_img_z7358953714029_6a7a8c912df9884a2fa156d0bc4a5d11_1_png);    // assets/z7358953714029_6a7a8c912df9884a2fa156d0bc4a5d11 1.png
 
 // FONTS
 LV_FONT_DECLARE(ui_font_Bold);
@@ -58,6 +60,7 @@ LV_FONT_DECLARE(ui_font_H1);
 LV_FONT_DECLARE(ui_font_H2);
 LV_FONT_DECLARE(ui_font_Light);
 LV_FONT_DECLARE(ui_font_Number);
+LV_FONT_DECLARE(ui_font_H11);
 
 // UI INIT
 void ui_init(void);

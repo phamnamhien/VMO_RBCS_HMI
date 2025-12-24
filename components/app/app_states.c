@@ -109,11 +109,20 @@ app_state_main_common_handler(hsm_t* hsm, hsm_event_t event, void* data) {
         case HEVT_MODBUS_GET_STATION_STATE_DATA:
             // Handle station state data update if needed
             break;
-        case HEVT_MODBUS_GET_SLOT_DATA: ui_update_all_slots_display(me); break;
-        case HEVT_CHANGE_SCR_MAIN_TO_SETTING: hsm_transition((hsm_t *)me, &app_state_setting, NULL, NULL); break;
-        case HEVT_MODBUS_CONNECTED: ui_show_main_not_connect(false); break;
-        case HEVT_MODBUS_NOTCONNECTED: ui_show_main_not_connect(true); break;
-        default: return event;
+        case HEVT_MODBUS_GET_SLOT_DATA: 
+            ui_update_all_slots_display(me); 
+            break;
+        case HEVT_CHANGE_SCR_MAIN_TO_SETTING: 
+            hsm_transition((hsm_t *)me, &app_state_setting, NULL, NULL); 
+            break;
+        case HEVT_MODBUS_CONNECTED: 
+            ui_show_main_not_connect(false); 
+            break;
+        case HEVT_MODBUS_NOTCONNECTED: 
+            ui_show_main_not_connect(true); 
+            break;
+        default: 
+            return event;
     }
     return 0;
 }
@@ -126,18 +135,6 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             ui_load_screen(ui_scrMain);
             ui_show_slot_serial_detail(0);
             ui_show_slot_detail_panel(false);
-
-            // ✅ IN RA ĐỊA CHỈ CÁC UI LABELS
-            ESP_LOGI(TAG, "===========================================");
-            ESP_LOGI(TAG, "  📺 UI LABEL ADDRESSES");
-            ESP_LOGI(TAG, "===========================================");
-            ESP_LOGI(TAG, "  ui_lbMainVoltageSlot1 @ %p", ui_lbMainVoltageSlot1);
-            ESP_LOGI(TAG, "  ui_lbMainVoltageSlot2 @ %p", ui_lbMainVoltageSlot2);
-            ESP_LOGI(TAG, "  ui_lbMainVoltageSlot3 @ %p", ui_lbMainVoltageSlot3);
-            ESP_LOGI(TAG, "  ui_lbMainVoltageSlot4 @ %p", ui_lbMainVoltageSlot4);
-            ESP_LOGI(TAG, "  ui_lbMainVoltageSlot5 @ %p", ui_lbMainVoltageSlot5);
-            ESP_LOGI(TAG, "===========================================");
-
             ESP_LOGI(TAG, "Entered Main State");
             break;
         case HSM_EVENT_EXIT: break;
@@ -156,14 +153,14 @@ app_state_main_slot_1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ui_set_button_color(ui_btMainSlot1, BTN_COLOR_ACTIVE);
+            // ui_set_button_color(ui_btMainSlot1, BTN_COLOR_ACTIVE);
             ui_show_slot_serial_detail(1);
             ui_clear_all_slot_details();
             ui_show_slot_detail_panel(true);
             ESP_LOGI(TAG, "Main Slot 1 Clicked");
             break;
         case HSM_EVENT_EXIT:
-            ui_set_button_color(ui_btMainSlot1, BTN_COLOR_NORMAL);
+            // ui_set_button_color(ui_btMainSlot1, BTN_COLOR_NORMAL);
             ui_show_slot_serial_detail(0);
             //ui_show_slot_detail_panel(false);
             break;
@@ -184,14 +181,14 @@ app_state_main_slot_2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ui_set_button_color(ui_btMainSlot2, BTN_COLOR_ACTIVE);
+            // ui_set_button_color(ui_btMainSlot2, BTN_COLOR_ACTIVE);
             ui_show_slot_serial_detail(2);
             ui_clear_all_slot_details();
             ui_show_slot_detail_panel(true);
             ESP_LOGI(TAG, "Main Slot 2 Clicked");
             break;
         case HSM_EVENT_EXIT:
-            ui_set_button_color(ui_btMainSlot2, BTN_COLOR_NORMAL);
+            // ui_set_button_color(ui_btMainSlot2, BTN_COLOR_NORMAL);
             ui_show_slot_serial_detail(0);
             // ui_show_slot_detail_panel(false);
             break;
@@ -212,14 +209,14 @@ app_state_main_slot_3_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ui_set_button_color(ui_btMainSlot3, BTN_COLOR_ACTIVE);
+            // ui_set_button_color(ui_btMainSlot3, BTN_COLOR_ACTIVE);
             ui_show_slot_serial_detail(3);
             ui_clear_all_slot_details();
             ui_show_slot_detail_panel(true);
             ESP_LOGI(TAG, "Main Slot 3 Clicked");
             break;
         case HSM_EVENT_EXIT:
-            ui_set_button_color(ui_btMainSlot3, BTN_COLOR_NORMAL);
+            // ui_set_button_color(ui_btMainSlot3, BTN_COLOR_NORMAL);
             ui_show_slot_serial_detail(0);
             // ui_show_slot_detail_panel(false);
             break;
@@ -240,14 +237,14 @@ app_state_main_slot_4_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ui_set_button_color(ui_btMainSlot4, BTN_COLOR_ACTIVE);
+            // ui_set_button_color(ui_btMainSlot4, BTN_COLOR_ACTIVE);
             ui_show_slot_serial_detail(4);
             ui_clear_all_slot_details();
             ui_show_slot_detail_panel(true);
             ESP_LOGI(TAG, "Main Slot 4 Clicked");
             break;
         case HSM_EVENT_EXIT:
-            ui_set_button_color(ui_btMainSlot4, BTN_COLOR_NORMAL);
+            // ui_set_button_color(ui_btMainSlot4, BTN_COLOR_NORMAL);
             ui_show_slot_serial_detail(0);
             // ui_show_slot_detail_panel(false);
             break;
@@ -268,14 +265,14 @@ app_state_main_slot_5_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ui_set_button_color(ui_btMainSlot5, BTN_COLOR_ACTIVE);
+            // ui_set_button_color(ui_btMainSlot5, BTN_COLOR_ACTIVE);
             ui_show_slot_serial_detail(5);
             ui_clear_all_slot_details();
             ui_show_slot_detail_panel(true);
             ESP_LOGI(TAG, "Main Slot 5 Clicked");
             break;
         case HSM_EVENT_EXIT:
-            ui_set_button_color(ui_btMainSlot5, BTN_COLOR_NORMAL);
+            // ui_set_button_color(ui_btMainSlot5, BTN_COLOR_NORMAL);
             ui_show_slot_serial_detail(0);
             // ui_show_slot_detail_panel(false);
             break;
