@@ -758,3 +758,7 @@ app_main(void) {
     ESP_LOGI(TAG, "  Free PSRAM: %lu bytes", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
     ESP_LOGI(TAG, "===========================================");
 }
+
+void fnscrmainbatterybuttonclicked(void) {
+    
+}

@@ -460,11 +460,11 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_style_text_font(ui_scrmainbatslotslabel, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_scrmainchargerimg = lv_img_create(ui_scrMain);
-    lv_img_set_src(ui_scrmainchargerimg, &ui_img_vmocharger_png);
-    lv_obj_set_width(ui_scrmainchargerimg, LV_SIZE_CONTENT);   /// 282
-    lv_obj_set_height(ui_scrmainchargerimg, LV_SIZE_CONTENT);    /// 365
-    lv_obj_set_x(ui_scrmainchargerimg, 58);
-    lv_obj_set_y(ui_scrmainchargerimg, 13);
+    lv_img_set_src(ui_scrmainchargerimg, &ui_img_group_14_png);
+    lv_obj_set_width(ui_scrmainchargerimg, LV_SIZE_CONTENT);   /// 305
+    lv_obj_set_height(ui_scrmainchargerimg, LV_SIZE_CONTENT);    /// 377
+    lv_obj_set_x(ui_scrmainchargerimg, 52);
+    lv_obj_set_y(ui_scrmainchargerimg, 25);
     lv_obj_set_align(ui_scrmainchargerimg, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_scrmainchargerimg, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_scrmainchargerimg, LV_OBJ_FLAG_SCROLLABLE);      /// Flags

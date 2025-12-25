@@ -17,6 +17,18 @@ lv_obj_t * ui_chooseb1container = NULL;
 lv_obj_t * ui_chooseb2container = NULL;
 lv_obj_t * ui_scrmanual1backtomainbutton = NULL;
 // event funtions
+void ui_event_scrManualControl12(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOAD_START) {
+        fadeout_Animation(ui_scrmanual1robotbackimg, 0);
+    }
+    if(event_code == LV_EVENT_SCREEN_UNLOAD_START) {
+        _ui_opacity_set(ui_scrmanual1robotbackimg, 255);
+    }
+}
+
 void ui_event_chooseb1container_button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -92,7 +104,7 @@ void ui_scrManualControl12_screen_init(void)
     lv_obj_set_align(ui_scrmanual1robotbackimg, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_scrmanual1robotbackimg, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_scrmanual1robotbackimg, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_opa(ui_scrmanual1robotbackimg, 120, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_opa(ui_scrmanual1robotbackimg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_scrmanual1robotbat1img = lv_img_create(ui_scrmanual1robotbackcontainer);
     lv_img_set_src(ui_scrmanual1robotbat1img, &ui_img_1_blue_3_8_png);
@@ -149,6 +161,7 @@ void ui_scrManualControl12_screen_init(void)
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooseb2container, UI_COMP_BUTTONCONTAINER_BUTTON),
                         ui_event_chooseb2container_button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrmanual1backtomainbutton, ui_event_scrmanual1backtomainbutton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_scrManualControl12, ui_event_scrManualControl12, LV_EVENT_ALL, NULL);
 
 }
 

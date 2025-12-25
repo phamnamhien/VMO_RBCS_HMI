@@ -13,6 +13,7 @@ extern "C" {
 // SCREEN: ui_scrProcess
 extern void ui_scrProcess_screen_init(void);
 extern void ui_scrProcess_screen_destroy(void);
+extern void ui_event_scrProcess(lv_event_t * e);
 extern lv_obj_t * ui_scrProcess;
 extern lv_obj_t * ui_scrprocessstatecontainer;
 extern lv_obj_t * ui_scrprocessstatepanel;
@@ -29,9 +30,12 @@ extern lv_obj_t * ui_scrprocessslotssttslot2panel;
 extern lv_obj_t * ui_scrprocessslotssttslot3panel;
 extern lv_obj_t * ui_scrprocessslotssttslot4panel;
 extern lv_obj_t * ui_scrprocessslotssttslot5panel;
-extern lv_obj_t * ui_scrprocessrobotnchrgimg;
+extern lv_obj_t * ui_scrprocesschargerimg;
+extern lv_obj_t * ui_scrprocessrobotimg;
 extern void ui_event_scrprocessbacktomainbutton(lv_event_t * e);
 extern lv_obj_t * ui_scrprocessbacktomainbutton;
+extern lv_obj_t * ui_scrprocessprcontainer;
+extern lv_obj_t * ui_scrprocessstopcontainer;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

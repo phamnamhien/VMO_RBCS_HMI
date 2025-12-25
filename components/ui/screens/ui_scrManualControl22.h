@@ -13,6 +13,7 @@ extern "C" {
 // SCREEN: ui_scrManualControl22
 extern void ui_scrManualControl22_screen_init(void);
 extern void ui_scrManualControl22_screen_destroy(void);
+extern void ui_event_scrManualControl22(lv_event_t * e);
 extern lv_obj_t * ui_scrManualControl22;
 extern lv_obj_t * ui_scrmanual2robotnchrgimg;
 extern lv_obj_t * ui_scrmanual2guidelabel;

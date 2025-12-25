@@ -10,6 +10,15 @@ lv_obj_t * ui_scrsplashloadingbar = NULL;
 lv_obj_t * ui_scrsplashloadingprogresslabel = NULL;
 lv_obj_t * ui_scrsplashvmologo = NULL;
 // event funtions
+void ui_event_scrSplash(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_SCREEN_LOAD_START) {
+        scrsplashstartlogo_Animation(ui_scrsplashvmologo, 0);
+        _ui_opacity_set(ui_scrsplashvmologo, 255);
+    }
+}
 
 // build funtions
 
@@ -41,16 +50,20 @@ void ui_scrSplash_screen_init(void)
     lv_obj_set_y(ui_scrsplashloadingprogresslabel, 200);
     lv_obj_set_align(ui_scrsplashloadingprogresslabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_scrsplashloadingprogresslabel, "system Initialization...");
+    lv_obj_add_flag(ui_scrsplashloadingprogresslabel, LV_OBJ_FLAG_HIDDEN);     /// Flags
 
     ui_scrsplashvmologo = lv_img_create(ui_scrSplash);
     lv_img_set_src(ui_scrsplashvmologo, &ui_img_vmo_logo_png);
     lv_obj_set_width(ui_scrsplashvmologo, LV_SIZE_CONTENT);   /// 525
     lv_obj_set_height(ui_scrsplashvmologo, LV_SIZE_CONTENT);    /// 89
     lv_obj_set_x(ui_scrsplashvmologo, 0);
-    lv_obj_set_y(ui_scrsplashvmologo, -50);
+    lv_obj_set_y(ui_scrsplashvmologo, -30);
     lv_obj_set_align(ui_scrsplashvmologo, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_scrsplashvmologo, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_scrsplashvmologo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_opa(ui_scrsplashvmologo, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_scrSplash, ui_event_scrSplash, LV_EVENT_ALL, NULL);
 
 }
 
