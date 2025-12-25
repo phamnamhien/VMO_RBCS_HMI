@@ -16,6 +16,63 @@ static const char* TAG = "UI_HELPERS";
 /* OPTIMIZED BATCH UPDATE - SINGLE LOCK */
 /*--------------------------------------------------------------------*/
 
+
+// Hàm cập nhật dữ liệu cho container
+#include "lvgl.h"
+#include "esp_log.h"
+
+#define TAG "UI"
+
+void scrmainbatslotscontainer_update(
+    const bool has_slot[5],
+    const float voltages[5],
+    const float percents[5])
+{
+    if (!ui_lock(-1)) {
+        ESP_LOGE(TAG, "Failed to lock UI");
+        return;
+    }
+
+    char summaryText[256];
+    summaryText[0] = '\0';
+
+    for (int i = 0; i < 5; i++) {
+        char line[64];
+
+        if (has_slot[i]) {
+            snprintf(line, sizeof(line),
+                     "%.1fV\n%.1f%%",
+                     voltages[i], percents[i]);
+
+            int value = (int)percents[i];
+            switch (i) {
+                case 0: lv_bar_set_value(ui_scrmainbatslot1bar, value, LV_ANIM_OFF); break;
+                case 1: lv_bar_set_value(ui_scrmainbatslot2bar, value, LV_ANIM_OFF); break;
+                case 2: lv_bar_set_value(ui_scrmainbatslot3bar, value, LV_ANIM_OFF); break;
+                case 3: lv_bar_set_value(ui_scrmainbatslot4bar, value, LV_ANIM_OFF); break;
+                case 4: lv_bar_set_value(ui_scrmainbatslot5bar, value, LV_ANIM_OFF); break;
+            }
+        } else {
+            snprintf(line, sizeof(line), "-.-V\n-.-%%");
+
+            switch (i) {
+                case 0: lv_bar_set_value(ui_scrmainbatslot1bar, 0, LV_ANIM_OFF); break;
+                case 1: lv_bar_set_value(ui_scrmainbatslot2bar, 0, LV_ANIM_OFF); break;
+                case 2: lv_bar_set_value(ui_scrmainbatslot3bar, 0, LV_ANIM_OFF); break;
+                case 3: lv_bar_set_value(ui_scrmainbatslot4bar, 0, LV_ANIM_OFF); break;
+                case 4: lv_bar_set_value(ui_scrmainbatslot5bar, 0, LV_ANIM_OFF); break;
+            }
+        }
+
+        strcat(summaryText, line);
+        if (i < 4) strcat(summaryText, "\n\n");
+    }
+
+    lv_label_set_text(ui_scrmainbatslotslabel, summaryText);
+
+    ui_unlock();
+}
+
 void
 ui_update_all_slot_details(app_state_hsm_t* me, uint8_t slot_index) {
     // if (slot_index >= TOTAL_SLOT) {

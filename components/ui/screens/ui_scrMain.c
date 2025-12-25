@@ -363,8 +363,6 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_style_text_font(ui_scrmainbatslotstitlelabel, &ui_font_H11, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_scrmainbatslot1bar = lv_bar_create(ui_scrmainbatslotscontainer);
-    lv_bar_set_value(ui_scrmainbatslot1bar, 90, LV_ANIM_OFF);
-    lv_bar_set_start_value(ui_scrmainbatslot1bar, 0, LV_ANIM_OFF);
     lv_obj_set_width(ui_scrmainbatslot1bar, 153);
     lv_obj_set_height(ui_scrmainbatslot1bar, 10);
     lv_obj_set_x(ui_scrmainbatslot1bar, -20);
@@ -382,8 +380,6 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_style_bg_opa(ui_scrmainbatslot1bar, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
     ui_scrmainbatslot2bar = lv_bar_create(ui_scrmainbatslotscontainer);
-    lv_bar_set_value(ui_scrmainbatslot2bar, 98, LV_ANIM_OFF);
-    lv_bar_set_start_value(ui_scrmainbatslot2bar, 0, LV_ANIM_OFF);
     lv_obj_set_width(ui_scrmainbatslot2bar, 153);
     lv_obj_set_height(ui_scrmainbatslot2bar, 10);
     lv_obj_set_x(ui_scrmainbatslot2bar, -20);
@@ -401,8 +397,6 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_style_bg_opa(ui_scrmainbatslot2bar, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
     ui_scrmainbatslot3bar = lv_bar_create(ui_scrmainbatslotscontainer);
-    lv_bar_set_value(ui_scrmainbatslot3bar, 80, LV_ANIM_OFF);
-    lv_bar_set_start_value(ui_scrmainbatslot3bar, 0, LV_ANIM_OFF);
     lv_obj_set_width(ui_scrmainbatslot3bar, 153);
     lv_obj_set_height(ui_scrmainbatslot3bar, 10);
     lv_obj_set_x(ui_scrmainbatslot3bar, -20);
@@ -420,8 +414,6 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_style_bg_opa(ui_scrmainbatslot3bar, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
     ui_scrmainbatslot4bar = lv_bar_create(ui_scrmainbatslotscontainer);
-    lv_bar_set_value(ui_scrmainbatslot4bar, 100, LV_ANIM_OFF);
-    lv_bar_set_start_value(ui_scrmainbatslot4bar, 0, LV_ANIM_OFF);
     lv_obj_set_width(ui_scrmainbatslot4bar, 153);
     lv_obj_set_height(ui_scrmainbatslot4bar, 10);
     lv_obj_set_x(ui_scrmainbatslot4bar, -20);
@@ -461,7 +453,7 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_x(ui_scrmainbatslotslabel, 85);
     lv_obj_set_y(ui_scrmainbatslotslabel, 15);
     lv_obj_set_align(ui_scrmainbatslotslabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmainbatslotslabel, "54.6V\n60%\n\n60.2V\n98%\n\n30.6V\n56%\n\n48.8V\n100%\n\nX\nX");
+    lv_label_set_text(ui_scrmainbatslotslabel, "-.-V\n-.-%\n\n-.-V\n-.-%\n\n-.-V\n-.-%\n\n-.-V\n-.-%\n\n-.-V\n-.-%");
     lv_obj_set_style_text_color(ui_scrmainbatslotslabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_scrmainbatslotslabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_scrmainbatslotslabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -522,7 +514,7 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_x(ui_scrmainlasttimelabel, 0);
     lv_obj_set_y(ui_scrmainlasttimelabel, 7);
     lv_obj_set_align(ui_scrmainlasttimelabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmainlasttimelabel, "1m20s");
+    lv_label_set_text(ui_scrmainlasttimelabel, "0s");
     lv_obj_set_style_text_color(ui_scrmainlasttimelabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_scrmainlasttimelabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_scrmainlasttimelabel, &ui_font_H1, LV_PART_MAIN | LV_STATE_DEFAULT);

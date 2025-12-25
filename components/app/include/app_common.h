@@ -57,6 +57,21 @@ extern "C" {
 #define LCD_PIN_NUM_DATA15        40 // R7
 #define LCD_PIN_NUM_DISP_EN       -1
 
+
+
+#define MB_SLOT1_START_REG          0
+#define MB_SLOT1_NUMBER_OF_REGS     55
+#define MB_SLOT2_START_REG          100
+#define MB_SLOT2_NUMBER_OF_REGS     55
+#define MB_SLOT3_START_REG          200
+#define MB_SLOT3_NUMBER_OF_REGS     55
+#define MB_SLOT4_START_REG          300
+#define MB_SLOT4_NUMBER_OF_REGS     55
+#define MB_SLOT5_START_REG          400
+#define MB_SLOT5_NUMBER_OF_REGS     55
+#define MB_COMMON_START_REG         1000
+#define MB_COMMON_NUMBER_OF_REGS    55
+
 #ifdef __cplusplus
 }
 #endif

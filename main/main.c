@@ -152,7 +152,7 @@ modbus_poll_task(void* arg) {
     while (1) {
         // ===== SLOT 1 =====
         ESP_LOGD(TAG, "📥 Reading Slot 1 (addr=%d, reg=0, count=50)", APP_MODBUS_SLAVE_ID);
-        esp_err_t err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 0, 50, holding_regs);
+        esp_err_t err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT1_START_REG, MB_SLOT1_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_1);
             consecutive_errors = 0;
@@ -168,7 +168,7 @@ modbus_poll_task(void* arg) {
 
         // ===== SLOT 2 =====
         ESP_LOGD(TAG, "📥 Reading Slot 2 (addr=%d, reg=100, count=50)", APP_MODBUS_SLAVE_ID);
-        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 100, 50, holding_regs);
+        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT2_START_REG, MB_SLOT2_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_2);
             consecutive_errors = 0;
@@ -184,7 +184,7 @@ modbus_poll_task(void* arg) {
 
         // ===== SLOT 3 =====
         ESP_LOGD(TAG, "📥 Reading Slot 3 (addr=%d, reg=200, count=50)", APP_MODBUS_SLAVE_ID);
-        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 200, 50, holding_regs);
+        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT3_START_REG, MB_SLOT3_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_3);
             consecutive_errors = 0;
@@ -200,7 +200,7 @@ modbus_poll_task(void* arg) {
 
         // ===== SLOT 4 =====
         ESP_LOGD(TAG, "📥 Reading Slot 4 (addr=%d, reg=300, count=50)", APP_MODBUS_SLAVE_ID);
-        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 300, 50, holding_regs);
+        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT4_START_REG, MB_SLOT4_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_4);
             consecutive_errors = 0;
@@ -216,7 +216,7 @@ modbus_poll_task(void* arg) {
 
         // ===== SLOT 5 =====
         ESP_LOGD(TAG, "📥 Reading Slot 5 (addr=%d, reg=400, count=50)", APP_MODBUS_SLAVE_ID);
-        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 400, 50, holding_regs);
+        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT5_START_REG, MB_SLOT5_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_5);
             consecutive_errors = 0;
@@ -232,7 +232,7 @@ modbus_poll_task(void* arg) {
 
         // ===== STATION STATE =====
         ESP_LOGD(TAG, "📥 Reading Station State (addr=%d, reg=1000, count=50)", APP_MODBUS_SLAVE_ID);
-        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 1000, 50, holding_regs);
+        err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_COMMON_START_REG, MB_COMMON_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_bms_information_sync_data(&device, holding_regs);
             consecutive_errors = 0;
@@ -247,8 +247,11 @@ modbus_poll_task(void* arg) {
         // ===== KIỂM TRA QUÁ NHIỀU LỖI =====
         if (consecutive_errors >= 5) {
             ESP_LOGE(TAG, "⚠️  Too many errors (%d) - pausing 1s", consecutive_errors);
+            hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_NOTCONNECTED, NULL);
             vTaskDelay(pdMS_TO_TICKS(1000));
             consecutive_errors = 0;
+        } else {
+             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_DATA, NULL);
         }
     }
 }

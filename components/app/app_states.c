@@ -31,6 +31,7 @@ static hsm_state_t app_state_setting;
 
 /* Timers */
 static hsm_timer_t *timer_loading;
+static hsm_timer_t *timer_update;
 
 void
 app_state_hsm_init(app_state_hsm_t* me) {
@@ -74,14 +75,6 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             break;
             
         case HEVT_TIMER_LOADING:
-            // if (timer_loading == NULL) {
-            //     ESP_LOGW(TAG, "Timer callback after delete - IGNORED");
-            //     return HSM_EVENT_NONE;
-            // }
-            // if (!hsm_is_in_state(hsm, &app_state_loading)) {
-            //     ESP_LOGW(TAG, "Timer fired in wrong state - IGNORED");
-            //     return HSM_EVENT_NONE;
-            // }
             loading_count += 4;
             if (loading_count > 100) {
                 ESP_LOGI(TAG, "Loading Done -> Main State");
@@ -135,9 +128,17 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             ui_load_screen(ui_scrMain);
             ui_show_slot_serial_detail(0);
             ui_show_slot_detail_panel(false);
+            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
+            hsm_timer_start(timer_update);
             ESP_LOGI(TAG, "Entered Main State");
             break;
         case HSM_EVENT_EXIT: break;
+        case HEVT_TIMER_UPDATE:
+            bool slots[5] = {true, true, false, true, true};
+            float voltages[5] = {0.0, 34.5, 12.3, 56.3, 34.5};
+            float percents[5] = {99.0, 23.5, 22.3, 32.3, 74.5};
+            scrmainbatslotscontainer_update(slots, voltages, percents);
+            break;
         case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_1, NULL, NULL); break;
         case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_2, NULL, NULL); break;
         case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_3, NULL, NULL); break;

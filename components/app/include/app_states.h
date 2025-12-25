@@ -36,7 +36,9 @@ extern "C" {
 
 #define BMS_TIMEOUT_MAX_COUNT           3
 
-#define LOADING_1PERCENT_MS             100                     
+#define LOADING_1PERCENT_MS             100     
+#define UPDATE_SCREEN_VALUE_MS          1000     
+
 typedef enum {
     IDX_SLOT_1 = 0,
     IDX_SLOT_2,
@@ -155,7 +157,7 @@ typedef enum {
     HEVT_MANUAL_MOTOR_3_MOVE,
 
     HEVT_TIMER_LOADING,
-    HEVT_TIMER_CUSTOM,
+    HEVT_TIMER_UPDATE,
 } app_events_t;
 
 typedef struct {
@@ -181,6 +183,9 @@ void ui_update_all_slot_details(app_state_hsm_t* me, uint8_t slot_index);
 void ui_clear_all_slot_details(void);
 
 void ui_show_main_not_connect(bool show);
+
+
+void scrmainbatslotscontainer_update(const bool has_slot[5], const float voltages[5], const float percents[5]);
 
 #ifdef __cplusplus
 }
