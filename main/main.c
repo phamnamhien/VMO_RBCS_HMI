@@ -754,9 +754,10 @@ app_main(void) {
     esp_err_t modbus_ret = modbus_master_init(&modbus_cfg);
     if (modbus_ret == ESP_OK) {
         modbus_master_register_callback(modbus_data_received);
-        ESP_LOGI(TAG, "      Modbus: UART%d @ %d baud", modbus_cfg.uart_port, modbus_cfg.baudrate);
-        ESP_LOGI(TAG, "      Pins: TX=%d RX=%d RTS=%d", modbus_cfg.tx_pin, modbus_cfg.rx_pin, modbus_cfg.rts_pin);
-
+        ESP_LOGI(TAG, "      Modbus initialized");
+        
+        vTaskDelay(pdMS_TO_TICKS(500)); // ✅ ĐỢI modbus stack ready
+        
         xTaskCreate(modbus_poll_task, "modbus_poll", 4096, NULL, 4, NULL);
         ESP_LOGI(TAG, "      Modbus task created");
     } else {
