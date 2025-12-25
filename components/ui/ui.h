@@ -36,6 +36,8 @@ extern lv_anim_t * scrsplashstartloadinginfolabel_Animation(lv_obj_t * TargetObj
 extern lv_anim_t * scrmainstartinvfademove_Animation(lv_obj_t * TargetObject, int delay);
 extern lv_anim_t * fadeout_Animation(lv_obj_t * TargetObject, int delay);
 extern lv_anim_t * fadein_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * backslotclicked_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * nextslotclicked_Animation(lv_obj_t * TargetObject, int delay);
 
 // EVENTS
 

@@ -16,12 +16,7 @@ lv_obj_t * ui_chooses2container = NULL;
 lv_obj_t * ui_chooses3container = NULL;
 lv_obj_t * ui_chooses4container = NULL;
 lv_obj_t * ui_chooses5container = NULL;
-lv_obj_t * ui_scrmanual2infoslotcontainer = NULL;
-lv_obj_t * ui_scrmanual2infoslot1label = NULL;
-lv_obj_t * ui_scrmanual2infoslot2label = NULL;
-lv_obj_t * ui_scrmanual2infoslot3label = NULL;
-lv_obj_t * ui_scrmanual2infoslot4label = NULL;
-lv_obj_t * ui_scrmanual2infoslot5label = NULL;
+lv_obj_t * ui_scrmanual2slotinfolabel = NULL;
 // event funtions
 void ui_event_scrManualControl22(lv_event_t * e)
 {
@@ -30,7 +25,7 @@ void ui_event_scrManualControl22(lv_event_t * e)
     if(event_code == LV_EVENT_SCREEN_LOAD_START) {
         fadeout_Animation(ui_scrmanual2robotnchrgimg, 0);
     }
-    if(event_code == LV_EVENT_SCREEN_UNLOAD_START) {
+    if(event_code == LV_EVENT_SCREEN_UNLOADED) {
         _ui_opacity_set(ui_scrmanual2robotnchrgimg, 255);
     }
 }
@@ -179,64 +174,15 @@ void ui_scrManualControl22_screen_init(void)
 
     lv_label_set_text(ui_comp_get_child(ui_chooses5container, UI_COMP_BUTTONCONTAINER_BUTONLABEL), "SLOT 5");
 
-    ui_scrmanual2infoslotcontainer = lv_obj_create(ui_scrManualControl22);
-    lv_obj_remove_style_all(ui_scrmanual2infoslotcontainer);
-    lv_obj_set_width(ui_scrmanual2infoslotcontainer, 99);
-    lv_obj_set_height(ui_scrmanual2infoslotcontainer, 371);
-    lv_obj_set_x(ui_scrmanual2infoslotcontainer, -138);
-    lv_obj_set_y(ui_scrmanual2infoslotcontainer, 40);
-    lv_obj_set_align(ui_scrmanual2infoslotcontainer, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_scrmanual2infoslotcontainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-
-    ui_scrmanual2infoslot1label = lv_label_create(ui_scrmanual2infoslotcontainer);
-    lv_obj_set_width(ui_scrmanual2infoslot1label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_scrmanual2infoslot1label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_scrmanual2infoslot1label, -3);
-    lv_obj_set_y(ui_scrmanual2infoslot1label, -146);
-    lv_obj_set_align(ui_scrmanual2infoslot1label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmanual2infoslot1label, "48.4V\n98%");
-    lv_obj_set_style_text_align(ui_scrmanual2infoslot1label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_scrmanual2infoslot1label, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_scrmanual2infoslot2label = lv_label_create(ui_scrmanual2infoslotcontainer);
-    lv_obj_set_width(ui_scrmanual2infoslot2label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_scrmanual2infoslot2label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_scrmanual2infoslot2label, -3);
-    lv_obj_set_y(ui_scrmanual2infoslot2label, -74);
-    lv_obj_set_align(ui_scrmanual2infoslot2label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmanual2infoslot2label, "48.4V\n98%");
-    lv_obj_set_style_text_align(ui_scrmanual2infoslot2label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_scrmanual2infoslot2label, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_scrmanual2infoslot3label = lv_label_create(ui_scrmanual2infoslotcontainer);
-    lv_obj_set_width(ui_scrmanual2infoslot3label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_scrmanual2infoslot3label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_scrmanual2infoslot3label, -3);
-    lv_obj_set_y(ui_scrmanual2infoslot3label, 0);
-    lv_obj_set_align(ui_scrmanual2infoslot3label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmanual2infoslot3label, "48.4V\n98%");
-    lv_obj_set_style_text_align(ui_scrmanual2infoslot3label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_scrmanual2infoslot3label, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_scrmanual2infoslot4label = lv_label_create(ui_scrmanual2infoslotcontainer);
-    lv_obj_set_width(ui_scrmanual2infoslot4label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_scrmanual2infoslot4label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_scrmanual2infoslot4label, -2);
-    lv_obj_set_y(ui_scrmanual2infoslot4label, 74);
-    lv_obj_set_align(ui_scrmanual2infoslot4label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmanual2infoslot4label, "48.4V\n98%");
-    lv_obj_set_style_text_align(ui_scrmanual2infoslot4label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_scrmanual2infoslot4label, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_scrmanual2infoslot5label = lv_label_create(ui_scrmanual2infoslotcontainer);
-    lv_obj_set_width(ui_scrmanual2infoslot5label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_scrmanual2infoslot5label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_scrmanual2infoslot5label, -3);
-    lv_obj_set_y(ui_scrmanual2infoslot5label, 150);
-    lv_obj_set_align(ui_scrmanual2infoslot5label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmanual2infoslot5label, "48.4V\n98%");
-    lv_obj_set_style_text_align(ui_scrmanual2infoslot5label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_scrmanual2infoslot5label, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrmanual2slotinfolabel = lv_label_create(ui_scrManualControl22);
+    lv_obj_set_width(ui_scrmanual2slotinfolabel, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_scrmanual2slotinfolabel, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_scrmanual2slotinfolabel, -144);
+    lv_obj_set_y(ui_scrmanual2slotinfolabel, 42);
+    lv_obj_set_align(ui_scrmanual2slotinfolabel, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_scrmanual2slotinfolabel, "-.-V\n-.-%\n\n-.-V\n-.-%\n\n-.-V\n-.-%\n\n-.-V\n-.-%\n\n-.-V\n-.-%");
+    lv_obj_set_style_text_align(ui_scrmanual2slotinfolabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_scrmanual2slotinfolabel, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_scrmanual2backtomainbutton, ui_event_scrmanual2backtomainbutton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooses1container, UI_COMP_BUTTONCONTAINER_BUTTON),
@@ -269,11 +215,6 @@ void ui_scrManualControl22_screen_destroy(void)
     ui_chooses3container = NULL;
     ui_chooses4container = NULL;
     ui_chooses5container = NULL;
-    ui_scrmanual2infoslotcontainer = NULL;
-    ui_scrmanual2infoslot1label = NULL;
-    ui_scrmanual2infoslot2label = NULL;
-    ui_scrmanual2infoslot3label = NULL;
-    ui_scrmanual2infoslot4label = NULL;
-    ui_scrmanual2infoslot5label = NULL;
+    ui_scrmanual2slotinfolabel = NULL;
 
 }

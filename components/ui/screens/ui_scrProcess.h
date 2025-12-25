@@ -35,6 +35,7 @@ extern lv_obj_t * ui_scrprocessrobotimg;
 extern void ui_event_scrprocessbacktomainbutton(lv_event_t * e);
 extern lv_obj_t * ui_scrprocessbacktomainbutton;
 extern lv_obj_t * ui_scrprocessprcontainer;
+extern void ui_event_scrprocessstopcontainer_buttoncontainer(lv_event_t * e);
 extern lv_obj_t * ui_scrprocessstopcontainer;
 // CUSTOM VARIABLES
 

@@ -47,6 +47,15 @@ void ui_event_scrprocessbacktomainbutton(lv_event_t * e)
     }
 }
 
+void ui_event_scrprocessstopcontainer_buttoncontainer(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrMain, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_scrMain_screen_init);
+    }
+}
+
 // build funtions
 
 void ui_scrProcess_screen_init(void)
@@ -264,6 +273,7 @@ void ui_scrProcess_screen_init(void)
     lv_label_set_text(ui_comp_get_child(ui_scrprocessstopcontainer, UI_COMP_BUTTONCONTAINER_BUTONLABEL), "stop");
 
     lv_obj_add_event_cb(ui_scrprocessbacktomainbutton, ui_event_scrprocessbacktomainbutton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_scrprocessstopcontainer, ui_event_scrprocessstopcontainer_buttoncontainer, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrProcess, ui_event_scrProcess, LV_EVENT_ALL, NULL);
 
 }

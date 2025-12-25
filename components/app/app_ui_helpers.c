@@ -73,6 +73,41 @@ void scrmainbatslotscontainer_update(
     ui_unlock();
 }
 
+
+void scrmanual2slotinfolabel_update(
+    const bool has_slot[5],
+    const float voltages[5],
+    const float percents[5])
+{
+    if (!ui_lock(-1)) {
+        ESP_LOGE(TAG, "Failed to lock UI");
+        return;
+    }
+
+    char summaryText[256];
+    summaryText[0] = '\0';
+
+    for (int i = 0; i < 5; i++) {
+        char line[64];
+
+        if (has_slot[i]) {
+            snprintf(line, sizeof(line),
+                     "%.1fV\n%.1f%%",
+                     voltages[i], percents[i]);
+        } else {
+            snprintf(line, sizeof(line), "-.-V\n-.-%%");
+        }
+
+        strcat(summaryText, line);
+        if (i < 4) strcat(summaryText, "\n\n");
+    }
+
+    lv_label_set_text(ui_scrmanual2slotinfolabel, summaryText);
+
+    ui_unlock();
+}
+
+
 void
 ui_update_all_slot_details(app_state_hsm_t* me, uint8_t slot_index) {
     // if (slot_index >= TOTAL_SLOT) {

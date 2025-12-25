@@ -24,7 +24,7 @@ void ui_event_scrManualControl12(lv_event_t * e)
     if(event_code == LV_EVENT_SCREEN_LOAD_START) {
         fadeout_Animation(ui_scrmanual1robotbackimg, 0);
     }
-    if(event_code == LV_EVENT_SCREEN_UNLOAD_START) {
+    if(event_code == LV_EVENT_SCREEN_UNLOADED) {
         _ui_opacity_set(ui_scrmanual1robotbackimg, 255);
     }
 }

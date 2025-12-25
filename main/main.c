@@ -130,11 +130,14 @@ modbus_bms_information_sync_data(app_state_hsm_t* me, uint16_t* dat) {
     me->bms_info.swap_state = dat[10];
 }
 
+
+#define USE_MODBUS_MASTER_DEBUG 0
 void
 modbus_poll_task(void* arg) {
     uint16_t holding_regs[60];
     uint8_t consecutive_errors = 0;
-    
+
+#if USE_MODBUS_MASTER_DEBUG   
     ESP_LOGI(TAG, "===========================================");
     ESP_LOGI(TAG, "  🔄 MODBUS POLLING TASK STARTED");
     ESP_LOGI(TAG, "===========================================");
@@ -148,17 +151,21 @@ modbus_poll_task(void* arg) {
     ESP_LOGI(TAG, "    - Slot 5: 400-449 (50 regs)");
     ESP_LOGI(TAG, "    - Station: 1000-1049 (50 regs)");
     ESP_LOGI(TAG, "===========================================");
-
+#endif
     while (1) {
         // ===== SLOT 1 =====
+#if USE_MODBUS_MASTER_DEBUG           
         ESP_LOGD(TAG, "📥 Reading Slot 1 (addr=%d, reg=0, count=50)", APP_MODBUS_SLAVE_ID);
+#endif        
         esp_err_t err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT1_START_REG, MB_SLOT1_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_1);
             consecutive_errors = 0;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGI(TAG, "✅ Slot 1: stack_volt=%d, soc=%d%%", 
                      device.bms_data[IDX_SLOT_1].stack_volt,
                      device.bms_data[IDX_SLOT_1].soc_percent);
+#endif                    
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_1_DATA, NULL);
         } else {
             consecutive_errors++;
@@ -167,86 +174,118 @@ modbus_poll_task(void* arg) {
         vTaskDelay(pdMS_TO_TICKS(100));
 
         // ===== SLOT 2 =====
+#if USE_MODBUS_MASTER_DEBUG           
         ESP_LOGD(TAG, "📥 Reading Slot 2 (addr=%d, reg=100, count=50)", APP_MODBUS_SLAVE_ID);
+#endif
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT2_START_REG, MB_SLOT2_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_2);
             consecutive_errors = 0;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGI(TAG, "✅ Slot 2: stack_volt=%d, soc=%d%%",
                      device.bms_data[IDX_SLOT_2].stack_volt,
                      device.bms_data[IDX_SLOT_2].soc_percent);
+#endif                     
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_2_DATA, NULL);
         } else {
             consecutive_errors++;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGW(TAG, "❌ Slot 2 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
+#endif
         }
         vTaskDelay(pdMS_TO_TICKS(100));
 
         // ===== SLOT 3 =====
+#if USE_MODBUS_MASTER_DEBUG           
         ESP_LOGD(TAG, "📥 Reading Slot 3 (addr=%d, reg=200, count=50)", APP_MODBUS_SLAVE_ID);
+#endif
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT3_START_REG, MB_SLOT3_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_3);
             consecutive_errors = 0;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGI(TAG, "✅ Slot 3: stack_volt=%d, soc=%d%%",
                      device.bms_data[IDX_SLOT_3].stack_volt,
                      device.bms_data[IDX_SLOT_3].soc_percent);
+#endif                     
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_3_DATA, NULL);
         } else {
             consecutive_errors++;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGW(TAG, "❌ Slot 3 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
+#endif        
         }
         vTaskDelay(pdMS_TO_TICKS(100));
 
         // ===== SLOT 4 =====
+#if USE_MODBUS_MASTER_DEBUG           
         ESP_LOGD(TAG, "📥 Reading Slot 4 (addr=%d, reg=300, count=50)", APP_MODBUS_SLAVE_ID);
+#endif
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT4_START_REG, MB_SLOT4_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_4);
             consecutive_errors = 0;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGI(TAG, "✅ Slot 4: stack_volt=%d, soc=%d%%",
                      device.bms_data[IDX_SLOT_4].stack_volt,
                      device.bms_data[IDX_SLOT_4].soc_percent);
+#endif                     
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_4_DATA, NULL);
         } else {
             consecutive_errors++;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGW(TAG, "❌ Slot 4 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
+#endif
         }
         vTaskDelay(pdMS_TO_TICKS(100));
 
         // ===== SLOT 5 =====
+#if USE_MODBUS_MASTER_DEBUG           
         ESP_LOGD(TAG, "📥 Reading Slot 5 (addr=%d, reg=400, count=50)", APP_MODBUS_SLAVE_ID);
+#endif
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_SLOT5_START_REG, MB_SLOT5_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_5);
             consecutive_errors = 0;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGI(TAG, "✅ Slot 5: stack_volt=%d, soc=%d%%",
                      device.bms_data[IDX_SLOT_5].stack_volt,
                      device.bms_data[IDX_SLOT_5].soc_percent);
+#endif                     
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_5_DATA, NULL);
         } else {
             consecutive_errors++;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGW(TAG, "❌ Slot 5 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
+#endif        
         }
         vTaskDelay(pdMS_TO_TICKS(100));
 
         // ===== STATION STATE =====
+#if USE_MODBUS_MASTER_DEBUG           
         ESP_LOGD(TAG, "📥 Reading Station State (addr=%d, reg=1000, count=50)", APP_MODBUS_SLAVE_ID);
+#endif        
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, MB_COMMON_START_REG, MB_COMMON_NUMBER_OF_REGS, holding_regs);
         if (err == ESP_OK) {
             modbus_bms_information_sync_data(&device, holding_regs);
             consecutive_errors = 0;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGI(TAG, "✅ Station: swap_state=%d", device.bms_info.swap_state);
+#endif            
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_STATION_STATE_DATA, NULL);
         } else {
             consecutive_errors++;
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGW(TAG, "❌ Station FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
+#endif        
         }
         vTaskDelay(pdMS_TO_TICKS(100));
 
         // ===== KIỂM TRA QUÁ NHIỀU LỖI =====
         if (consecutive_errors >= 5) {
+#if USE_MODBUS_MASTER_DEBUG               
             ESP_LOGE(TAG, "⚠️  Too many errors (%d) - pausing 1s", consecutive_errors);
+#endif            
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_NOTCONNECTED, NULL);
             vTaskDelay(pdMS_TO_TICKS(1000));
             consecutive_errors = 0;
@@ -759,6 +798,31 @@ app_main(void) {
     ESP_LOGI(TAG, "===========================================");
 }
 
-void fnscrmainbatterybuttonclicked(void) {
-    
+// Main Screen
+void fnscrmainbatterybuttonclicked(lv_event_t * e) {
+
 }
+
+void fnscrmainmanualbuttonclicked(lv_event_t * e) {
+
+}    
+
+// Detail Screen
+void fnscrdetailbatterybuttonclicked(lv_event_t * e) {
+
+}
+
+void fnscrdetailmanualbuttonclicked(lv_event_t * e) {
+
+}    
+
+void fnscrdetailbacktomainbuttonclicked(lv_event_t * e) {
+
+}    
+
+void fnscrdetailbackslotbuttonclicked(lv_event_t * e) {
+
+}    
+void fnscrdetailnextslotbuttonclicked(lv_event_t * e) {
+
+}    

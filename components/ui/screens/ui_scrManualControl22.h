@@ -31,12 +31,7 @@ extern lv_obj_t * ui_chooses4container;
 extern void ui_event_chooses4container_button(lv_event_t * e);
 extern lv_obj_t * ui_chooses5container;
 extern void ui_event_chooses5container_button(lv_event_t * e);
-extern lv_obj_t * ui_scrmanual2infoslotcontainer;
-extern lv_obj_t * ui_scrmanual2infoslot1label;
-extern lv_obj_t * ui_scrmanual2infoslot2label;
-extern lv_obj_t * ui_scrmanual2infoslot3label;
-extern lv_obj_t * ui_scrmanual2infoslot4label;
-extern lv_obj_t * ui_scrmanual2infoslot5label;
+extern lv_obj_t * ui_scrmanual2slotinfolabel;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

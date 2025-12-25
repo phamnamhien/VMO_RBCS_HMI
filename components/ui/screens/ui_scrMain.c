@@ -68,6 +68,7 @@ void ui_event_scrmainbatterybutton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrDetail, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrDetail_screen_init);
+        fnscrmainbatterybuttonclicked(e);
     }
 }
 
@@ -86,6 +87,7 @@ void ui_event_scrmainmanualbutton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrManualControl12, LV_SCR_LOAD_ANIM_NONE, 500, 0, &ui_scrManualControl12_screen_init);
+        fnscrmainmanualbuttonclicked(e);
     }
 }
 

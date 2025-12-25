@@ -10,6 +10,14 @@
 extern "C" {
 #endif
 
+void fnscrmainbatterybuttonclicked(lv_event_t * e);
+void fnscrmainmanualbuttonclicked(lv_event_t * e);
+void fnscrdetailbatterybuttonclicked(lv_event_t * e);
+void fnscrdetailmanualbuttonclicked(lv_event_t * e);
+void fnscrdetailbackslotbuttonclicked(lv_event_t * e);
+void fnscrdetailnextslotbuttonclicked(lv_event_t * e);
+void fnscrdetailbacktomainbuttonclicked(lv_event_t * e);
+
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

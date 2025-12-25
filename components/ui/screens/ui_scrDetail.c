@@ -51,6 +51,7 @@ void ui_event_scrdetailbatterybutton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrMain, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrMain_screen_init);
+        fnscrdetailbatterybuttonclicked(e);
     }
 }
 
@@ -60,6 +61,25 @@ void ui_event_scrdetailmanualbutton(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrMain, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrMain_screen_init);
+        fnscrdetailmanualbuttonclicked(e);
+    }
+}
+
+void ui_event_scrdetaildataslotbackbutton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        fnscrdetailbackslotbuttonclicked(e);
+    }
+}
+
+void ui_event_scrdetaildataslotnextbutton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        fnscrdetailnextslotbuttonclicked(e);
     }
 }
 
@@ -69,6 +89,7 @@ void ui_event_scrdetailvmologo(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrMain, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrMain_screen_init);
+        fnscrdetailbacktomainbuttonclicked(e);
     }
 }
 
@@ -366,6 +387,8 @@ void ui_scrDetail_screen_init(void)
 
     lv_obj_add_event_cb(ui_scrdetailbatterybutton, ui_event_scrdetailbatterybutton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrdetailmanualbutton, ui_event_scrdetailmanualbutton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_scrdetaildataslotbackbutton, ui_event_scrdetaildataslotbackbutton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_scrdetaildataslotnextbutton, ui_event_scrdetaildataslotnextbutton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrdetailvmologo, ui_event_scrdetailvmologo, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrDetail, ui_event_scrDetail, LV_EVENT_ALL, NULL);
 

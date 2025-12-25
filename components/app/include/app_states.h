@@ -186,6 +186,9 @@ void ui_show_main_not_connect(bool show);
 
 
 void scrmainbatslotscontainer_update(const bool has_slot[5], const float voltages[5], const float percents[5]);
+void scrmanual2slotinfolabel_update(const bool has_slot[5], const float voltages[5], const float percents[5]);
+
+
 
 #ifdef __cplusplus
 }
