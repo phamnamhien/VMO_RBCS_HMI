@@ -88,7 +88,7 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
                 hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
             } else {
                 if (ui_lock(-1)) {
-                    lv_bar_set_value(ui_barSplashLoading, loading_count, LV_ANIM_OFF);
+                    lv_bar_set_value(ui_scrsplashloadingbar, loading_count, LV_ANIM_OFF);
                     ui_unlock();
                 }
             }

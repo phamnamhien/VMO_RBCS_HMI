@@ -14,19 +14,19 @@ extern "C" {
 extern void ui_scrManualControl12_screen_init(void);
 extern void ui_scrManualControl12_screen_destroy(void);
 extern lv_obj_t * ui_scrManualControl12;
-extern lv_obj_t * ui_vmologo2;
-extern lv_obj_t * ui_manualstep12label;
-extern lv_obj_t * ui_robotbackcontainer;
-extern lv_obj_t * ui_robotback;
-extern lv_obj_t * ui_backbat1;
-extern lv_obj_t * ui_backbat2;
-extern lv_obj_t * ui_btngrpcontainer1;
+extern lv_obj_t * ui_scrmanual1vmologo;
+extern lv_obj_t * ui_scrmanual1guidelabel;
+extern lv_obj_t * ui_scrmanual1robotbackcontainer;
+extern lv_obj_t * ui_scrmanual1robotbackimg;
+extern lv_obj_t * ui_scrmanual1robotbat1img;
+extern lv_obj_t * ui_scrmanual1robotbat2img;
+extern lv_obj_t * ui_scrmanual1btngrpcontainer;
 extern lv_obj_t * ui_chooseb1container;
 extern void ui_event_chooseb1container_button(lv_event_t * e);
 extern lv_obj_t * ui_chooseb2container;
 extern void ui_event_chooseb2container_button(lv_event_t * e);
-extern void ui_event_backtomainbtn(lv_event_t * e);
-extern lv_obj_t * ui_backtomainbtn;
+extern void ui_event_scrmanual1backtomainbutton(lv_event_t * e);
+extern lv_obj_t * ui_scrmanual1backtomainbutton;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

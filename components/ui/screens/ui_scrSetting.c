@@ -6,7 +6,17 @@
 #include "../ui.h"
 
 lv_obj_t * ui_scrSetting = NULL;
+lv_obj_t * ui_scrsettingvmologo = NULL;
+lv_obj_t * ui_scrsettingbackbutton = NULL;
 // event funtions
+void ui_event_scrsettingbackbutton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrMain, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_scrMain_screen_init);
+    }
+}
 
 // build funtions
 
@@ -14,6 +24,28 @@ void ui_scrSetting_screen_init(void)
 {
     ui_scrSetting = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_scrSetting, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_scrsettingvmologo = lv_img_create(ui_scrSetting);
+    lv_img_set_src(ui_scrsettingvmologo, &ui_img_vmo_logo2_png);
+    lv_obj_set_width(ui_scrsettingvmologo, LV_SIZE_CONTENT);   /// 216
+    lv_obj_set_height(ui_scrsettingvmologo, LV_SIZE_CONTENT);    /// 37
+    lv_obj_set_x(ui_scrsettingvmologo, 289);
+    lv_obj_set_y(ui_scrsettingvmologo, 218);
+    lv_obj_set_align(ui_scrsettingvmologo, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_scrsettingvmologo, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_scrsettingvmologo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_scrsettingbackbutton = lv_btn_create(ui_scrSetting);
+    lv_obj_set_width(ui_scrsettingbackbutton, 214);
+    lv_obj_set_height(ui_scrsettingbackbutton, 50);
+    lv_obj_set_x(ui_scrsettingbackbutton, 290);
+    lv_obj_set_y(ui_scrsettingbackbutton, 213);
+    lv_obj_set_align(ui_scrsettingbackbutton, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_scrsettingbackbutton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_scrsettingbackbutton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_opa(ui_scrsettingbackbutton, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_scrsettingbackbutton, ui_event_scrsettingbackbutton, LV_EVENT_ALL, NULL);
 
 }
 
@@ -23,5 +55,7 @@ void ui_scrSetting_screen_destroy(void)
 
     // NULL screen variables
     ui_scrSetting = NULL;
+    ui_scrsettingvmologo = NULL;
+    ui_scrsettingbackbutton = NULL;
 
 }

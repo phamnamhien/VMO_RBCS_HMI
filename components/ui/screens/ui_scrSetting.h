@@ -14,6 +14,9 @@ extern "C" {
 extern void ui_scrSetting_screen_init(void);
 extern void ui_scrSetting_screen_destroy(void);
 extern lv_obj_t * ui_scrSetting;
+extern lv_obj_t * ui_scrsettingvmologo;
+extern void ui_event_scrsettingbackbutton(lv_event_t * e);
+extern lv_obj_t * ui_scrsettingbackbutton;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

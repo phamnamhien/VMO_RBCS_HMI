@@ -21,18 +21,23 @@ extern "C" {
 ///////////////////// SCREENS ////////////////////
 
 #include "screens/ui_scrSplash.h"
-#include "screens/ui_scrSetting.h"
 #include "screens/ui_scrMain.h"
 #include "screens/ui_scrProcess.h"
 #include "screens/ui_scrManualControl12.h"
 #include "screens/ui_scrManualControl22.h"
-#include "screens/ui_scrMainSlot.h"
+#include "screens/ui_scrDetail.h"
+#include "screens/ui_scrSetting.h"
 
 ///////////////////// VARIABLES ////////////////////
 
+extern lv_anim_t * scrmainstartfademove_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * scrsplashstartlogo_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * scrsplashstartloadinginfolabel_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * scrmainstartinvfademove_Animation(lv_obj_t * TargetObject, int delay);
 
 // EVENTS
 
+void ui_event____initial_actions0(lv_event_t * e);
 extern lv_obj_t * ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
@@ -40,13 +45,13 @@ LV_IMG_DECLARE(ui_img_bg1_png);    // assets/bg1.png
 LV_IMG_DECLARE(ui_img_vmo_logo_png);    // assets/vmo_logo.png
 LV_IMG_DECLARE(ui_img_bg2_png);    // assets/bg2.png
 LV_IMG_DECLARE(ui_img_vmo_logo2_png);    // assets/vmo_logo2.png
-LV_IMG_DECLARE(ui_img_vmocharger_png);    // assets/vmocharger.png
-LV_IMG_DECLARE(ui_img_scrnotconnected_warningicon_png);    // assets/scrNotConnected_warningIcon.png
 LV_IMG_DECLARE(ui_img_left_side_2_png);    // assets/left_side 2.png
 LV_IMG_DECLARE(ui_img_battery_png);    // assets/battery.png
 LV_IMG_DECLARE(ui_img_setting_1_png);    // assets/setting 1.png
 LV_IMG_DECLARE(ui_img_help_1_png);    // assets/help 1.png
 LV_IMG_DECLARE(ui_img_manual_png);    // assets/manual.png
+LV_IMG_DECLARE(ui_img_vmocharger_png);    // assets/vmocharger.png
+LV_IMG_DECLARE(ui_img_scrnotconnected_warningicon_png);    // assets/scrNotConnected_warningIcon.png
 LV_IMG_DECLARE(ui_img_group_9_png);    // assets/Group 9.png
 LV_IMG_DECLARE(ui_img_143516147);    // assets/pastel-gray-oil-paint-textured 1.png
 LV_IMG_DECLARE(ui_img_1_blue_3_5_png);    // assets/1_Blue_3 5.png

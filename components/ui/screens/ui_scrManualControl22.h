@@ -14,12 +14,12 @@ extern "C" {
 extern void ui_scrManualControl22_screen_init(void);
 extern void ui_scrManualControl22_screen_destroy(void);
 extern lv_obj_t * ui_scrManualControl22;
-extern lv_obj_t * ui_robotandcharge2;
-extern lv_obj_t * ui_manualstep22label;
-extern lv_obj_t * ui_vmologo3;
-extern void ui_event_backtomainbtn2(lv_event_t * e);
-extern lv_obj_t * ui_backtomainbtn2;
-extern lv_obj_t * ui_btngrpcontainer2;
+extern lv_obj_t * ui_scrmanual2robotnchrgimg;
+extern lv_obj_t * ui_scrmanual2guidelabel;
+extern lv_obj_t * ui_scrmanual2vmologo;
+extern void ui_event_scrmanual2backtomainbutton(lv_event_t * e);
+extern lv_obj_t * ui_scrmanual2backtomainbutton;
+extern lv_obj_t * ui_scrmanual2btgrpcontainer;
 extern lv_obj_t * ui_chooses1container;
 extern void ui_event_chooses1container_button(lv_event_t * e);
 extern lv_obj_t * ui_chooses2container;
@@ -30,12 +30,12 @@ extern lv_obj_t * ui_chooses4container;
 extern void ui_event_chooses4container_button(lv_event_t * e);
 extern lv_obj_t * ui_chooses5container;
 extern void ui_event_chooses5container_button(lv_event_t * e);
-extern lv_obj_t * ui_slotvaluecontainner;
-extern lv_obj_t * ui_slot1info;
-extern lv_obj_t * ui_slot2info;
-extern lv_obj_t * ui_slot3info;
-extern lv_obj_t * ui_slot4info;
-extern lv_obj_t * ui_slot5info;
+extern lv_obj_t * ui_scrmanual2infoslotcontainer;
+extern lv_obj_t * ui_scrmanual2infoslot1label;
+extern lv_obj_t * ui_scrmanual2infoslot2label;
+extern lv_obj_t * ui_scrmanual2infoslot3label;
+extern lv_obj_t * ui_scrmanual2infoslot4label;
+extern lv_obj_t * ui_scrmanual2infoslot5label;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

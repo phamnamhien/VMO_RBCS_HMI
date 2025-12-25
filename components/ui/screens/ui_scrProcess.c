@@ -6,21 +6,25 @@
 #include "../ui.h"
 
 lv_obj_t * ui_scrProcess = NULL;
-lv_obj_t * ui_vmologo4 = NULL;
-lv_obj_t * ui_runtimecontainer = NULL;
-lv_obj_t * ui_runtimepanel = NULL;
-lv_obj_t * ui_runtimetitle = NULL;
-lv_obj_t * ui_runtimevalue = NULL;
-lv_obj_t * ui_slotbatterysttcontainer1 = NULL;
-lv_obj_t * ui_slotbatterystt6 = NULL;
-lv_obj_t * ui_slotbatterystt7 = NULL;
-lv_obj_t * ui_slotbatterystt8 = NULL;
-lv_obj_t * ui_slotbatterystt9 = NULL;
-lv_obj_t * ui_slotbatterystt10 = NULL;
-lv_obj_t * ui_robotandcharge1 = NULL;
-lv_obj_t * ui_Button1 = NULL;
+lv_obj_t * ui_scrprocessstatecontainer = NULL;
+lv_obj_t * ui_scrprocessstatepanel = NULL;
+lv_obj_t * ui_scrprocessstatetitlelabel = NULL;
+lv_obj_t * ui_scrprocessstatevalue = NULL;
+lv_obj_t * ui_scrprocessvmologo = NULL;
+lv_obj_t * ui_scrprocessruntimecontainer = NULL;
+lv_obj_t * ui_scrprocessruntimepanel = NULL;
+lv_obj_t * ui_scrprocessruntimetitle = NULL;
+lv_obj_t * ui_scrprocessruntimevalue = NULL;
+lv_obj_t * ui_scrprocessslotssttcontainer = NULL;
+lv_obj_t * ui_scrprocessslotssttslot1panel = NULL;
+lv_obj_t * ui_scrprocessslotssttslot2panel = NULL;
+lv_obj_t * ui_scrprocessslotssttslot3panel = NULL;
+lv_obj_t * ui_scrprocessslotssttslot4panel = NULL;
+lv_obj_t * ui_scrprocessslotssttslot5panel = NULL;
+lv_obj_t * ui_scrprocessrobotnchrgimg = NULL;
+lv_obj_t * ui_scrprocessbacktomainbutton = NULL;
 // event funtions
-void ui_event_Button1(lv_event_t * e)
+void ui_event_scrprocessbacktomainbutton(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -37,143 +41,192 @@ void ui_scrProcess_screen_init(void)
     lv_obj_clear_flag(ui_scrProcess, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_img_src(ui_scrProcess, &ui_img_bg2_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_vmologo4 = lv_img_create(ui_scrProcess);
-    lv_img_set_src(ui_vmologo4, &ui_img_vmo_logo2_png);
-    lv_obj_set_width(ui_vmologo4, LV_SIZE_CONTENT);   /// 216
-    lv_obj_set_height(ui_vmologo4, LV_SIZE_CONTENT);    /// 37
-    lv_obj_set_x(ui_vmologo4, 289);
-    lv_obj_set_y(ui_vmologo4, 218);
-    lv_obj_set_align(ui_vmologo4, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_vmologo4, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_vmologo4, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_scrprocessstatecontainer = lv_obj_create(ui_scrProcess);
+    lv_obj_remove_style_all(ui_scrprocessstatecontainer);
+    lv_obj_set_width(ui_scrprocessstatecontainer, 268);
+    lv_obj_set_height(ui_scrprocessstatecontainer, 132);
+    lv_obj_set_x(ui_scrprocessstatecontainer, 257);
+    lv_obj_set_y(ui_scrprocessstatecontainer, -166);
+    lv_obj_set_align(ui_scrprocessstatecontainer, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessstatecontainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_runtimecontainer = lv_obj_create(ui_scrProcess);
-    lv_obj_remove_style_all(ui_runtimecontainer);
-    lv_obj_set_width(ui_runtimecontainer, 270);
-    lv_obj_set_height(ui_runtimecontainer, 117);
-    lv_obj_set_x(ui_runtimecontainer, -238);
-    lv_obj_set_y(ui_runtimecontainer, -166);
-    lv_obj_set_align(ui_runtimecontainer, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_runtimecontainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_scrprocessstatepanel = lv_obj_create(ui_scrprocessstatecontainer);
+    lv_obj_set_width(ui_scrprocessstatepanel, 264);
+    lv_obj_set_height(ui_scrprocessstatepanel, 123);
+    lv_obj_set_x(ui_scrprocessstatepanel, 1);
+    lv_obj_set_y(ui_scrprocessstatepanel, -1);
+    lv_obj_set_align(ui_scrprocessstatepanel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessstatepanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_scrprocessstatepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrprocessstatepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor(ui_scrprocessstatepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor_opa(ui_scrprocessstatepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_scrprocessstatepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_scrprocessstatepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_scrprocessstatepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_scrprocessstatepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_runtimepanel = lv_obj_create(ui_runtimecontainer);
-    lv_obj_set_width(ui_runtimepanel, 261);
-    lv_obj_set_height(ui_runtimepanel, 114);
-    lv_obj_set_align(ui_runtimepanel, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_runtimepanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_runtimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_runtimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_recolor(ui_runtimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_recolor_opa(ui_runtimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_runtimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_runtimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_color(ui_runtimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_runtimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessstatetitlelabel = lv_label_create(ui_scrprocessstatecontainer);
+    lv_obj_set_width(ui_scrprocessstatetitlelabel, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_scrprocessstatetitlelabel, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_scrprocessstatetitlelabel, 0);
+    lv_obj_set_y(ui_scrprocessstatetitlelabel, -48);
+    lv_obj_set_align(ui_scrprocessstatetitlelabel, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_scrprocessstatetitlelabel, "State");
+    lv_obj_set_style_text_color(ui_scrprocessstatetitlelabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_scrprocessstatetitlelabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(ui_scrprocessstatetitlelabel, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_scrprocessstatetitlelabel, &ui_font_H11, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_runtimetitle = lv_label_create(ui_runtimecontainer);
-    lv_obj_set_width(ui_runtimetitle, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_runtimetitle, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_runtimetitle, 0);
-    lv_obj_set_y(ui_runtimetitle, -39);
-    lv_obj_set_align(ui_runtimetitle, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_runtimetitle, "Run times");
-    lv_obj_set_style_text_color(ui_runtimetitle, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_runtimetitle, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_align(ui_runtimetitle, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_runtimetitle, &ui_font_H11, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessstatevalue = lv_label_create(ui_scrprocessstatecontainer);
+    lv_obj_set_width(ui_scrprocessstatevalue, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_scrprocessstatevalue, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_scrprocessstatevalue, 0);
+    lv_obj_set_y(ui_scrprocessstatevalue, 7);
+    lv_obj_set_align(ui_scrprocessstatevalue, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_scrprocessstatevalue, "IDLE");
+    lv_obj_set_style_text_color(ui_scrprocessstatevalue, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_scrprocessstatevalue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_scrprocessstatevalue, &ui_font_H1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_runtimevalue = lv_label_create(ui_runtimecontainer);
-    lv_obj_set_width(ui_runtimevalue, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_runtimevalue, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_runtimevalue, 0);
-    lv_obj_set_y(ui_runtimevalue, 12);
-    lv_obj_set_align(ui_runtimevalue, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_runtimevalue, "0s");
-    lv_obj_set_style_text_color(ui_runtimevalue, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_runtimevalue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_runtimevalue, &ui_font_H1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessvmologo = lv_img_create(ui_scrProcess);
+    lv_img_set_src(ui_scrprocessvmologo, &ui_img_vmo_logo2_png);
+    lv_obj_set_width(ui_scrprocessvmologo, LV_SIZE_CONTENT);   /// 216
+    lv_obj_set_height(ui_scrprocessvmologo, LV_SIZE_CONTENT);    /// 37
+    lv_obj_set_x(ui_scrprocessvmologo, 289);
+    lv_obj_set_y(ui_scrprocessvmologo, 218);
+    lv_obj_set_align(ui_scrprocessvmologo, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_scrprocessvmologo, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_scrprocessvmologo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_slotbatterysttcontainer1 = lv_obj_create(ui_scrProcess);
-    lv_obj_remove_style_all(ui_slotbatterysttcontainer1);
-    lv_obj_set_width(ui_slotbatterysttcontainer1, 443);
-    lv_obj_set_height(ui_slotbatterysttcontainer1, 50);
-    lv_obj_set_x(ui_slotbatterysttcontainer1, -175);
-    lv_obj_set_y(ui_slotbatterysttcontainer1, 429);
-    lv_obj_set_align(ui_slotbatterysttcontainer1, LV_ALIGN_TOP_MID);
-    lv_obj_clear_flag(ui_slotbatterysttcontainer1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_scrprocessruntimecontainer = lv_obj_create(ui_scrProcess);
+    lv_obj_remove_style_all(ui_scrprocessruntimecontainer);
+    lv_obj_set_width(ui_scrprocessruntimecontainer, 270);
+    lv_obj_set_height(ui_scrprocessruntimecontainer, 117);
+    lv_obj_set_x(ui_scrprocessruntimecontainer, -238);
+    lv_obj_set_y(ui_scrprocessruntimecontainer, -166);
+    lv_obj_set_align(ui_scrprocessruntimecontainer, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessruntimecontainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_slotbatterystt6 = lv_obj_create(ui_slotbatterysttcontainer1);
-    lv_obj_set_width(ui_slotbatterystt6, 20);
-    lv_obj_set_height(ui_slotbatterystt6, 20);
-    lv_obj_set_x(ui_slotbatterystt6, -196);
-    lv_obj_set_y(ui_slotbatterystt6, -14);
-    lv_obj_set_align(ui_slotbatterystt6, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt6, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt6, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt6, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessruntimepanel = lv_obj_create(ui_scrprocessruntimecontainer);
+    lv_obj_set_width(ui_scrprocessruntimepanel, 261);
+    lv_obj_set_height(ui_scrprocessruntimepanel, 114);
+    lv_obj_set_align(ui_scrprocessruntimepanel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessruntimepanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_scrprocessruntimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrprocessruntimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor(ui_scrprocessruntimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor_opa(ui_scrprocessruntimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_scrprocessruntimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_scrprocessruntimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_scrprocessruntimepanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_scrprocessruntimepanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_shadow_color(ui_slotbatterystt6, lv_color_hex(0x000000), LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_slotbatterystt6, 255, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
+    ui_scrprocessruntimetitle = lv_label_create(ui_scrprocessruntimecontainer);
+    lv_obj_set_width(ui_scrprocessruntimetitle, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_scrprocessruntimetitle, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_scrprocessruntimetitle, 0);
+    lv_obj_set_y(ui_scrprocessruntimetitle, -39);
+    lv_obj_set_align(ui_scrprocessruntimetitle, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_scrprocessruntimetitle, "Run times");
+    lv_obj_set_style_text_color(ui_scrprocessruntimetitle, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_scrprocessruntimetitle, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(ui_scrprocessruntimetitle, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_scrprocessruntimetitle, &ui_font_H11, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_slotbatterystt7 = lv_obj_create(ui_slotbatterysttcontainer1);
-    lv_obj_set_width(ui_slotbatterystt7, 20);
-    lv_obj_set_height(ui_slotbatterystt7, 20);
-    lv_obj_set_x(ui_slotbatterystt7, -166);
-    lv_obj_set_y(ui_slotbatterystt7, -14);
-    lv_obj_set_align(ui_slotbatterystt7, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt7, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt7, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt7, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessruntimevalue = lv_label_create(ui_scrprocessruntimecontainer);
+    lv_obj_set_width(ui_scrprocessruntimevalue, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_scrprocessruntimevalue, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_scrprocessruntimevalue, 0);
+    lv_obj_set_y(ui_scrprocessruntimevalue, 12);
+    lv_obj_set_align(ui_scrprocessruntimevalue, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_scrprocessruntimevalue, "0s");
+    lv_obj_set_style_text_color(ui_scrprocessruntimevalue, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_scrprocessruntimevalue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_scrprocessruntimevalue, &ui_font_H1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_slotbatterystt8 = lv_obj_create(ui_slotbatterysttcontainer1);
-    lv_obj_set_width(ui_slotbatterystt8, 20);
-    lv_obj_set_height(ui_slotbatterystt8, 20);
-    lv_obj_set_x(ui_slotbatterystt8, -136);
-    lv_obj_set_y(ui_slotbatterystt8, -14);
-    lv_obj_set_align(ui_slotbatterystt8, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt8, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt8, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt8, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessslotssttcontainer = lv_obj_create(ui_scrProcess);
+    lv_obj_remove_style_all(ui_scrprocessslotssttcontainer);
+    lv_obj_set_width(ui_scrprocessslotssttcontainer, 443);
+    lv_obj_set_height(ui_scrprocessslotssttcontainer, 50);
+    lv_obj_set_x(ui_scrprocessslotssttcontainer, -175);
+    lv_obj_set_y(ui_scrprocessslotssttcontainer, 429);
+    lv_obj_set_align(ui_scrprocessslotssttcontainer, LV_ALIGN_TOP_MID);
+    lv_obj_clear_flag(ui_scrprocessslotssttcontainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_slotbatterystt9 = lv_obj_create(ui_slotbatterysttcontainer1);
-    lv_obj_set_width(ui_slotbatterystt9, 20);
-    lv_obj_set_height(ui_slotbatterystt9, 20);
-    lv_obj_set_x(ui_slotbatterystt9, -106);
-    lv_obj_set_y(ui_slotbatterystt9, -14);
-    lv_obj_set_align(ui_slotbatterystt9, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt9, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_slotbatterystt9, lv_color_hex(0xEE3A29), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_slotbatterystt9, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessslotssttslot1panel = lv_obj_create(ui_scrprocessslotssttcontainer);
+    lv_obj_set_width(ui_scrprocessslotssttslot1panel, 20);
+    lv_obj_set_height(ui_scrprocessslotssttslot1panel, 20);
+    lv_obj_set_x(ui_scrprocessslotssttslot1panel, -196);
+    lv_obj_set_y(ui_scrprocessslotssttslot1panel, -14);
+    lv_obj_set_align(ui_scrprocessslotssttslot1panel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessslotssttslot1panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot1panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot1panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_slotbatterystt10 = lv_obj_create(ui_slotbatterysttcontainer1);
-    lv_obj_set_width(ui_slotbatterystt10, 20);
-    lv_obj_set_height(ui_slotbatterystt10, 20);
-    lv_obj_set_x(ui_slotbatterystt10, -76);
-    lv_obj_set_y(ui_slotbatterystt10, -14);
-    lv_obj_set_align(ui_slotbatterystt10, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_slotbatterystt10, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_shadow_color(ui_scrprocessslotssttslot1panel, lv_color_hex(0x000000),
+                                  LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_scrprocessslotssttslot1panel, 255, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
 
-    ui_robotandcharge1 = lv_img_create(ui_scrProcess);
-    lv_img_set_src(ui_robotandcharge1, &ui_img_group_9_png);
-    lv_obj_set_width(ui_robotandcharge1, LV_SIZE_CONTENT);   /// 282
-    lv_obj_set_height(ui_robotandcharge1, LV_SIZE_CONTENT);    /// 374
-    lv_obj_set_x(ui_robotandcharge1, 74);
-    lv_obj_set_y(ui_robotandcharge1, 7);
-    lv_obj_set_align(ui_robotandcharge1, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_robotandcharge1, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_robotandcharge1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_scrprocessslotssttslot2panel = lv_obj_create(ui_scrprocessslotssttcontainer);
+    lv_obj_set_width(ui_scrprocessslotssttslot2panel, 20);
+    lv_obj_set_height(ui_scrprocessslotssttslot2panel, 20);
+    lv_obj_set_x(ui_scrprocessslotssttslot2panel, -166);
+    lv_obj_set_y(ui_scrprocessslotssttslot2panel, -14);
+    lv_obj_set_align(ui_scrprocessslotssttslot2panel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessslotssttslot2panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot2panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot2panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Button1 = lv_btn_create(ui_scrProcess);
-    lv_obj_set_width(ui_Button1, 231);
-    lv_obj_set_height(ui_Button1, 50);
-    lv_obj_set_x(ui_Button1, 280);
-    lv_obj_set_y(ui_Button1, 214);
-    lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Button1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    lv_obj_clear_flag(ui_Button1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_opa(ui_Button1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrprocessslotssttslot3panel = lv_obj_create(ui_scrprocessslotssttcontainer);
+    lv_obj_set_width(ui_scrprocessslotssttslot3panel, 20);
+    lv_obj_set_height(ui_scrprocessslotssttslot3panel, 20);
+    lv_obj_set_x(ui_scrprocessslotssttslot3panel, -136);
+    lv_obj_set_y(ui_scrprocessslotssttslot3panel, -14);
+    lv_obj_set_align(ui_scrprocessslotssttslot3panel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessslotssttslot3panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot3panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot3panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
+    ui_scrprocessslotssttslot4panel = lv_obj_create(ui_scrprocessslotssttcontainer);
+    lv_obj_set_width(ui_scrprocessslotssttslot4panel, 20);
+    lv_obj_set_height(ui_scrprocessslotssttslot4panel, 20);
+    lv_obj_set_x(ui_scrprocessslotssttslot4panel, -106);
+    lv_obj_set_y(ui_scrprocessslotssttslot4panel, -14);
+    lv_obj_set_align(ui_scrprocessslotssttslot4panel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessslotssttslot4panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot4panel, lv_color_hex(0xEE3A29), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot4panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_scrprocessslotssttslot5panel = lv_obj_create(ui_scrprocessslotssttcontainer);
+    lv_obj_set_width(ui_scrprocessslotssttslot5panel, 20);
+    lv_obj_set_height(ui_scrprocessslotssttslot5panel, 20);
+    lv_obj_set_x(ui_scrprocessslotssttslot5panel, -76);
+    lv_obj_set_y(ui_scrprocessslotssttslot5panel, -14);
+    lv_obj_set_align(ui_scrprocessslotssttslot5panel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_scrprocessslotssttslot5panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_scrprocessrobotnchrgimg = lv_img_create(ui_scrProcess);
+    lv_img_set_src(ui_scrprocessrobotnchrgimg, &ui_img_group_9_png);
+    lv_obj_set_width(ui_scrprocessrobotnchrgimg, LV_SIZE_CONTENT);   /// 282
+    lv_obj_set_height(ui_scrprocessrobotnchrgimg, LV_SIZE_CONTENT);    /// 374
+    lv_obj_set_x(ui_scrprocessrobotnchrgimg, 74);
+    lv_obj_set_y(ui_scrprocessrobotnchrgimg, 7);
+    lv_obj_set_align(ui_scrprocessrobotnchrgimg, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_scrprocessrobotnchrgimg, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_scrprocessrobotnchrgimg, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_scrprocessbacktomainbutton = lv_btn_create(ui_scrProcess);
+    lv_obj_set_width(ui_scrprocessbacktomainbutton, 231);
+    lv_obj_set_height(ui_scrprocessbacktomainbutton, 50);
+    lv_obj_set_x(ui_scrprocessbacktomainbutton, 280);
+    lv_obj_set_y(ui_scrprocessbacktomainbutton, 214);
+    lv_obj_set_align(ui_scrprocessbacktomainbutton, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_scrprocessbacktomainbutton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_scrprocessbacktomainbutton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_opa(ui_scrprocessbacktomainbutton, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_scrprocessbacktomainbutton, ui_event_scrprocessbacktomainbutton, LV_EVENT_ALL, NULL);
 
 }
 
@@ -183,18 +236,22 @@ void ui_scrProcess_screen_destroy(void)
 
     // NULL screen variables
     ui_scrProcess = NULL;
-    ui_vmologo4 = NULL;
-    ui_runtimecontainer = NULL;
-    ui_runtimepanel = NULL;
-    ui_runtimetitle = NULL;
-    ui_runtimevalue = NULL;
-    ui_slotbatterysttcontainer1 = NULL;
-    ui_slotbatterystt6 = NULL;
-    ui_slotbatterystt7 = NULL;
-    ui_slotbatterystt8 = NULL;
-    ui_slotbatterystt9 = NULL;
-    ui_slotbatterystt10 = NULL;
-    ui_robotandcharge1 = NULL;
-    ui_Button1 = NULL;
+    ui_scrprocessstatecontainer = NULL;
+    ui_scrprocessstatepanel = NULL;
+    ui_scrprocessstatetitlelabel = NULL;
+    ui_scrprocessstatevalue = NULL;
+    ui_scrprocessvmologo = NULL;
+    ui_scrprocessruntimecontainer = NULL;
+    ui_scrprocessruntimepanel = NULL;
+    ui_scrprocessruntimetitle = NULL;
+    ui_scrprocessruntimevalue = NULL;
+    ui_scrprocessslotssttcontainer = NULL;
+    ui_scrprocessslotssttslot1panel = NULL;
+    ui_scrprocessslotssttslot2panel = NULL;
+    ui_scrprocessslotssttslot3panel = NULL;
+    ui_scrprocessslotssttslot4panel = NULL;
+    ui_scrprocessslotssttslot5panel = NULL;
+    ui_scrprocessrobotnchrgimg = NULL;
+    ui_scrprocessbacktomainbutton = NULL;
 
 }

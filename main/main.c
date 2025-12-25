@@ -34,45 +34,6 @@ static SemaphoreHandle_t sem_gui_ready;
 // ============================================
 // SquareLine UI Event Handlers
 // ============================================
-static void
-fnMainSetting(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_CHANGE_SCR_MAIN_TO_SETTING, NULL);
-}
-
-void
-fnSettingBackToMain(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_CHANGE_SCR_SETTING_TO_MAIN, NULL);
-}
-
-void
-fnMainSlot1(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_1_CLICKED, NULL);
-}
-
-void
-fnMainSlot2(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_2_CLICKED, NULL);
-}
-
-void
-fnMainSlot3(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_3_CLICKED, NULL);
-}
-
-void
-fnMainSlot4(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_4_CLICKED, NULL);
-}
-
-void
-fnMainSlot5(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_SLOT_5_CLICKED, NULL);
-}
-
-void
-fnMainManualSwap(lv_event_t* e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MAIN_MANUAL_SWAP_CLICKED, NULL);
-}
 
 // ============================================
 // Modbus Callbacks & Task
@@ -333,25 +294,27 @@ lcd_increase_lvgl_tick(void* arg) {
     lv_tick_inc(LCD_LVGL_TICK_PERIOD_MS);
 }
 
-static void
+static void 
 lvgl_touch_cb(lv_indev_drv_t* drv, lv_indev_data_t* data) {
-    uint16_t touchpad_x[1] = {0};
-    uint16_t touchpad_y[1] = {0};
+    esp_lcd_touch_point_data_t points[1];   // struct chứa dữ liệu cảm ứng
     uint8_t touchpad_cnt = 0;
 
+    // Đọc dữ liệu từ driver
     esp_lcd_touch_read_data(drv->user_data);
 
-    bool touchpad_pressed =
-        esp_lcd_touch_get_coordinates(drv->user_data, touchpad_x, touchpad_y, NULL, &touchpad_cnt, 1);
+    // Lấy dữ liệu cảm ứng
+    esp_err_t ret = esp_lcd_touch_get_data(drv->user_data, points, &touchpad_cnt, 1);
 
-    if (touchpad_pressed && touchpad_cnt > 0) {
-        data->point.x = touchpad_x[0];
-        data->point.y = touchpad_y[0];
-        data->state = LV_INDEV_STATE_PR;
+    if (ret == ESP_OK && touchpad_cnt > 0) {
+        data->point.x = points[0].x;
+        data->point.y = points[0].y;
+        data->state   = LV_INDEV_STATE_PR;   // đang chạm
     } else {
-        data->state = LV_INDEV_STATE_REL;
+        data->state   = LV_INDEV_STATE_REL;  // không chạm
     }
 }
+
+
 
 // ============================================
 // LVGL Port Task

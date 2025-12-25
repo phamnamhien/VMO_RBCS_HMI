@@ -6,9 +6,9 @@
 #include "../ui.h"
 
 lv_obj_t * ui_scrSplash = NULL;
-lv_obj_t * ui_barSplashLoading = NULL;
-lv_obj_t * ui_lbSplashLoadProgress = NULL;
-lv_obj_t * ui_vmoLogo = NULL;
+lv_obj_t * ui_scrsplashloadingbar = NULL;
+lv_obj_t * ui_scrsplashloadingprogresslabel = NULL;
+lv_obj_t * ui_scrsplashvmologo = NULL;
 // event funtions
 
 // build funtions
@@ -19,38 +19,38 @@ void ui_scrSplash_screen_init(void)
     lv_obj_clear_flag(ui_scrSplash, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_img_src(ui_scrSplash, &ui_img_bg1_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_barSplashLoading = lv_bar_create(ui_scrSplash);
-    lv_obj_set_width(ui_barSplashLoading, 800);
-    lv_obj_set_height(ui_barSplashLoading, 10);
-    lv_obj_set_x(ui_barSplashLoading, 0);
-    lv_obj_set_y(ui_barSplashLoading, 235);
-    lv_obj_set_align(ui_barSplashLoading, LV_ALIGN_CENTER);
-    lv_obj_set_style_radius(ui_barSplashLoading, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_barSplashLoading, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_barSplashLoading, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_blend_mode(ui_barSplashLoading, LV_BLEND_MODE_MULTIPLY, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_scrsplashloadingbar = lv_bar_create(ui_scrSplash);
+    lv_obj_set_width(ui_scrsplashloadingbar, 800);
+    lv_obj_set_height(ui_scrsplashloadingbar, 10);
+    lv_obj_set_x(ui_scrsplashloadingbar, 0);
+    lv_obj_set_y(ui_scrsplashloadingbar, 235);
+    lv_obj_set_align(ui_scrsplashloadingbar, LV_ALIGN_CENTER);
+    lv_obj_set_style_radius(ui_scrsplashloadingbar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_scrsplashloadingbar, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrsplashloadingbar, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_blend_mode(ui_scrsplashloadingbar, LV_BLEND_MODE_MULTIPLY, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_radius(ui_barSplashLoading, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_barSplashLoading, lv_color_hex(0x324A81), LV_PART_INDICATOR | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_barSplashLoading, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui_scrsplashloadingbar, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_scrsplashloadingbar, lv_color_hex(0x324A81), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_scrsplashloadingbar, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
-    ui_lbSplashLoadProgress = lv_label_create(ui_scrSplash);
-    lv_obj_set_width(ui_lbSplashLoadProgress, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_lbSplashLoadProgress, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_lbSplashLoadProgress, 0);
-    lv_obj_set_y(ui_lbSplashLoadProgress, 200);
-    lv_obj_set_align(ui_lbSplashLoadProgress, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_lbSplashLoadProgress, "system Initialization...");
+    ui_scrsplashloadingprogresslabel = lv_label_create(ui_scrSplash);
+    lv_obj_set_width(ui_scrsplashloadingprogresslabel, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_scrsplashloadingprogresslabel, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_scrsplashloadingprogresslabel, 0);
+    lv_obj_set_y(ui_scrsplashloadingprogresslabel, 200);
+    lv_obj_set_align(ui_scrsplashloadingprogresslabel, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_scrsplashloadingprogresslabel, "system Initialization...");
 
-    ui_vmoLogo = lv_img_create(ui_scrSplash);
-    lv_img_set_src(ui_vmoLogo, &ui_img_vmo_logo_png);
-    lv_obj_set_width(ui_vmoLogo, LV_SIZE_CONTENT);   /// 525
-    lv_obj_set_height(ui_vmoLogo, LV_SIZE_CONTENT);    /// 89
-    lv_obj_set_x(ui_vmoLogo, 0);
-    lv_obj_set_y(ui_vmoLogo, -50);
-    lv_obj_set_align(ui_vmoLogo, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_vmoLogo, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_vmoLogo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_scrsplashvmologo = lv_img_create(ui_scrSplash);
+    lv_img_set_src(ui_scrsplashvmologo, &ui_img_vmo_logo_png);
+    lv_obj_set_width(ui_scrsplashvmologo, LV_SIZE_CONTENT);   /// 525
+    lv_obj_set_height(ui_scrsplashvmologo, LV_SIZE_CONTENT);    /// 89
+    lv_obj_set_x(ui_scrsplashvmologo, 0);
+    lv_obj_set_y(ui_scrsplashvmologo, -50);
+    lv_obj_set_align(ui_scrsplashvmologo, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_scrsplashvmologo, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_scrsplashvmologo, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
 }
 
@@ -60,8 +60,8 @@ void ui_scrSplash_screen_destroy(void)
 
     // NULL screen variables
     ui_scrSplash = NULL;
-    ui_barSplashLoading = NULL;
-    ui_lbSplashLoadProgress = NULL;
-    ui_vmoLogo = NULL;
+    ui_scrsplashloadingbar = NULL;
+    ui_scrsplashloadingprogresslabel = NULL;
+    ui_scrsplashvmologo = NULL;
 
 }
