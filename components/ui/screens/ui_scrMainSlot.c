@@ -32,9 +32,21 @@ lv_obj_t * ui_slotbatterystt15 = NULL;
 lv_obj_t * ui_lasttimecontainer1 = NULL;
 lv_obj_t * ui_slottitle = NULL;
 lv_obj_t * ui_slotdetailvalue = NULL;
+lv_obj_t * ui_backbutton = NULL;
+lv_obj_t * ui_nextbutton = NULL;
 lv_obj_t * ui_vmochargeralone = NULL;
 lv_obj_t * ui_vmologo5 = NULL;
 // event funtions
+void ui_event_scrMainSlot(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_scrMainSlot, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_scrMainSlot_screen_init);
+    }
+}
+
 void ui_event_batterybtn2(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -341,6 +353,26 @@ void ui_scrMainSlot_screen_init(void)
     lv_obj_set_style_text_opa(ui_slotdetailvalue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_slotdetailvalue, &ui_font_H2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_backbutton = lv_btn_create(ui_lasttimecontainer1);
+    lv_obj_set_width(ui_backbutton, 150);
+    lv_obj_set_height(ui_backbutton, 416);
+    lv_obj_set_x(ui_backbutton, -269);
+    lv_obj_set_y(ui_backbutton, 0);
+    lv_obj_set_align(ui_backbutton, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_backbutton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_backbutton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_opa(ui_backbutton, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_nextbutton = lv_btn_create(ui_lasttimecontainer1);
+    lv_obj_set_width(ui_nextbutton, 167);
+    lv_obj_set_height(ui_nextbutton, 416);
+    lv_obj_set_x(ui_nextbutton, 260);
+    lv_obj_set_y(ui_nextbutton, 2);
+    lv_obj_set_align(ui_nextbutton, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_nextbutton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_nextbutton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_opa(ui_nextbutton, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     ui_vmochargeralone = lv_img_create(ui_scrMainSlot);
     lv_img_set_src(ui_vmochargeralone, &ui_img_vmocharger_png);
     lv_obj_set_width(ui_vmochargeralone, LV_SIZE_CONTENT);   /// 282
@@ -366,6 +398,7 @@ void ui_scrMainSlot_screen_init(void)
     lv_obj_add_event_cb(ui_manualbtn, ui_event_manualbtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_manualbtn1, ui_event_manualbtn1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_vmologo5, ui_event_vmologo5, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_scrMainSlot, ui_event_scrMainSlot, LV_EVENT_ALL, NULL);
 
 }
 
@@ -401,6 +434,8 @@ void ui_scrMainSlot_screen_destroy(void)
     ui_lasttimecontainer1 = NULL;
     ui_slottitle = NULL;
     ui_slotdetailvalue = NULL;
+    ui_backbutton = NULL;
+    ui_nextbutton = NULL;
     ui_vmochargeralone = NULL;
     ui_vmologo5 = NULL;
 

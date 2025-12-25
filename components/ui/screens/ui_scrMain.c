@@ -48,7 +48,7 @@ void ui_event_batslotbutton(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_scrMainSlot, LV_SCR_LOAD_ANIM_FADE_ON, 200, 0, &ui_scrMainSlot_screen_init);
+        _ui_screen_change(&ui_scrMainSlot, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrMainSlot_screen_init);
     }
 }
 
@@ -57,7 +57,7 @@ void ui_event_manualbutton(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_scrManualControl12, LV_SCR_LOAD_ANIM_FADE_ON, 200, 0, &ui_scrManualControl12_screen_init);
+        _ui_screen_change(&ui_scrManualControl12, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrManualControl12_screen_init);
     }
 }
 

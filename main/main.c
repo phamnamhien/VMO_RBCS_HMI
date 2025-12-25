@@ -19,14 +19,6 @@ static const char* TAG = "RBCS_HMI";
 // ============================================
 app_state_hsm_t device;
 
-modbus_master_config_t modbus_cfg = {
-    .uart_port = APP_IO_UART_NUM,
-    .tx_pin = APP_IO_UART_TX_PIN,
-    .rx_pin = APP_IO_UART_RX_PIN,
-    .rts_pin = APP_IO_UART_RTS_PIN,
-    .baudrate = 115200,
-};
-
 // ============================================
 // Global Variables
 // ============================================
@@ -773,7 +765,7 @@ app_main(void) {
     disp_drv.user_data = panel_handle;
 #if CONFIG_HMI_DOUBLE_FB
     disp_drv.full_refresh = true;
-    ESP_LOGI(TAG, "      Full refresh mode enabled (double buffer)");
+    ESP_LOGI(TAG, "      Full refresh mode enable (double buffer)");
 #endif
     lv_disp_t* disp = lv_disp_drv_register(&disp_drv);
     ESP_LOGI(TAG, "      Display driver registered (%dx%d)", LCD_H_RES, LCD_V_RES);
@@ -862,6 +854,14 @@ app_main(void) {
     ESP_LOGI(TAG, "===========================================");
 
     // ✅ IN RA ĐỊA CHỈ BMS_DATA ARRAY
+    modbus_master_config_t modbus_cfg = {
+        .uart_port = APP_IO_UART_NUM,
+        .tx_pin = APP_IO_UART_TX_PIN,
+        .rx_pin = APP_IO_UART_RX_PIN,
+        .rts_pin = APP_IO_UART_RTS_PIN,
+        .baudrate = 115200,
+    };
+
     ESP_LOGI(TAG, "  📦 BMS_DATA ARRAY ADDRESSES");
     ESP_LOGI(TAG, "===========================================");
     for (int i = 0; i < TOTAL_SLOT; i++) {

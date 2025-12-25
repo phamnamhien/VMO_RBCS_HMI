@@ -19,20 +19,6 @@ extern lv_obj_t * ui_runtimecontainer;
 extern lv_obj_t * ui_runtimepanel;
 extern lv_obj_t * ui_runtimetitle;
 extern lv_obj_t * ui_runtimevalue;
-extern lv_obj_t * ui_menucontainer1;
-extern lv_obj_t * ui_leftsidebar1;
-extern lv_obj_t * ui_batterycontainer1;
-extern lv_obj_t * ui_batteryicon1;
-extern lv_obj_t * ui_batterylabel1;
-extern lv_obj_t * ui_settingcontainer1;
-extern lv_obj_t * ui_settingicon1;
-extern lv_obj_t * ui_settinglabel1;
-extern lv_obj_t * ui_infocontainer1;
-extern lv_obj_t * ui_infoicon1;
-extern lv_obj_t * ui_infolabel1;
-extern lv_obj_t * ui_manualcontainer1;
-extern lv_obj_t * ui_maunicon1;
-extern lv_obj_t * ui_manlabel1;
 extern lv_obj_t * ui_slotbatterysttcontainer1;
 extern lv_obj_t * ui_slotbatterystt6;
 extern lv_obj_t * ui_slotbatterystt7;
@@ -40,6 +26,8 @@ extern lv_obj_t * ui_slotbatterystt8;
 extern lv_obj_t * ui_slotbatterystt9;
 extern lv_obj_t * ui_slotbatterystt10;
 extern lv_obj_t * ui_robotandcharge1;
+extern void ui_event_Button1(lv_event_t * e);
+extern lv_obj_t * ui_Button1;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

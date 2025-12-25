@@ -13,6 +13,7 @@ extern "C" {
 // SCREEN: ui_scrMainSlot
 extern void ui_scrMainSlot_screen_init(void);
 extern void ui_scrMainSlot_screen_destroy(void);
+extern void ui_event_scrMainSlot(lv_event_t * e);
 extern lv_obj_t * ui_scrMainSlot;
 extern lv_obj_t * ui_menucontainer2;
 extern lv_obj_t * ui_leftsidebar2;
@@ -43,6 +44,8 @@ extern lv_obj_t * ui_slotbatterystt15;
 extern lv_obj_t * ui_lasttimecontainer1;
 extern lv_obj_t * ui_slottitle;
 extern lv_obj_t * ui_slotdetailvalue;
+extern lv_obj_t * ui_backbutton;
+extern lv_obj_t * ui_nextbutton;
 extern lv_obj_t * ui_vmochargeralone;
 extern void ui_event_vmologo5(lv_event_t * e);
 extern lv_obj_t * ui_vmologo5;

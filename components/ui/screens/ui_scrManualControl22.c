@@ -32,6 +32,51 @@ void ui_event_backtomainbtn2(lv_event_t * e)
     }
 }
 
+void ui_event_chooses1container_button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrProcess_screen_init);
+    }
+}
+
+void ui_event_chooses2container_button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrProcess_screen_init);
+    }
+}
+
+void ui_event_chooses3container_button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrProcess_screen_init);
+    }
+}
+
+void ui_event_chooses4container_button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrProcess_screen_init);
+    }
+}
+
+void ui_event_chooses5container_button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_scrProcess_screen_init);
+    }
+}
+
 // build funtions
 
 void ui_scrManualControl22_screen_init(void)
@@ -54,8 +99,8 @@ void ui_scrManualControl22_screen_init(void)
     ui_manualstep22label = lv_label_create(ui_scrManualControl22);
     lv_obj_set_width(ui_manualstep22label, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_manualstep22label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_manualstep22label, -284);
-    lv_obj_set_y(ui_manualstep22label, -190);
+    lv_obj_set_x(ui_manualstep22label, -254);
+    lv_obj_set_y(ui_manualstep22label, -187);
     lv_obj_set_align(ui_manualstep22label, LV_ALIGN_CENTER);
     lv_label_set_text(ui_manualstep22label, "STEP 2/2: \nSELECT BATTERY \nON THE CHARGER");
     lv_obj_set_style_text_color(ui_manualstep22label, lv_color_hex(0x808080), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -182,6 +227,16 @@ void ui_scrManualControl22_screen_init(void)
     lv_obj_set_style_text_font(ui_slot5info, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_backtomainbtn2, ui_event_backtomainbtn2, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_comp_get_child(ui_chooses1container, UI_COMP_BUTTONCONTAINER_BUTTON),
+                        ui_event_chooses1container_button, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_comp_get_child(ui_chooses2container, UI_COMP_BUTTONCONTAINER_BUTTON),
+                        ui_event_chooses2container_button, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_comp_get_child(ui_chooses3container, UI_COMP_BUTTONCONTAINER_BUTTON),
+                        ui_event_chooses3container_button, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_comp_get_child(ui_chooses4container, UI_COMP_BUTTONCONTAINER_BUTTON),
+                        ui_event_chooses4container_button, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_comp_get_child(ui_chooses5container, UI_COMP_BUTTONCONTAINER_BUTTON),
+                        ui_event_chooses5container_button, LV_EVENT_ALL, NULL);
 
 }
 
