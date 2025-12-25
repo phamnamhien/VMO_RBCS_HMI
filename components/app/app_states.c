@@ -309,13 +309,16 @@ static void
 esp32_timer_callback(TimerHandle_t xTimer) {
     esp32_timer_t* timer = (esp32_timer_t*)pvTimerGetTimerID(xTimer);
     if (timer == NULL) return;
-    if (xSemaphoreTake(timer->mutex, 0) != pdTRUE) {
-        return; 
+    
+    // ✅ KHÔNG take mutex - chỉ check state
+    if (timer->state != TIMER_STATE_ACTIVE) {
+        return;
     }
-    if (timer->state == TIMER_STATE_ACTIVE && timer->callback) {
+    
+    // ✅ GỌI CALLBACK TRỰC TIẾP (không qua mutex)
+    if (timer->callback) {
         timer->callback(timer->arg);
     }
-    xSemaphoreGive(timer->mutex);
 }
 
 static void* 
@@ -350,22 +353,31 @@ static void
 esp32_timer_stop(void* timer_handle) {
     esp32_timer_t* timer = (esp32_timer_t*)timer_handle;
     if (timer == NULL) return;
-    ESP_LOGD(TAG, "Timer stopping: %p", timer);
-    if (xSemaphoreTake(timer->mutex, pdMS_TO_TICKS(100)) != pdTRUE) {
-        ESP_LOGE(TAG, "Failed to acquire mutex for deletion");
-        return;
-    }
-    timer->state = TIMER_STATE_DELETING;
-    timer->callback = NULL; 
     
-    xSemaphoreGive(timer->mutex);
+    ESP_LOGD(TAG, "Timer stopping: %p", timer);
+    
+    // ✅ ĐÁNH DẤU DELETING TRƯỚC
+    timer->state = TIMER_STATE_DELETING;
+    timer->callback = NULL;  // ✅ NULL ngay để callback không chạy
+    
+    // ✅ STOP timer
     if (timer->handle) {
         xTimerStop(timer->handle, pdMS_TO_TICKS(100));
+    }
+    
+    // ✅ ĐỢI callback chạy xong (nếu đang chạy)
+    vTaskDelay(pdMS_TO_TICKS(50));
+    
+    // ✅ XÓA TIMER
+    if (timer->handle) {
         xTimerDelete(timer->handle, pdMS_TO_TICKS(100));
         timer->handle = NULL;
     }
-    vTaskDelay(pdMS_TO_TICKS(10));  
-    vSemaphoreDelete(timer->mutex);
+    
+    // ✅ XÓA MUTEX và FREE
+    if (timer->mutex) {
+        vSemaphoreDelete(timer->mutex);
+    }
     free(timer);
     
     ESP_LOGD(TAG, "Timer deleted: %p", timer);

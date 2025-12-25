@@ -172,241 +172,123 @@ modbus_bms_information_sync_data(app_state_hsm_t* me, uint16_t* dat) {
 void
 modbus_poll_task(void* arg) {
     uint16_t holding_regs[60];
-    uint16_t bms_connect_counter = 0;
-    uint8_t consecutive_errors = 0; // ← THÊM BIẾN ĐẾM LỖI LIÊN TIẾP
-    uint8_t is_data_not_received[TOTAL_SLOT + 1] = {0};
-    ESP_LOGI(TAG, "Modbus polling task started");
+    uint8_t consecutive_errors = 0;
+    
+    ESP_LOGI(TAG, "===========================================");
+    ESP_LOGI(TAG, "  🔄 MODBUS POLLING TASK STARTED");
+    ESP_LOGI(TAG, "===========================================");
+    ESP_LOGI(TAG, "  Slave ID: %d", APP_MODBUS_SLAVE_ID);
+    ESP_LOGI(TAG, "  Poll interval: 100ms between slots");
+    ESP_LOGI(TAG, "  Register map:");
+    ESP_LOGI(TAG, "    - Slot 1: 0-49 (50 regs)");
+    ESP_LOGI(TAG, "    - Slot 2: 100-149 (50 regs)");
+    ESP_LOGI(TAG, "    - Slot 3: 200-249 (50 regs)");
+    ESP_LOGI(TAG, "    - Slot 4: 300-349 (50 regs)");
+    ESP_LOGI(TAG, "    - Slot 5: 400-449 (50 regs)");
+    ESP_LOGI(TAG, "    - Station: 1000-1049 (50 regs)");
+    ESP_LOGI(TAG, "===========================================");
 
     while (1) {
-        // ===== SLOT 1 (Register 0) =====
+        // ===== SLOT 1 =====
+        ESP_LOGD(TAG, "📥 Reading Slot 1 (addr=%d, reg=0, count=50)", APP_MODBUS_SLAVE_ID);
         esp_err_t err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 0, 50, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_1);
-            is_data_not_received[IDX_SLOT_1] = 0;
-            consecutive_errors = 0; // ← RESET ĐẾM LỖI
-            ESP_LOGI(TAG, "Slot 1 data synced");
+            consecutive_errors = 0;
+            ESP_LOGI(TAG, "✅ Slot 1: stack_volt=%d, soc=%d%%", 
+                     device.bms_data[IDX_SLOT_1].stack_volt,
+                     device.bms_data[IDX_SLOT_1].soc_percent);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_1_DATA, NULL);
+        } else {
+            consecutive_errors++;
+            ESP_LOGW(TAG, "❌ Slot 1 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
         }
-        // } else {
-        //     ESP_LOGW(TAG, "Failed to read Slot 1 data: %s", esp_err_to_name(err));
-        //     uart_flush(APP_IO_UART_NUM);
-        //     is_data_not_received[IDX_SLOT_1] = 1;
-        //     consecutive_errors++;  // ← TĂNG ĐẾM LỖI
-
-        //     // ✅ NẾU QUÁ 3 LỖI LIÊN TIẾP → RESET MODBUS
-        //     if (consecutive_errors >= 3) {
-        //         ESP_LOGE(TAG, "🔴 Too many consecutive errors! Reinitializing Modbus...");
-        //         modbus_master_deinit();
-        //         vTaskDelay(pdMS_TO_TICKS(500));
-
-        //         modbus_master_config_t modbus_cfg = {
-        //             .uart_port = APP_IO_UART_NUM,
-        //             .tx_pin = APP_IO_UART_TX_PIN,
-        //             .rx_pin = APP_IO_UART_RX_PIN,
-        //             .rts_pin = APP_IO_UART_RTS_PIN,
-        //             .baudrate = 115200,
-        //         };
-
-        //         if (modbus_master_init(&modbus_cfg) == ESP_OK) {
-        //             ESP_LOGI(TAG, "✅ Modbus reinitialized successfully");
-        //             consecutive_errors = 0;
-        //         } else {
-        //             ESP_LOGE(TAG, "❌ Failed to reinitialize Modbus!");
-        //         }
-        //     }
-        // }
         vTaskDelay(pdMS_TO_TICKS(100));
 
-        // ===== SLOT 2 (Register 100) =====
+        // ===== SLOT 2 =====
+        ESP_LOGD(TAG, "📥 Reading Slot 2 (addr=%d, reg=100, count=50)", APP_MODBUS_SLAVE_ID);
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 100, 50, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_2);
-            is_data_not_received[IDX_SLOT_2] = 0;
             consecutive_errors = 0;
-            ESP_LOGI(TAG, "Slot 2 data synced");
+            ESP_LOGI(TAG, "✅ Slot 2: stack_volt=%d, soc=%d%%",
+                     device.bms_data[IDX_SLOT_2].stack_volt,
+                     device.bms_data[IDX_SLOT_2].soc_percent);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_2_DATA, NULL);
+        } else {
+            consecutive_errors++;
+            ESP_LOGW(TAG, "❌ Slot 2 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
         }
-        // } else {
-        //     ESP_LOGW(TAG, "Failed to read Slot 2 data: %s", esp_err_to_name(err));
-        //     uart_flush(APP_IO_UART_NUM);
-        //     is_data_not_received[IDX_SLOT_2] = 1;
-        //     consecutive_errors++;
-
-        //     if (consecutive_errors >= 3) {
-        //         ESP_LOGE(TAG, "🔴 Too many consecutive errors! Reinitializing Modbus...");
-        //         modbus_master_deinit();
-        //         vTaskDelay(pdMS_TO_TICKS(500));
-
-        //         modbus_master_config_t modbus_cfg = {
-        //             .uart_port = APP_IO_UART_NUM,
-        //             .tx_pin = APP_IO_UART_TX_PIN,
-        //             .rx_pin = APP_IO_UART_RX_PIN,
-        //             .rts_pin = APP_IO_UART_RTS_PIN,
-        //             .baudrate = 115200,
-        //         };
-
-        //         if (modbus_master_init(&modbus_cfg) == ESP_OK) {
-        //             ESP_LOGI(TAG, "✅ Modbus reinitialized successfully");
-        //             consecutive_errors = 0;
-        //         } else {
-        //             ESP_LOGE(TAG, "❌ Failed to reinitialize Modbus!");
-        //         }
-        //     }
-        // }
         vTaskDelay(pdMS_TO_TICKS(100));
 
-        // ===== SLOT 3 (Register 200) =====
+        // ===== SLOT 3 =====
+        ESP_LOGD(TAG, "📥 Reading Slot 3 (addr=%d, reg=200, count=50)", APP_MODBUS_SLAVE_ID);
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 200, 50, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_3);
-            is_data_not_received[IDX_SLOT_3] = 0;
             consecutive_errors = 0;
-            ESP_LOGI(TAG, "Slot 3 data synced");
+            ESP_LOGI(TAG, "✅ Slot 3: stack_volt=%d, soc=%d%%",
+                     device.bms_data[IDX_SLOT_3].stack_volt,
+                     device.bms_data[IDX_SLOT_3].soc_percent);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_3_DATA, NULL);
+        } else {
+            consecutive_errors++;
+            ESP_LOGW(TAG, "❌ Slot 3 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
         }
-        // } else {
-        //     ESP_LOGW(TAG, "Failed to read Slot 3 data: %s", esp_err_to_name(err));
-        //     uart_flush(APP_IO_UART_NUM);
-        //     is_data_not_received[IDX_SLOT_3] = 1;
-        //     consecutive_errors++;
-
-        //     if (consecutive_errors >= 3) {
-        //         ESP_LOGE(TAG, "🔴 Too many consecutive errors! Reinitializing Modbus...");
-        //         modbus_master_deinit();
-        //         vTaskDelay(pdMS_TO_TICKS(500));
-
-        //         modbus_master_config_t modbus_cfg = {
-        //             .uart_port = APP_IO_UART_NUM,
-        //             .tx_pin = APP_IO_UART_TX_PIN,
-        //             .rx_pin = APP_IO_UART_RX_PIN,
-        //             .rts_pin = APP_IO_UART_RTS_PIN,
-        //             .baudrate = 115200,
-        //         };
-
-        //         if (modbus_master_init(&modbus_cfg) == ESP_OK) {
-        //             ESP_LOGI(TAG, "✅ Modbus reinitialized successfully");
-        //             consecutive_errors = 0;
-        //         } else {
-        //             ESP_LOGE(TAG, "❌ Failed to reinitialize Modbus!");
-        //         }
-        //     }
-        // }
         vTaskDelay(pdMS_TO_TICKS(100));
 
-        // ===== SLOT 4 (Register 300) =====
+        // ===== SLOT 4 =====
+        ESP_LOGD(TAG, "📥 Reading Slot 4 (addr=%d, reg=300, count=50)", APP_MODBUS_SLAVE_ID);
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 300, 50, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_4);
-            is_data_not_received[IDX_SLOT_4] = 0;
             consecutive_errors = 0;
-            ESP_LOGI(TAG, "Slot 4 data synced");
+            ESP_LOGI(TAG, "✅ Slot 4: stack_volt=%d, soc=%d%%",
+                     device.bms_data[IDX_SLOT_4].stack_volt,
+                     device.bms_data[IDX_SLOT_4].soc_percent);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_4_DATA, NULL);
+        } else {
+            consecutive_errors++;
+            ESP_LOGW(TAG, "❌ Slot 4 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
         }
-        // } else {
-        //     ESP_LOGW(TAG, "Failed to read Slot 4 data: %s", esp_err_to_name(err));
-        //     uart_flush(APP_IO_UART_NUM);
-        //     is_data_not_received[IDX_SLOT_4] = 1;
-        //     consecutive_errors++;
-
-        //     if (consecutive_errors >= 3) {
-        //         ESP_LOGE(TAG, "🔴 Too many consecutive errors! Reinitializing Modbus...");
-        //         modbus_master_deinit();
-        //         vTaskDelay(pdMS_TO_TICKS(500));
-
-        //         modbus_master_config_t modbus_cfg = {
-        //             .uart_port = APP_IO_UART_NUM,
-        //             .tx_pin = APP_IO_UART_TX_PIN,
-        //             .rx_pin = APP_IO_UART_RX_PIN,
-        //             .rts_pin = APP_IO_UART_RTS_PIN,
-        //             .baudrate = 115200,
-        //         };
-
-        //         if (modbus_master_init(&modbus_cfg) == ESP_OK) {
-        //             ESP_LOGI(TAG, "✅ Modbus reinitialized successfully");
-        //             consecutive_errors = 0;
-        //         } else {
-        //             ESP_LOGE(TAG, "❌ Failed to reinitialize Modbus!");
-        //         }
-        //     }
-        // }
         vTaskDelay(pdMS_TO_TICKS(100));
 
-        // ===== SLOT 5 (Register 400) =====
+        // ===== SLOT 5 =====
+        ESP_LOGD(TAG, "📥 Reading Slot 5 (addr=%d, reg=400, count=50)", APP_MODBUS_SLAVE_ID);
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 400, 50, holding_regs);
         if (err == ESP_OK) {
             modbus_battery_sync_data(&device, holding_regs, IDX_SLOT_5);
-            is_data_not_received[IDX_SLOT_5] = 0;
             consecutive_errors = 0;
-            ESP_LOGI(TAG, "Slot 5 data synced");
+            ESP_LOGI(TAG, "✅ Slot 5: stack_volt=%d, soc=%d%%",
+                     device.bms_data[IDX_SLOT_5].stack_volt,
+                     device.bms_data[IDX_SLOT_5].soc_percent);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_SLOT_5_DATA, NULL);
+        } else {
+            consecutive_errors++;
+            ESP_LOGW(TAG, "❌ Slot 5 FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
         }
-        // } else {
-        //     ESP_LOGW(TAG, "Failed to read Slot 5 data: %s", esp_err_to_name(err));
-        //     uart_flush(APP_IO_UART_NUM);
-        //     is_data_not_received[IDX_SLOT_5] = 1;
-        //     consecutive_errors++;
-
-        //     if (consecutive_errors >= 3) {
-        //         ESP_LOGE(TAG, "🔴 Too many consecutive errors! Reinitializing Modbus...");
-        //         modbus_master_deinit();
-        //         vTaskDelay(pdMS_TO_TICKS(500));
-
-        //         modbus_master_config_t modbus_cfg = {
-        //             .uart_port = APP_IO_UART_NUM,
-        //             .tx_pin = APP_IO_UART_TX_PIN,
-        //             .rx_pin = APP_IO_UART_RX_PIN,
-        //             .rts_pin = APP_IO_UART_RTS_PIN,
-        //             .baudrate = 115200,
-        //         };
-
-        //         if (modbus_master_init(&modbus_cfg) == ESP_OK) {
-        //             ESP_LOGI(TAG, "✅ Modbus reinitialized successfully");
-        //             consecutive_errors = 0;
-        //         } else {
-        //             ESP_LOGE(TAG, "❌ Failed to reinitialize Modbus!");
-        //         }
-        //     }
-        // }
         vTaskDelay(pdMS_TO_TICKS(100));
 
-        // ===== STATION STATE (Register 1000) =====
+        // ===== STATION STATE =====
+        ESP_LOGD(TAG, "📥 Reading Station State (addr=%d, reg=1000, count=50)", APP_MODBUS_SLAVE_ID);
         err = modbus_master_read_holding_registers(APP_MODBUS_SLAVE_ID, 1000, 50, holding_regs);
         if (err == ESP_OK) {
             modbus_bms_information_sync_data(&device, holding_regs);
-            ESP_LOGI(TAG, "STATION STATE data synced");
-            is_data_not_received[TOTAL_SLOT] = 0;
             consecutive_errors = 0;
+            ESP_LOGI(TAG, "✅ Station: swap_state=%d", device.bms_info.swap_state);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_GET_STATION_STATE_DATA, NULL);
+        } else {
+            consecutive_errors++;
+            ESP_LOGW(TAG, "❌ Station FAILED: %s (errors=%d)", esp_err_to_name(err), consecutive_errors);
         }
-        // } else {
-        //     ESP_LOGW(TAG, "Failed to read STATION STATE data: %s", esp_err_to_name(err));
-        //     uart_flush(APP_IO_UART_NUM);
-        //     is_data_not_received[TOTAL_SLOT] = 1;
-        //     consecutive_errors++;
-        // }
         vTaskDelay(pdMS_TO_TICKS(100));
 
-        // // ===== CHECK CONNECTION STATUS =====
-        // if (is_data_not_received[IDX_SLOT_1]
-        //     && is_data_not_received[IDX_SLOT_2]
-        //     && is_data_not_received[IDX_SLOT_3]
-        //     && is_data_not_received[IDX_SLOT_4]
-        //     && is_data_not_received[IDX_SLOT_5]
-        //     && is_data_not_received[TOTAL_SLOT]) {
-        //     bms_connect_counter++;
-        //     if (bms_connect_counter >= BMS_TIMEOUT_MAX_COUNT) {
-        //         bms_connect_counter = BMS_TIMEOUT_MAX_COUNT;
-        //         device.is_bms_not_connected = 1;
-        //         ESP_LOGW(TAG, "BMS not connected!");
-        //         hsm_dispatch((HSM *)&device, HEVT_MODBUS_NOTCONNECTED, NULL);
-        //     }
-        // } else {
-        //     bms_connect_counter = 0;
-        //     device.is_bms_not_connected = 0;
-        //     hsm_dispatch((HSM *)&device, HEVT_MODBUS_CONNECTED, NULL);
-        // }
-        // hsm_dispatch((HSM *)&device, HEVT_MODBUS_GET_SLOT_DATA, NULL);
-        // vTaskDelay(pdMS_TO_TICKS(50));
+        // ===== KIỂM TRA QUÁ NHIỀU LỖI =====
+        if (consecutive_errors >= 5) {
+            ESP_LOGE(TAG, "⚠️  Too many errors (%d) - pausing 1s", consecutive_errors);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+            consecutive_errors = 0;
+        }
     }
 }
 
