@@ -115,19 +115,14 @@ modbus_battery_sync_data(app_state_hsm_t* me, uint16_t* dat, uint8_t slot_index)
 
 static void
 modbus_bms_information_sync_data(app_state_hsm_t* me, uint16_t* dat) {
-    me->bms_info.manual_swap[IDX_SLOT_1] = dat[0];
-    me->bms_info.manual_swap[IDX_SLOT_2] = dat[1];
-    me->bms_info.manual_swap[IDX_SLOT_3] = dat[2];
-    me->bms_info.manual_swap[IDX_SLOT_4] = dat[3];
-    me->bms_info.manual_swap[IDX_SLOT_5] = dat[4];
+    me->bms_info.slot_state[IDX_SLOT_1] = dat[0];
+    me->bms_info.slot_state[IDX_SLOT_2] = dat[1];
+    me->bms_info.slot_state[IDX_SLOT_3] = dat[2];
+    me->bms_info.slot_state[IDX_SLOT_4] = dat[3];
+    me->bms_info.slot_state[IDX_SLOT_5] = dat[4];
 
-    me->bms_info.slot_state[IDX_SLOT_1] = dat[5];
-    me->bms_info.slot_state[IDX_SLOT_2] = dat[6];
-    me->bms_info.slot_state[IDX_SLOT_3] = dat[7];
-    me->bms_info.slot_state[IDX_SLOT_4] = dat[8];
-    me->bms_info.slot_state[IDX_SLOT_5] = dat[9];
-
-    me->bms_info.swap_state = dat[10];
+    me->bms_info.swap_state = dat[5];
+    me->bms_info.manual_swap_request= dat[6];
 }
 
 

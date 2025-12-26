@@ -452,3 +452,77 @@ void scrprocessslotssttcontainer_update(
 
     ui_unlock();
 }
+void scrprocessruntimevalue_update(uint16_t seconds)
+{
+    if (!ui_lock(-1)) {
+        ESP_LOGE(TAG, "Failed to lock UI");
+        return;
+    }
+
+    char timeText[32];
+    uint16_t hours = seconds / 3600;
+    uint16_t minutes = (seconds % 3600) / 60;
+    uint16_t secs = seconds % 60;
+
+    if (hours > 0) {
+        snprintf(timeText, sizeof(timeText), "%uh%um%us", hours, minutes, secs);
+    } else if (minutes > 0) {
+        snprintf(timeText, sizeof(timeText), "%um%us", minutes, secs);
+    } else {
+        snprintf(timeText, sizeof(timeText), "%us", secs);
+    }
+
+    lv_label_set_text(ui_scrprocessruntimevalue, timeText);
+
+    ui_unlock();
+}
+
+void scrprocessstatevalue_update(BMS_Swap_State_t state)
+{
+    if (!ui_lock(-1)) {
+        ESP_LOGE(TAG, "Failed to lock UI");
+        return;
+    }
+
+    const char* stateText;
+    
+    switch (state) {
+        case SWAP_STATE_STANDBY:
+            stateText = "Standby";
+            break;
+        case SWAP_STATE_ROBOT_REQUEST:
+            stateText = "Requesting";
+            break;
+        case SWAP_STATE_ROBOT_POSTION:
+            stateText = "Positioning";
+            break;
+        case SWAP_STATE_REMOVE_EMPTY_BATTERY:
+            stateText = "Removing";
+            break;
+        case SWAP_STATE_STORE_EMPTY_BATTERY:
+            stateText = "Storing";
+            break;
+        case SWAP_STATE_RETRIEVES_FULL_BATTERY:
+            stateText = "Retrieving";
+            break;
+        case SWAP_STATE_INSTALL_FULL_BATTERY:
+            stateText = "Installing";
+            break;
+        case SWAP_STATE_CHARGING_COMPLETE:
+            stateText = "Complete";
+            break;
+        case SWAP_STATE_MOTOR_CABLID:
+            stateText = "Motor Calib";
+            break;
+        case SWAP_STATE_FAULT:
+            stateText = "Fault";
+            break;
+        default:
+            stateText = "----";
+            break;
+    }
+
+    lv_label_set_text(ui_scrprocessstatevalue, stateText);
+
+    ui_unlock();
+}

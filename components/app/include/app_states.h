@@ -39,6 +39,9 @@ extern "C" {
 #define LOADING_1PERCENT_MS             100     
 #define UPDATE_SCREEN_VALUE_MS          1000     
 
+
+#define BMS_RUN_TIMEOUT                 (60*3)
+
 typedef enum {
     IDX_SLOT_1 = 0,
     IDX_SLOT_2,
@@ -132,7 +135,6 @@ typedef struct {
 } BMS_Data_t;
 
 typedef struct {
-    uint8_t manual_swap[TOTAL_SLOT];
     BMS_Slot_State_t slot_state[TOTAL_SLOT];
     BMS_Swap_State_t swap_state;
     uint16_t manual_swap_request;
@@ -173,6 +175,7 @@ typedef enum {
 
     HEVT_TIMER_LOADING,
     HEVT_TIMER_UPDATE,
+    HEVT_TIMER_CLOCK,
 } app_events_t;
 
 
@@ -209,7 +212,8 @@ void scrmanual2slotinfolabel_update(const bool has_slot[5], const float voltages
 
 // UI Process screen
 void scrprocessslotssttcontainer_update(const BMS_Slot_State_t state[TOTAL_SLOT], const BMS_Data_t data[TOTAL_SLOT]);
-
+void scrprocessruntimevalue_update(uint16_t seconds);
+void scrprocessstatevalue_update(BMS_Swap_State_t state);
 
 
 #ifdef __cplusplus

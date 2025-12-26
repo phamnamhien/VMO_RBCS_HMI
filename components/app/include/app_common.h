@@ -72,6 +72,17 @@ extern "C" {
 #define MB_COMMON_START_REG         1000
 #define MB_COMMON_NUMBER_OF_REGS    55
 
+
+#define MB_COMMON_SLOT_1_STATE_REG      (MB_COMMON_START_REG + 0)  
+#define MB_COMMON_SLOT_2_STATE_REG      (MB_COMMON_START_REG + 1)  
+#define MB_COMMON_SLOT_3_STATE_REG      (MB_COMMON_START_REG + 2)  
+#define MB_COMMON_SLOT_4_STATE_REG      (MB_COMMON_START_REG + 3)  
+#define MB_COMMON_SLOT_5_STATE_REG      (MB_COMMON_START_REG + 4)  
+
+#define MB_COMMON_SWAP_STATE_REG        (MB_COMMON_START_REG + 5)  
+#define MB_COMMON_MANUAL_CONTROL_REG    (MB_COMMON_START_REG + 6)  
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -32,6 +32,7 @@ static hsm_state_t app_state_setting;
 /* Timers */
 static hsm_timer_t *timer_loading;
 static hsm_timer_t *timer_update;
+static hsm_timer_t *timer_clock;
 
 void
 app_state_hsm_init(app_state_hsm_t* me) {
@@ -124,6 +125,8 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             ui_load_screen(ui_scrMain);
             hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
             hsm_timer_start(timer_update);
+            me->last_time_run = me->time_run;
+            me->time_run = 0;
             ESP_LOGI(TAG, "Entered Main State");
             break;
         case HSM_EVENT_EXIT: 
@@ -225,26 +228,46 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             break;
         case HEVT_MANUAL2_SELECT_SLOT1:
             me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 1;
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_MANUAL_CONTROL_REG, 
+                        me->bms_info.manual_swap_request);
             me->manual_robot_bat_select = 0;
             hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
             break;
         case HEVT_MANUAL2_SELECT_SLOT2:
             me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 2;
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_MANUAL_CONTROL_REG, 
+                        me->bms_info.manual_swap_request);
             me->manual_robot_bat_select = 0;
             hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
             break;
         case HEVT_MANUAL2_SELECT_SLOT3:
             me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 3;
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_MANUAL_CONTROL_REG, 
+                        me->bms_info.manual_swap_request);
             me->manual_robot_bat_select = 0;
             hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
             break;
         case HEVT_MANUAL2_SELECT_SLOT4:
             me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 4;
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_MANUAL_CONTROL_REG, 
+                        me->bms_info.manual_swap_request);
             me->manual_robot_bat_select = 0;
             hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
             break;
         case HEVT_MANUAL2_SELECT_SLOT5: 
             me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 5;
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_MANUAL_CONTROL_REG, 
+                        me->bms_info.manual_swap_request);
             me->manual_robot_bat_select = 0;
             hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
             break;
@@ -255,10 +278,33 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 }
 
 static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void* data) {
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY: 
+            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
+            hsm_timer_start(timer_update);
+            hsm_timer_create(&timer_clock, hsm, HEVT_TIMER_CLOCK, 1000, HSM_TIMER_PERIODIC);
+            hsm_timer_start(timer_clock);
             break;
         case HSM_EVENT_EXIT: 
+
+            break;
+        case HEVT_TIMER_UPDATE:
+            scrprocessslotssttcontainer_update(me->bms_info.slot_state, me->bms_data);
+            scrprocessruntimevalue_update(me->time_run);
+            scrprocessstatevalue_update(me->bms_info.swap_state);
+
+            if(me->bms_info.swap_state == SWAP_STATE_CHARGING_COMPLETE
+            || me->bms_info.swap_state == SWAP_STATE_MOTOR_CABLID
+            || me->bms_info.swap_state == SWAP_STATE_STANDBY) {
+                hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            }
+            break;
+        case HEVT_TIMER_CLOCK:
+            me->time_run++;
+            if(me->time_run > BMS_RUN_TIMEOUT) {
+                // Fault
+            }
             break;
         default: 
             return event;
