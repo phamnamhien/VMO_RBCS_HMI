@@ -35,6 +35,7 @@ void ui_event_chooseb1container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrManualControl22, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrManualControl22_screen_init);
+        fnscrmanual1selectbat1(e);
     }
 }
 
@@ -44,6 +45,7 @@ void ui_event_chooseb2container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrManualControl22, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrManualControl22_screen_init);
+        fnscrmanual1selectbat2(e);
     }
 }
 

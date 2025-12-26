@@ -321,7 +321,7 @@ void ui_scrMain_screen_init(void)
     lv_obj_set_x(ui_scrmainstateofchargervalue, 0);
     lv_obj_set_y(ui_scrmainstateofchargervalue, 7);
     lv_obj_set_align(ui_scrmainstateofchargervalue, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_scrmainstateofchargervalue, "IDLE");
+    lv_label_set_text(ui_scrmainstateofchargervalue, "----");
     lv_obj_set_style_text_color(ui_scrmainstateofchargervalue, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_scrmainstateofchargervalue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_scrmainstateofchargervalue, &ui_font_H1, LV_PART_MAIN | LV_STATE_DEFAULT);

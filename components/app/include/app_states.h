@@ -55,9 +55,19 @@ typedef enum {
 } BMS_Slot_State_t;
 
 typedef enum {
-    SWAP_STATE_IDLE = 0,
-    SWAP_STATE_ROBOT_COMMING,
+    SWAP_STATE_STANDBY = 0,
+    SWAP_STATE_ROBOT_REQUEST,
+    SWAP_STATE_ROBOT_POSTION,
+    SWAP_STATE_REMOVE_EMPTY_BATTERY,
+    SWAP_STATE_STORE_EMPTY_BATTERY,
+    SWAP_STATE_RETRIEVES_FULL_BATTERY,
+    SWAP_STATE_INSTALL_FULL_BATTERY,
+    SWAP_STATE_CHARGING_COMPLETE,
+    SWAP_STATE_MOTOR_CABLID,
+    
+    SWAP_STATE_FAULT,
     // ... add more states if needed
+    TOTAL_SWAP_STATE,
 } BMS_Swap_State_t;
 
 typedef enum {
@@ -125,7 +135,7 @@ typedef struct {
     uint8_t manual_swap[TOTAL_SLOT];
     BMS_Slot_State_t slot_state[TOTAL_SLOT];
     BMS_Swap_State_t swap_state;
-
+    uint16_t manual_swap_request;
 } BMS_Information_t;
 
 typedef enum {
@@ -143,50 +153,62 @@ typedef enum {
     HEVT_MODBUS_CONNECTED,
     HEVT_MODBUS_NOTCONNECTED,
 
-    HEVT_CHANGE_SCR_MAIN_TO_SETTING,
-    HEVT_CHANGE_SCR_SETTING_TO_MAIN,
-    HEVT_MAIN_SLOT_1_CLICKED,
-    HEVT_MAIN_SLOT_2_CLICKED,
-    HEVT_MAIN_SLOT_3_CLICKED,
-    HEVT_MAIN_SLOT_4_CLICKED,
-    HEVT_MAIN_SLOT_5_CLICKED,
-    HEVT_MAIN_MANUAL_SWAP_CLICKED,
+    HEVT_TRANS_MAIN_TO_DETAIL,
+    HEVT_TRANS_MAIN_TO_MANUAL1,
 
-    HEVT_MANUAL_MOTOR_1_MOVE,
-    HEVT_MANUAL_MOTOR_2_MOVE,
-    HEVT_MANUAL_MOTOR_3_MOVE,
+    HEVT_TRANS_DETAIL_TO_MAIN,
+    HEVT_TRANS_DETAIL_TO_MANUAL1,
+
+    HEVT_TRANS_MANUAL1_TO_MANUAL2,
+    
+    HEVT_TRANS_BACK_TO_MAIN,
+
+    HEVT_MANUAL1_SELECT_BAT1,
+    HEVT_MANUAL1_SELECT_BAT2,
+    HEVT_MANUAL2_SELECT_SLOT1,
+    HEVT_MANUAL2_SELECT_SLOT2,
+    HEVT_MANUAL2_SELECT_SLOT3,
+    HEVT_MANUAL2_SELECT_SLOT4,
+    HEVT_MANUAL2_SELECT_SLOT5,
 
     HEVT_TIMER_LOADING,
     HEVT_TIMER_UPDATE,
 } app_events_t;
+
+
 
 typedef struct {
     hsm_t parent;
 
     BMS_Data_t bms_data[TOTAL_SLOT];
     BMS_Information_t bms_info;
+    
+    uint16_t time_run;
+    uint16_t last_time_run;
+
+    uint16_t present_slot_display;
+
+    uint8_t manual_robot_bat_select;
 
     uint8_t is_bms_not_connected;
 } app_state_hsm_t;
 
 void app_state_hsm_init(app_state_hsm_t* me);
 
-void ui_update_main_slot_voltage(app_state_hsm_t* me, int8_t slot_index);
-void ui_update_main_battery_percent(app_state_hsm_t* me, uint8_t slot_index);
-void ui_update_main_slot_capacity(app_state_hsm_t* me, int8_t slot_index);
-void ui_update_all_slots_display(app_state_hsm_t* me);
 
-void ui_show_slot_serial_detail(uint8_t slot_number);
-void ui_show_slot_detail_panel(bool show);
-
-void ui_update_all_slot_details(app_state_hsm_t* me, uint8_t slot_index);
-void ui_clear_all_slot_details(void);
-
-void ui_show_main_not_connect(bool show);
-
-
+// UI main screen
 void scrmainbatslotscontainer_update(const bool has_slot[5], const float voltages[5], const float percents[5]);
+void scrmainlasttimelabel_update(uint16_t seconds);
+void scrmainstateofchargervalue_update(BMS_Swap_State_t state);
+// UI detail screen
+void scrdetaildataslottitlelabel_update(SlotIndex_t index);
+void scrdetailslotssttcontainer_update(const BMS_Slot_State_t state[TOTAL_SLOT], const BMS_Data_t data[TOTAL_SLOT], uint16_t current_slot);
+void scrdetaildataslotvalue_update(const BMS_Data_t* data, BMS_Slot_State_t state);
+// UI manual 2 screen
 void scrmanual2slotinfolabel_update(const bool has_slot[5], const float voltages[5], const float percents[5]);
+
+// UI Process screen
+void scrprocessslotssttcontainer_update(const BMS_Slot_State_t state[TOTAL_SLOT], const BMS_Data_t data[TOTAL_SLOT]);
 
 
 

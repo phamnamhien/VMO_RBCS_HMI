@@ -93,7 +93,7 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_width(ui_scrprocessstatetitlelabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_scrprocessstatetitlelabel, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_scrprocessstatetitlelabel, 0);
-    lv_obj_set_y(ui_scrprocessstatetitlelabel, -48);
+    lv_obj_set_y(ui_scrprocessstatetitlelabel, -44);
     lv_obj_set_align(ui_scrprocessstatetitlelabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_scrprocessstatetitlelabel, "State");
     lv_obj_set_style_text_color(ui_scrprocessstatetitlelabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -181,7 +181,7 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_width(ui_scrprocessslotssttslot1panel, 20);
     lv_obj_set_height(ui_scrprocessslotssttslot1panel, 20);
     lv_obj_set_x(ui_scrprocessslotssttslot1panel, -196);
-    lv_obj_set_y(ui_scrprocessslotssttslot1panel, -14);
+    lv_obj_set_y(ui_scrprocessslotssttslot1panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot1panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot1panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_scrprocessslotssttslot1panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -195,7 +195,7 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_width(ui_scrprocessslotssttslot2panel, 20);
     lv_obj_set_height(ui_scrprocessslotssttslot2panel, 20);
     lv_obj_set_x(ui_scrprocessslotssttslot2panel, -166);
-    lv_obj_set_y(ui_scrprocessslotssttslot2panel, -14);
+    lv_obj_set_y(ui_scrprocessslotssttslot2panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot2panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot2panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_scrprocessslotssttslot2panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -205,7 +205,7 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_width(ui_scrprocessslotssttslot3panel, 20);
     lv_obj_set_height(ui_scrprocessslotssttslot3panel, 20);
     lv_obj_set_x(ui_scrprocessslotssttslot3panel, -136);
-    lv_obj_set_y(ui_scrprocessslotssttslot3panel, -14);
+    lv_obj_set_y(ui_scrprocessslotssttslot3panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot3panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot3panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_scrprocessslotssttslot3panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -215,7 +215,7 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_width(ui_scrprocessslotssttslot4panel, 20);
     lv_obj_set_height(ui_scrprocessslotssttslot4panel, 20);
     lv_obj_set_x(ui_scrprocessslotssttslot4panel, -106);
-    lv_obj_set_y(ui_scrprocessslotssttslot4panel, -14);
+    lv_obj_set_y(ui_scrprocessslotssttslot4panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot4panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot4panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_scrprocessslotssttslot4panel, lv_color_hex(0xEE3A29), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -225,7 +225,7 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_width(ui_scrprocessslotssttslot5panel, 20);
     lv_obj_set_height(ui_scrprocessslotssttslot5panel, 20);
     lv_obj_set_x(ui_scrprocessslotssttslot5panel, -76);
-    lv_obj_set_y(ui_scrprocessslotssttslot5panel, -14);
+    lv_obj_set_y(ui_scrprocessslotssttslot5panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot5panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot5panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 

@@ -798,31 +798,104 @@ app_main(void) {
     ESP_LOGI(TAG, "===========================================");
 }
 
+void fnbacktomainbutton(lv_event_t * e) {
+    ESP_LOGI(TAG, "Back To Main Screen");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_BACK_TO_MAIN, NULL);
+}
+
 // Main Screen
 void fnscrmainbatterybuttonclicked(lv_event_t * e) {
-
+    ESP_LOGI(TAG, "Main Goto Detail Screen");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_MAIN_TO_DETAIL, NULL);
 }
 
 void fnscrmainmanualbuttonclicked(lv_event_t * e) {
-
+    ESP_LOGI(TAG, "Main Goto Manual 1 Screen");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_MAIN_TO_MANUAL1, NULL);
 }    
 
 // Detail Screen
 void fnscrdetailbatterybuttonclicked(lv_event_t * e) {
-
+    ESP_LOGI(TAG, "Detail Goto Main Screen");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_DETAIL_TO_MAIN, NULL);
 }
 
 void fnscrdetailmanualbuttonclicked(lv_event_t * e) {
-
+    ESP_LOGI(TAG, "Detail Goto Manual 1 Screen");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_DETAIL_TO_MANUAL1, NULL);
 }    
 
 void fnscrdetailbacktomainbuttonclicked(lv_event_t * e) {
+    ESP_LOGI(TAG, "Detail Goto Main Screen");
 
 }    
 
 void fnscrdetailbackslotbuttonclicked(lv_event_t * e) {
+    ESP_LOGI(TAG, "Detail Back Slot Data");
 
 }    
 void fnscrdetailnextslotbuttonclicked(lv_event_t * e) {
-
+    ESP_LOGI(TAG, "Detail Next Slot Data");
 }    
+void fnscrdetailnextslotgasture(lv_event_t * e) {
+    ESP_LOGI(TAG, "Detail Next Slot Data");
+    if(++device.present_slot_display > TOTAL_SLOT - 1) {
+        device.present_slot_display = IDX_SLOT_1;
+    }
+    lv_obj_set_style_opa(ui_scrdetaildataslottitlelabel, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_opa(ui_scrdetaildataslotvalue1, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_opa(ui_scrdetaildataslotvalue2, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_opa(ui_scrdetaildataslotvalue3, LV_OPA_TRANSP, 0);
+
+    scrdetaildataslottitlelabel_update(device.present_slot_display);
+    scrdetaildataslotvalue_update(
+                        &device.bms_data[device.present_slot_display],
+                        device.bms_info.slot_state[device.present_slot_display]);
+    scrdetailslotssttcontainer_update(
+                        device.bms_info.slot_state,
+                        device.bms_data,
+                        device.present_slot_display);
+}
+void fnscrdetailbackslotgasture(lv_event_t * e) {
+    ESP_LOGI(TAG, "Detail Back Slot Data");
+    if((int8_t)--device.present_slot_display < IDX_SLOT_1) {
+        device.present_slot_display = TOTAL_SLOT - 1;
+    }
+    lv_obj_set_style_opa(ui_scrdetaildataslottitlelabel, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_opa(ui_scrdetaildataslotvalue1, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_opa(ui_scrdetaildataslotvalue2, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_opa(ui_scrdetaildataslotvalue3, LV_OPA_TRANSP, 0);
+
+    scrdetaildataslottitlelabel_update(device.present_slot_display);
+    scrdetaildataslotvalue_update(
+                        &device.bms_data[device.present_slot_display],
+                        device.bms_info.slot_state[device.present_slot_display]);
+    scrdetailslotssttcontainer_update(
+                        device.bms_info.slot_state,
+                        device.bms_data,
+                        device.present_slot_display);
+}
+
+// Manual1 Screen
+void fnscrmanual1selectbat1(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT1, NULL);
+    
+}
+void fnscrmanual1selectbat2(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT1, NULL);
+}
+void fnscrmanual1selectslot1(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT1, NULL);
+}
+void fnscrmanual1selectslot2(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT2, NULL);
+}
+void fnscrmanual1selectslot3(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT3, NULL);
+}
+void fnscrmanual1selectslot4(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT4, NULL);
+}
+void fnscrmanual1selectslot5(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT5, NULL);
+}

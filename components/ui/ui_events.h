@@ -12,11 +12,18 @@ extern "C" {
 
 void fnscrmainbatterybuttonclicked(lv_event_t * e);
 void fnscrmainmanualbuttonclicked(lv_event_t * e);
+void fnscrmanual1selectbat1(lv_event_t * e);
+void fnscrmanual1selectbat2(lv_event_t * e);
+void fnscrmanual1selectslot1(lv_event_t * e);
+void fnscrmanual1selectslot2(lv_event_t * e);
+void fnscrmanual1selectslot3(lv_event_t * e);
+void fnscrmanual1selectslot4(lv_event_t * e);
+void fnscrmanual1selectslot5(lv_event_t * e);
+void fnscrdetailnextslotgasture(lv_event_t * e);
+void fnscrdetailbackslotgasture(lv_event_t * e);
 void fnscrdetailbatterybuttonclicked(lv_event_t * e);
 void fnscrdetailmanualbuttonclicked(lv_event_t * e);
-void fnscrdetailbackslotbuttonclicked(lv_event_t * e);
-void fnscrdetailnextslotbuttonclicked(lv_event_t * e);
-void fnscrdetailbacktomainbuttonclicked(lv_event_t * e);
+void fnbacktomainbutton(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

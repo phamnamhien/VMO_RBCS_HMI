@@ -25,8 +25,8 @@ extern "C" {
 #include "screens/ui_scrProcess.h"
 #include "screens/ui_scrManualControl12.h"
 #include "screens/ui_scrManualControl22.h"
-#include "screens/ui_scrDetail.h"
 #include "screens/ui_scrSetting.h"
+#include "screens/ui_scrDetail.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -38,6 +38,8 @@ extern lv_anim_t * fadeout_Animation(lv_obj_t * TargetObject, int delay);
 extern lv_anim_t * fadein_Animation(lv_obj_t * TargetObject, int delay);
 extern lv_anim_t * backslotclicked_Animation(lv_obj_t * TargetObject, int delay);
 extern lv_anim_t * nextslotclicked_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * gasturerightanimation_Animation(lv_obj_t * TargetObject, int delay);
+extern lv_anim_t * gastureleftanimation_Animation(lv_obj_t * TargetObject, int delay);
 
 // EVENTS
 

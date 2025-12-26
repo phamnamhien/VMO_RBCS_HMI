@@ -40,14 +40,14 @@ extern lv_obj_t * ui_scrdetailslotssttpanel3;
 extern lv_obj_t * ui_scrdetailslotssttpanel4;
 extern lv_obj_t * ui_scrdetailslotssttpanel5;
 extern lv_obj_t * ui_scrdetaildatacontainer;
+extern lv_obj_t * ui_scrdetaildatapanel;
 extern lv_obj_t * ui_scrdetaildataslottitlelabel;
-extern lv_obj_t * ui_scrdetaildataslotvalue;
-extern void ui_event_scrdetaildataslotbackbutton(lv_event_t * e);
-extern lv_obj_t * ui_scrdetaildataslotbackbutton;
-extern void ui_event_scrdetaildataslotnextbutton(lv_event_t * e);
-extern lv_obj_t * ui_scrdetaildataslotnextbutton;
-extern void ui_event_scrdetailvmologo(lv_event_t * e);
+extern lv_obj_t * ui_scrdetaildataslotvalue1;
+extern lv_obj_t * ui_scrdetaildataslotvalue2;
+extern lv_obj_t * ui_scrdetaildataslotvalue3;
 extern lv_obj_t * ui_scrdetailvmologo;
+extern void ui_event_scrdetailbacktomainbutton(lv_event_t * e);
+extern lv_obj_t * ui_scrdetailbacktomainbutton;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

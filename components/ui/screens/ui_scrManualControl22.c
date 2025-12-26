@@ -45,6 +45,7 @@ void ui_event_chooses1container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_NONE, 500, 0, &ui_scrProcess_screen_init);
+        fnscrmanual1selectslot1(e);
     }
 }
 
@@ -54,6 +55,7 @@ void ui_event_chooses2container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_NONE, 500, 0, &ui_scrProcess_screen_init);
+        fnscrmanual1selectslot2(e);
     }
 }
 
@@ -63,6 +65,7 @@ void ui_event_chooses3container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_NONE, 500, 0, &ui_scrProcess_screen_init);
+        fnscrmanual1selectslot3(e);
     }
 }
 
@@ -72,6 +75,7 @@ void ui_event_chooses4container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_NONE, 500, 0, &ui_scrProcess_screen_init);
+        fnscrmanual1selectslot4(e);
     }
 }
 
@@ -81,6 +85,7 @@ void ui_event_chooses5container_button(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_scrProcess, LV_SCR_LOAD_ANIM_NONE, 500, 0, &ui_scrProcess_screen_init);
+        fnscrmanual1selectslot5(e);
     }
 }
 

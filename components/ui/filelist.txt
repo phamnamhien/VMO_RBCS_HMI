@@ -5,8 +5,8 @@ screens/ui_scrMain.c
 screens/ui_scrProcess.c
 screens/ui_scrManualControl12.c
 screens/ui_scrManualControl22.c
-screens/ui_scrDetail.c
 screens/ui_scrSetting.c
+screens/ui_scrDetail.c
 ui.c
 components/ui_comp_hook.c
 ui_helpers.c

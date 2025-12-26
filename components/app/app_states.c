@@ -5,11 +5,11 @@ static const char* TAG = "HSM";
 static hsm_event_t app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data);
 static hsm_event_t app_state_main_common_handler(hsm_t* hsm, hsm_event_t event, void* data);
 static hsm_event_t app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data);
-static hsm_event_t app_state_main_slot_1_handler(hsm_t* hsm, hsm_event_t event, void* data);
-static hsm_event_t app_state_main_slot_2_handler(hsm_t* hsm, hsm_event_t event, void* data);
-static hsm_event_t app_state_main_slot_3_handler(hsm_t* hsm, hsm_event_t event, void* data);
-static hsm_event_t app_state_main_slot_4_handler(hsm_t* hsm, hsm_event_t event, void* data);
-static hsm_event_t app_state_main_slot_5_handler(hsm_t* hsm, hsm_event_t event, void* data);
+static hsm_event_t app_state_detail_handler(hsm_t* hsm, hsm_event_t event, void* data);
+static hsm_event_t app_state_manual1_handler(hsm_t* hsm, hsm_event_t event, void* data);
+static hsm_event_t app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data);
+static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void* data);
+
 static hsm_event_t app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data);
 
 
@@ -22,11 +22,11 @@ static uint32_t esp32_timer_get_ms(void);
 static hsm_state_t app_state_loading;
 static hsm_state_t app_state_main_common;
 static hsm_state_t app_state_main;
-static hsm_state_t app_state_main_slot_1;
-static hsm_state_t app_state_main_slot_2;
-static hsm_state_t app_state_main_slot_3;
-static hsm_state_t app_state_main_slot_4;
-static hsm_state_t app_state_main_slot_5;
+static hsm_state_t app_state_detail;
+static hsm_state_t app_state_manual1;
+static hsm_state_t app_state_manual2;
+static hsm_state_t app_state_process;
+
 static hsm_state_t app_state_setting;
 
 /* Timers */
@@ -39,11 +39,10 @@ app_state_hsm_init(app_state_hsm_t* me) {
     hsm_state_create(&app_state_loading, "s_loading", app_state_loading_handler, NULL);
     hsm_state_create(&app_state_main_common, "s_main_com", app_state_main_common_handler, NULL);
     hsm_state_create(&app_state_main, "s_main", app_state_main_handler, &app_state_main_common);
-    hsm_state_create(&app_state_main_slot_1, "s_main_sl1", app_state_main_slot_1_handler, &app_state_main_common);
-    hsm_state_create(&app_state_main_slot_2, "s_main_sl2", app_state_main_slot_2_handler, &app_state_main_common);
-    hsm_state_create(&app_state_main_slot_3, "s_main_sl3", app_state_main_slot_3_handler, &app_state_main_common);
-    hsm_state_create(&app_state_main_slot_4, "s_main_sl4", app_state_main_slot_4_handler, &app_state_main_common);
-    hsm_state_create(&app_state_main_slot_5, "s_main_sl5", app_state_main_slot_5_handler, &app_state_main_common);
+    hsm_state_create(&app_state_detail, "s_detail", app_state_detail_handler, &app_state_main_common);
+    hsm_state_create(&app_state_manual1, "s_manual1", app_state_manual1_handler, &app_state_main_common);
+    hsm_state_create(&app_state_manual2, "s_manual2", app_state_manual2_handler, &app_state_main_common);
+    hsm_state_create(&app_state_process, "s_process", app_state_process_handler, &app_state_main_common);
     hsm_state_create(&app_state_setting, "s_setting", app_state_setting_handler, NULL);
 
     static const hsm_timer_if_t esp32_timer_if = {
@@ -95,7 +94,7 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t
 app_state_main_common_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
+    // app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY: break;
         case HSM_EVENT_EXIT: break;
@@ -103,16 +102,13 @@ app_state_main_common_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             // Handle station state data update if needed
             break;
         case HEVT_MODBUS_GET_SLOT_DATA: 
-            ui_update_all_slots_display(me); 
-            break;
-        case HEVT_CHANGE_SCR_MAIN_TO_SETTING: 
-            hsm_transition((hsm_t *)me, &app_state_setting, NULL, NULL); 
+
             break;
         case HEVT_MODBUS_CONNECTED: 
-            ui_show_main_not_connect(false); 
+
             break;
         case HEVT_MODBUS_NOTCONNECTED: 
-            ui_show_main_not_connect(true); 
+
             break;
         default: 
             return event;
@@ -126,180 +122,157 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_load_screen(ui_scrMain);
-            ui_show_slot_serial_detail(0);
-            ui_show_slot_detail_panel(false);
             hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
             hsm_timer_start(timer_update);
             ESP_LOGI(TAG, "Entered Main State");
             break;
-        case HSM_EVENT_EXIT: break;
+        case HSM_EVENT_EXIT: 
+
+            break;
         case HEVT_TIMER_UPDATE:
-            bool slots[5] = {true, true, false, true, true};
-            float voltages[5] = {0.0, 34.5, 12.3, 56.3, 34.5};
-            float percents[5] = {99.0, 23.5, 22.3, 32.3, 74.5};
+            bool slots[5] = {
+                me->bms_info.slot_state[0], 
+                me->bms_info.slot_state[1], 
+                me->bms_info.slot_state[2], 
+                me->bms_info.slot_state[3], 
+                me->bms_info.slot_state[4]
+            };
+            float voltages[5] = {
+                me->bms_data[0].stack_volt/10.0, 
+                me->bms_data[1].stack_volt/10.0, 
+                me->bms_data[2].stack_volt/10.0, 
+                me->bms_data[3].stack_volt/10.0, 
+                me->bms_data[4].stack_volt/10.0
+            };
+            float percents[5] = {
+                me->bms_data[0].pin_percent/10.0, 
+                me->bms_data[1].pin_percent/10.0, 
+                me->bms_data[2].pin_percent/10.0, 
+                me->bms_data[3].pin_percent/10.0, 
+                me->bms_data[4].pin_percent/10.0
+            };
             scrmainbatslotscontainer_update(slots, voltages, percents);
+            scrmainlasttimelabel_update(me->last_time_run);
+            scrmainstateofchargervalue_update(me->bms_info.swap_state);
             break;
-        case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_1, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_2, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_3, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_4_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_4, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_5_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_5, NULL, NULL); break;
+        case HEVT_TRANS_MAIN_TO_DETAIL:
+            hsm_transition((hsm_t *)me, &app_state_detail, NULL, NULL);
+            break;
+        case HEVT_TRANS_MAIN_TO_MANUAL1:
+            hsm_transition((hsm_t *)me, &app_state_manual1, NULL, NULL);
+            break;
+        default: 
+            return event;
+    }
+    return 0;
+}
+static hsm_event_t app_state_detail_handler(hsm_t* hsm, hsm_event_t event, void* data) {
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
+    
+    switch (event) {
+        case HSM_EVENT_ENTRY:
+            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
+            hsm_timer_start(timer_update);
+            ESP_LOGI(TAG, "Entered Detail State");
+            break;
+        case HSM_EVENT_EXIT: 
+
+            break;
+        case HEVT_TIMER_UPDATE:
+            scrdetaildataslottitlelabel_update(me->present_slot_display);
+            scrdetaildataslotvalue_update(
+                        &me->bms_data[me->present_slot_display],
+                        me->bms_info.slot_state[me->present_slot_display]);
+            scrdetailslotssttcontainer_update(
+                        me->bms_info.slot_state,
+                        me->bms_data,
+                        me->present_slot_display);
+            break;
         default: return event;
     }
     return 0;
 }
 
 static hsm_event_t
-app_state_main_slot_1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
+app_state_manual1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
-        case HSM_EVENT_ENTRY:
-            // ui_set_button_color(ui_btMainSlot1, BTN_COLOR_ACTIVE);
-            ui_show_slot_serial_detail(1);
-            ui_clear_all_slot_details();
-            ui_show_slot_detail_panel(true);
-            ESP_LOGI(TAG, "Main Slot 1 Clicked");
+        case HSM_EVENT_ENTRY: 
             break;
-        case HSM_EVENT_EXIT:
-            // ui_set_button_color(ui_btMainSlot1, BTN_COLOR_NORMAL);
-            ui_show_slot_serial_detail(0);
-            //ui_show_slot_detail_panel(false);
+        case HSM_EVENT_EXIT: 
             break;
-        case HEVT_MODBUS_GET_SLOT_1_DATA: ui_update_all_slot_details(me, IDX_SLOT_1); break;
-        case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_2, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_3, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_4_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_4, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_5_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_5, NULL, NULL); break;
-        case HEVT_MAIN_MANUAL_SWAP_CLICKED: modbus_master_write_single_register(APP_MODBUS_SLAVE_ID, 1000, 1); break;
-        default: return event;
+        case HEVT_MANUAL1_SELECT_BAT1:
+            me->manual_robot_bat_select = 1;
+            hsm_transition((hsm_t *)me, &app_state_manual2, NULL, NULL);
+            break;
+        case HEVT_MANUAL1_SELECT_BAT2:
+            me->manual_robot_bat_select = 2;
+            hsm_transition((hsm_t *)me, &app_state_manual2, NULL, NULL);
+            break;    
+        default: 
+            return event;
     }
     return 0;
 }
 
 static hsm_event_t
-app_state_main_slot_2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
+app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
-        case HSM_EVENT_ENTRY:
-            // ui_set_button_color(ui_btMainSlot2, BTN_COLOR_ACTIVE);
-            ui_show_slot_serial_detail(2);
-            ui_clear_all_slot_details();
-            ui_show_slot_detail_panel(true);
-            ESP_LOGI(TAG, "Main Slot 2 Clicked");
+        case HSM_EVENT_ENTRY: 
             break;
-        case HSM_EVENT_EXIT:
-            // ui_set_button_color(ui_btMainSlot2, BTN_COLOR_NORMAL);
-            ui_show_slot_serial_detail(0);
-            // ui_show_slot_detail_panel(false);
+        case HSM_EVENT_EXIT: 
             break;
-        case HEVT_MODBUS_GET_SLOT_2_DATA: ui_update_all_slot_details(me, IDX_SLOT_2); break;
-        case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_1, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_3, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_4_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_4, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_5_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_5, NULL, NULL); break;
-        case HEVT_MAIN_MANUAL_SWAP_CLICKED: modbus_master_write_single_register(APP_MODBUS_SLAVE_ID, 1001, 1); break;
-        default: return event;
+        case HEVT_MANUAL2_SELECT_SLOT1:
+            me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 1;
+            me->manual_robot_bat_select = 0;
+            hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
+            break;
+        case HEVT_MANUAL2_SELECT_SLOT2:
+            me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 2;
+            me->manual_robot_bat_select = 0;
+            hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
+            break;
+        case HEVT_MANUAL2_SELECT_SLOT3:
+            me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 3;
+            me->manual_robot_bat_select = 0;
+            hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
+            break;
+        case HEVT_MANUAL2_SELECT_SLOT4:
+            me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 4;
+            me->manual_robot_bat_select = 0;
+            hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
+            break;
+        case HEVT_MANUAL2_SELECT_SLOT5: 
+            me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 5;
+            me->manual_robot_bat_select = 0;
+            hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
+            break;
+        default: 
+            return event;
     }
     return 0;
 }
 
-static hsm_event_t
-app_state_main_slot_3_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
+static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     switch (event) {
-        case HSM_EVENT_ENTRY:
-            // ui_set_button_color(ui_btMainSlot3, BTN_COLOR_ACTIVE);
-            ui_show_slot_serial_detail(3);
-            ui_clear_all_slot_details();
-            ui_show_slot_detail_panel(true);
-            ESP_LOGI(TAG, "Main Slot 3 Clicked");
+        case HSM_EVENT_ENTRY: 
             break;
-        case HSM_EVENT_EXIT:
-            // ui_set_button_color(ui_btMainSlot3, BTN_COLOR_NORMAL);
-            ui_show_slot_serial_detail(0);
-            // ui_show_slot_detail_panel(false);
+        case HSM_EVENT_EXIT: 
             break;
-        case HEVT_MODBUS_GET_SLOT_3_DATA: ui_update_all_slot_details(me, IDX_SLOT_3); break;
-        case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_1, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_2, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_4_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_4, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_5_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_5, NULL, NULL); break;
-        case HEVT_MAIN_MANUAL_SWAP_CLICKED: modbus_master_write_single_register(APP_MODBUS_SLAVE_ID, 1002, 1); break;
-        default: return event;
+        default: 
+            return event;
     }
     return 0;
 }
-
-static hsm_event_t
-app_state_main_slot_4_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
-    switch (event) {
-        case HSM_EVENT_ENTRY:
-            // ui_set_button_color(ui_btMainSlot4, BTN_COLOR_ACTIVE);
-            ui_show_slot_serial_detail(4);
-            ui_clear_all_slot_details();
-            ui_show_slot_detail_panel(true);
-            ESP_LOGI(TAG, "Main Slot 4 Clicked");
-            break;
-        case HSM_EVENT_EXIT:
-            // ui_set_button_color(ui_btMainSlot4, BTN_COLOR_NORMAL);
-            ui_show_slot_serial_detail(0);
-            // ui_show_slot_detail_panel(false);
-            break;
-        case HEVT_MODBUS_GET_SLOT_4_DATA: ui_update_all_slot_details(me, IDX_SLOT_4); break;
-        case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_1, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_2, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_3, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_4_CLICKED: hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_5_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_5, NULL, NULL); break;
-        case HEVT_MAIN_MANUAL_SWAP_CLICKED: modbus_master_write_single_register(APP_MODBUS_SLAVE_ID, 1003, 1); break;
-        default: return event;
-    }
-    return 0;
-}
-
-static hsm_event_t
-app_state_main_slot_5_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
-    switch (event) {
-        case HSM_EVENT_ENTRY:
-            // ui_set_button_color(ui_btMainSlot5, BTN_COLOR_ACTIVE);
-            ui_show_slot_serial_detail(5);
-            ui_clear_all_slot_details();
-            ui_show_slot_detail_panel(true);
-            ESP_LOGI(TAG, "Main Slot 5 Clicked");
-            break;
-        case HSM_EVENT_EXIT:
-            // ui_set_button_color(ui_btMainSlot5, BTN_COLOR_NORMAL);
-            ui_show_slot_serial_detail(0);
-            // ui_show_slot_detail_panel(false);
-            break;
-        case HEVT_MODBUS_GET_SLOT_5_DATA: ui_update_all_slot_details(me, IDX_SLOT_5); break;
-        case HEVT_MAIN_SLOT_1_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_1, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_2_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_2, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_3_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_3, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_4_CLICKED: hsm_transition((hsm_t *)me, &app_state_main_slot_4, NULL, NULL); break;
-        case HEVT_MAIN_SLOT_5_CLICKED: hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL); break;
-        case HEVT_MAIN_MANUAL_SWAP_CLICKED: modbus_master_write_single_register(APP_MODBUS_SLAVE_ID, 1004, 1); break;
-        default: return event;
-    }
-    return 0;
-}
-
 static hsm_event_t
 app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
+    // app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ui_load_screen(ui_scrSetting);
-            ui_show_slot_detail_panel(false);
             ESP_LOGI(TAG, "Entered Setting State");
             break;
         case HSM_EVENT_EXIT: break;
-        case HEVT_CHANGE_SCR_SETTING_TO_MAIN: hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL); break;
         default: return event;
     }
     return 0;
