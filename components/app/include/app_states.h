@@ -138,6 +138,7 @@ typedef struct {
     BMS_Slot_State_t slot_state[TOTAL_SLOT];
     BMS_Swap_State_t swap_state;
     uint16_t manual_swap_request;
+    uint16_t complete_swap;
 } BMS_Information_t;
 
 typedef enum {

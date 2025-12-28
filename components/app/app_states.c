@@ -164,6 +164,9 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
         case HEVT_TRANS_MAIN_TO_MANUAL1:
             hsm_transition((hsm_t *)me, &app_state_manual1, NULL, NULL);
             break;
+        case HEVT_TRANS_BACK_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            break;
         default: 
             return event;
     }
@@ -191,7 +194,17 @@ static hsm_event_t app_state_detail_handler(hsm_t* hsm, hsm_event_t event, void*
                         me->bms_data,
                         me->present_slot_display);
             break;
-        default: return event;
+        case HEVT_TRANS_DETAIL_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            break;
+        case HEVT_TRANS_DETAIL_TO_MANUAL1:
+            hsm_transition((hsm_t *)me, &app_state_manual1, NULL, NULL);
+            break;
+        case HEVT_TRANS_BACK_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            break;
+        default: 
+            return event;
     }
     return 0;
 }
@@ -213,6 +226,9 @@ app_state_manual1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             me->manual_robot_bat_select = 2;
             hsm_transition((hsm_t *)me, &app_state_manual2, NULL, NULL);
             break;    
+        case HEVT_TRANS_BACK_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            break;
         default: 
             return event;
     }
@@ -299,6 +315,9 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             me->manual_robot_bat_select = 0;
             hsm_transition((hsm_t *)me, &app_state_process, NULL, NULL);
             break;
+        case HEVT_TRANS_BACK_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            break;
         default: 
             return event;
     }
@@ -311,28 +330,42 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
         case HSM_EVENT_ENTRY: 
             hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
             hsm_timer_start(timer_update);
-            hsm_timer_create(&timer_clock, hsm, HEVT_TIMER_CLOCK, 1000, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_clock);
+            // hsm_timer_create(&timer_clock, hsm, HEVT_TIMER_CLOCK, 1000, HSM_TIMER_PERIODIC);
+            // hsm_timer_start(timer_clock);
             break;
         case HSM_EVENT_EXIT: 
 
             break;
         case HEVT_TIMER_UPDATE:
+
+            me->time_run++;
+            ESP_LOGD(TAG, "Process Time Run: %d seconds", me->time_run);
+            if(me->time_run > BMS_RUN_TIMEOUT) {
+                // Fault
+            }
+
             scrprocessslotssttcontainer_update(me->bms_info.slot_state, me->bms_data);
             scrprocessruntimevalue_update(me->time_run);
             scrprocessstatevalue_update(me->bms_info.swap_state);
 
-            if(me->bms_info.swap_state == SWAP_STATE_CHARGING_COMPLETE
-            || me->bms_info.swap_state == SWAP_STATE_MOTOR_CABLID
-            || me->bms_info.swap_state == SWAP_STATE_STANDBY) {
+            if(me->bms_info.complete_swap) {
+                me->bms_info.complete_swap = 0;
+                modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_COMPLETE_SWAP_REG, 
+                        me->bms_info.complete_swap);
                 hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
             }
             break;
         case HEVT_TIMER_CLOCK:
-            me->time_run++;
-            if(me->time_run > BMS_RUN_TIMEOUT) {
-                // Fault
-            }
+            // me->time_run++;
+            // ESP_LOGD(TAG, "Process Time Run: %d seconds", me->time_run);
+            // if(me->time_run > BMS_RUN_TIMEOUT) {
+            //     // Fault
+            // }
+            break;
+        case HEVT_TRANS_BACK_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
             break;
         default: 
             return event;
@@ -341,12 +374,16 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
 }
 static hsm_event_t
 app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data) {
-    // app_state_hsm_t* me = (app_state_hsm_t *)hsm;
+    app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:
             ESP_LOGI(TAG, "Entered Setting State");
             break;
-        case HSM_EVENT_EXIT: break;
+        case HSM_EVENT_EXIT: 
+            break;
+        case HEVT_TRANS_BACK_TO_MAIN:
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
+            break;    
         default: return event;
     }
     return 0;
@@ -373,16 +410,24 @@ static void*
 esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_t repeat) {
     esp32_timer_t* timer = malloc(sizeof(esp32_timer_t));
     if (!timer) return NULL;
+    
     timer->mutex = xSemaphoreCreateMutex();
     if (!timer->mutex) {
         free(timer);
         return NULL;
     }
+    
     timer->callback = callback;
     timer->arg = arg;
     timer->state = TIMER_STATE_ACTIVE;
     
-    timer->handle = xTimerCreate("hsm", pdMS_TO_TICKS(period_ms),
+    // ✅ TẠO TÊN DUY NHẤT CHO MỖI TIMER
+    static uint32_t timer_id = 0;
+    char timer_name[16];
+    snprintf(timer_name, sizeof(timer_name), "hsm_%lu", timer_id++);
+    
+    timer->handle = xTimerCreate(timer_name,  // ✅ TÊN KHÁC NHAU
+                                  pdMS_TO_TICKS(period_ms),
                                   repeat ? pdTRUE : pdFALSE, 
                                   timer, esp32_timer_callback);
 
@@ -393,7 +438,7 @@ esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_
         return NULL;
     }
     
-    ESP_LOGD(TAG, "Timer started: %p", timer);
+    ESP_LOGD(TAG, "Timer started: %s (%p), period=%lums", timer_name, timer, period_ms);
     return timer;
 }
 

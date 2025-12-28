@@ -74,7 +74,7 @@ void ui_event_scrdetailmanualbutton(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_scrMain, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrMain_screen_init);
+        _ui_screen_change(&ui_scrManualControl12, LV_SCR_LOAD_ANIM_NONE, 200, 0, &ui_scrManualControl12_screen_init);
         fnscrdetailmanualbuttonclicked(e);
     }
 }

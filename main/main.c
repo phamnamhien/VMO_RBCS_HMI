@@ -123,6 +123,7 @@ modbus_bms_information_sync_data(app_state_hsm_t* me, uint16_t* dat) {
 
     me->bms_info.swap_state = dat[5];
     me->bms_info.manual_swap_request= dat[6];
+    me->bms_info.complete_swap = dat[7];
 }
 
 
@@ -760,15 +761,7 @@ void fnscrdetailmanualbuttonclicked(lv_event_t * e) {
 
 void fnscrdetailbacktomainbuttonclicked(lv_event_t * e) {
     ESP_LOGI(TAG, "Detail Goto Main Screen");
-
-}    
-
-void fnscrdetailbackslotbuttonclicked(lv_event_t * e) {
-    ESP_LOGI(TAG, "Detail Back Slot Data");
-
-}    
-void fnscrdetailnextslotbuttonclicked(lv_event_t * e) {
-    ESP_LOGI(TAG, "Detail Next Slot Data");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_DETAIL_TO_MAIN, NULL);
 }    
 void fnscrdetailnextslotgasture(lv_event_t * e) {
     ESP_LOGI(TAG, "Detail Next Slot Data");
@@ -812,7 +805,6 @@ void fnscrdetailbackslotgasture(lv_event_t * e) {
 // Manual1 Screen
 void fnscrmanual1selectbat1(lv_event_t * e) {
     hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT1, NULL);
-    
 }
 void fnscrmanual1selectbat2(lv_event_t * e) {
     hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT1, NULL);
@@ -832,3 +824,8 @@ void fnscrmanual1selectslot4(lv_event_t * e) {
 void fnscrmanual1selectslot5(lv_event_t * e) {
     hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT5, NULL);
 }
+
+
+void backtomainscrevt(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_BACK_TO_MAIN, NULL);
+}    

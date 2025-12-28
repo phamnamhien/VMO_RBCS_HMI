@@ -81,7 +81,7 @@ extern "C" {
 
 #define MB_COMMON_SWAP_STATE_REG        (MB_COMMON_START_REG + 5)  
 #define MB_COMMON_MANUAL_CONTROL_REG    (MB_COMMON_START_REG + 6)  
-
+#define MB_COMMON_COMPLETE_SWAP_REG     (MB_COMMON_START_REG + 7)  
 
 #ifdef __cplusplus
 }
