@@ -144,7 +144,7 @@ modbus_poll_task(void* arg) {
     while (1) {
         // ===== KIỂM TRA CẦN RESET =====
         if (need_reset) {
-            ESP_LOGW(TAG, "🔄 Resetting Modbus stack...");
+            // ESP_LOGW(TAG, "🔄 Resetting Modbus stack...");
             modbus_master_reset();
             need_reset = false;
             consecutive_errors = 0;
@@ -220,7 +220,7 @@ modbus_poll_task(void* arg) {
 
         // ===== XỬ LÝ LỖI =====
         if (consecutive_errors >= 10) {
-            ESP_LOGE(TAG, "⚠️  Too many errors (%d) - will reset stack", consecutive_errors);
+            // ESP_LOGE(TAG, "⚠️  Too many errors (%d) - will reset stack", consecutive_errors);
             hsm_dispatch((hsm_t *)&device, HEVT_MODBUS_NOTCONNECTED, NULL);
             need_reset = true;
         } else if (consecutive_errors > 0) {
@@ -829,3 +829,10 @@ void fnscrmanual1selectslot5(lv_event_t * e) {
 void backtomainscrevt(lv_event_t * e) {
     hsm_dispatch((hsm_t *)&device, HEVT_TRANS_BACK_TO_MAIN, NULL);
 }    
+
+void scrprocessprbuttonclicked(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_PROCESS_PR_BUTTON_CLICKED, NULL);
+}    
+void scrprocessstbuttonclicked(lv_event_t * e) {
+    hsm_dispatch((hsm_t *)&device, HEVT_PROCESS_ST_BUTTON_CLICKED, NULL);
+}

@@ -80,11 +80,10 @@ typedef enum {
 } timer_state_t;
 
 typedef struct {
-    TimerHandle_t handle;
+    esp_timer_handle_t handle;
     void (*callback)(void*);
     void* arg;
-    volatile timer_state_t state; 
-    SemaphoreHandle_t mutex; 
+    volatile uint8_t active;
 } esp32_timer_t;
 
 typedef struct {
@@ -174,6 +173,9 @@ typedef enum {
     HEVT_MANUAL2_SELECT_SLOT4,
     HEVT_MANUAL2_SELECT_SLOT5,
 
+    HEVT_PROCESS_PR_BUTTON_CLICKED,
+    HEVT_PROCESS_ST_BUTTON_CLICKED,
+    
     HEVT_TIMER_LOADING,
     HEVT_TIMER_UPDATE,
     HEVT_TIMER_CLOCK,

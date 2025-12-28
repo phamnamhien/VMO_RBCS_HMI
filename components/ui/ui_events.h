@@ -12,6 +12,9 @@ extern "C" {
 
 void fnscrmainbatterybuttonclicked(lv_event_t * e);
 void fnscrmainmanualbuttonclicked(lv_event_t * e);
+void backtomainscrevt(lv_event_t * e);
+void scrprocessprbuttonclicked(lv_event_t * e);
+void scrprocessstbuttonclicked(lv_event_t * e);
 void fnscrmanual1selectbat1(lv_event_t * e);
 void fnscrmanual1selectbat2(lv_event_t * e);
 void fnscrmanual1selectslot1(lv_event_t * e);

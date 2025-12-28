@@ -87,7 +87,7 @@
  * Default: 4
  */
 #ifndef HSM_CFG_MAX_TIMERS
-#define HSM_CFG_MAX_TIMERS 4
+#define HSM_CFG_MAX_TIMERS 8
 #endif
 
 #endif /* HSM_CFG_USE_KCONFIG */

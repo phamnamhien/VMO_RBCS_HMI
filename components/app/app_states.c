@@ -1,4 +1,5 @@
 #include "app_states.h"
+#include "esp_timer.h"
 
 static const char* TAG = "HSM";
 
@@ -13,7 +14,7 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
 static hsm_event_t app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data);
 
 
-static void esp32_timer_callback(TimerHandle_t xTimer);
+static void esp32_timer_callback(void* arg);
 static void* esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_t repeat);
 static void esp32_timer_stop(void* timer_handle);
 static uint32_t esp32_timer_get_ms(void);
@@ -72,6 +73,7 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
         case HSM_EVENT_EXIT:
             ESP_LOGI(TAG, "Loading: EXIT");
             loading_count = 0;
+            hsm_timer_stop(timer_loading);
             break;
             
         case HEVT_TIMER_LOADING:
@@ -130,7 +132,7 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             ESP_LOGI(TAG, "Entered Main State");
             break;
         case HSM_EVENT_EXIT: 
-
+            hsm_timer_stop(timer_update);
             break;
         case HEVT_TIMER_UPDATE:
             bool slots[5] = {
@@ -182,7 +184,7 @@ static hsm_event_t app_state_detail_handler(hsm_t* hsm, hsm_event_t event, void*
             ESP_LOGI(TAG, "Entered Detail State");
             break;
         case HSM_EVENT_EXIT: 
-
+            hsm_timer_stop(timer_update);
             break;
         case HEVT_TIMER_UPDATE:
             scrdetaildataslottitlelabel_update(me->present_slot_display);
@@ -244,7 +246,8 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
             hsm_timer_start(timer_update);
             ESP_LOGI(TAG, "Entered Manual2 State");
             break;
-        case HSM_EVENT_EXIT: 
+        case HSM_EVENT_EXIT:    
+            hsm_timer_stop(timer_update);
             break;
         case HEVT_TIMER_UPDATE:
         bool slots[5] = {
@@ -326,24 +329,20 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 
 static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
+    static bool is_paused = false;
     switch (event) {
         case HSM_EVENT_ENTRY: 
             hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
             hsm_timer_start(timer_update);
-            // hsm_timer_create(&timer_clock, hsm, HEVT_TIMER_CLOCK, 1000, HSM_TIMER_PERIODIC);
-            // hsm_timer_start(timer_clock);
+            hsm_timer_create(&timer_clock, hsm, HEVT_TIMER_CLOCK, 1000, HSM_TIMER_PERIODIC);
+            hsm_timer_start(timer_clock);
             break;
         case HSM_EVENT_EXIT: 
-
+            hsm_timer_stop(timer_update); 
+            hsm_timer_stop(timer_clock);
+            is_paused = false;
             break;
         case HEVT_TIMER_UPDATE:
-
-            me->time_run++;
-            ESP_LOGD(TAG, "Process Time Run: %d seconds", me->time_run);
-            if(me->time_run > BMS_RUN_TIMEOUT) {
-                // Fault
-            }
-
             scrprocessslotssttcontainer_update(me->bms_info.slot_state, me->bms_data);
             scrprocessruntimevalue_update(me->time_run);
             scrprocessstatevalue_update(me->bms_info.swap_state);
@@ -358,11 +357,40 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
             }
             break;
         case HEVT_TIMER_CLOCK:
-            // me->time_run++;
-            // ESP_LOGD(TAG, "Process Time Run: %d seconds", me->time_run);
-            // if(me->time_run > BMS_RUN_TIMEOUT) {
-            //     // Fault
-            // }
+            me->time_run++;
+            ESP_LOGD(TAG, "Process Time Run: %d seconds", me->time_run);
+            if(me->time_run > BMS_RUN_TIMEOUT) {
+                // Fault
+            }
+            break;
+        case HEVT_PROCESS_PR_BUTTON_CLICKED:
+            lv_obj_t* button = ui_comp_get_child(ui_scrprocessprcontainer, UI_COMP_BUTTONCONTAINER_BUTTON);
+            lv_obj_t* label = ui_comp_get_child(ui_scrprocessprcontainer, UI_COMP_BUTTONCONTAINER_BUTONLABEL);
+            if(!is_paused) {
+                // Pause
+                is_paused = true;
+                lv_obj_set_style_bg_color(button, lv_color_hex(0x1A6538), LV_PART_MAIN);
+                lv_label_set_text(label, "resume");
+                hsm_timer_stop(timer_clock);
+            } else {
+                // Resume
+                is_paused = false;
+                lv_obj_set_style_bg_color(button, lv_color_hex(0x2095F6), LV_PART_MAIN);
+                lv_label_set_text(label, "pause");
+                hsm_timer_start(timer_clock);
+            }
+
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_PAUSE_RESUME_REG, 
+                        is_paused);
+            break;
+        case HEVT_PROCESS_ST_BUTTON_CLICKED:
+            modbus_master_write_single_register(
+                        APP_MODBUS_SLAVE_ID, 
+                        MB_COMMON_E_STOP_REG, 
+                        1);
+            hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);            
             break;
         case HEVT_TRANS_BACK_TO_MAIN:
             hsm_transition((hsm_t *)me, &app_state_main, NULL, NULL);
@@ -390,18 +418,12 @@ app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 }
 
 
+
+
 static void 
-esp32_timer_callback(TimerHandle_t xTimer) {
-    esp32_timer_t* timer = (esp32_timer_t*)pvTimerGetTimerID(xTimer);
-    if (timer == NULL) return;
-    
-    // ✅ KHÔNG take mutex - chỉ check state
-    if (timer->state != TIMER_STATE_ACTIVE) {
-        return;
-    }
-    
-    // ✅ GỌI CALLBACK TRỰC TIẾP (không qua mutex)
-    if (timer->callback) {
+esp32_timer_callback(void* arg) {
+    esp32_timer_t* timer = (esp32_timer_t*)arg;
+    if (timer && timer->active && timer->callback) {
         timer->callback(timer->arg);
     }
 }
@@ -411,72 +433,63 @@ esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_
     esp32_timer_t* timer = malloc(sizeof(esp32_timer_t));
     if (!timer) return NULL;
     
-    timer->mutex = xSemaphoreCreateMutex();
-    if (!timer->mutex) {
-        free(timer);
-        return NULL;
-    }
-    
     timer->callback = callback;
     timer->arg = arg;
-    timer->state = TIMER_STATE_ACTIVE;
+    timer->active = 1;
     
-    // ✅ TẠO TÊN DUY NHẤT CHO MỖI TIMER
     static uint32_t timer_id = 0;
     char timer_name[16];
     snprintf(timer_name, sizeof(timer_name), "hsm_%lu", timer_id++);
     
-    timer->handle = xTimerCreate(timer_name,  // ✅ TÊN KHÁC NHAU
-                                  pdMS_TO_TICKS(period_ms),
-                                  repeat ? pdTRUE : pdFALSE, 
-                                  timer, esp32_timer_callback);
-
-    if (!timer->handle || xTimerStart(timer->handle, 0) != pdPASS) {
-        if (timer->handle) xTimerDelete(timer->handle, 0);
-        vSemaphoreDelete(timer->mutex);
+    esp_timer_create_args_t timer_args = {
+        .callback = esp32_timer_callback,
+        .arg = timer,
+        .name = timer_name,
+        .dispatch_method = ESP_TIMER_TASK
+    };
+    
+    if (esp_timer_create(&timer_args, &timer->handle) != ESP_OK) {
         free(timer);
         return NULL;
     }
     
-    ESP_LOGD(TAG, "Timer started: %s (%p), period=%lums", timer_name, timer, period_ms);
+    esp_err_t err;
+    if (repeat) {
+        err = esp_timer_start_periodic(timer->handle, period_ms * 1000ULL);
+    } else {
+        err = esp_timer_start_once(timer->handle, period_ms * 1000ULL);
+    }
+    
+    if (err != ESP_OK) {
+        esp_timer_delete(timer->handle);
+        free(timer);
+        return NULL;
+    }
+    
+    ESP_LOGI(TAG, "✅ Timer started: %s, period=%lums, repeat=%d", timer_name, period_ms, repeat);
     return timer;
 }
 
 static void 
 esp32_timer_stop(void* timer_handle) {
     esp32_timer_t* timer = (esp32_timer_t*)timer_handle;
-    if (timer == NULL) return;
+    if (!timer) return;
     
-    ESP_LOGD(TAG, "Timer stopping: %p", timer);
+    ESP_LOGI(TAG, "🛑 Timer stopping: %p", timer);
     
-    // ✅ ĐÁNH DẤU DELETING TRƯỚC
-    timer->state = TIMER_STATE_DELETING;
-    timer->callback = NULL;  // ✅ NULL ngay để callback không chạy
+    timer->active = 0;
+    timer->callback = NULL;
     
-    // ✅ STOP timer
     if (timer->handle) {
-        xTimerStop(timer->handle, pdMS_TO_TICKS(100));
+        esp_timer_stop(timer->handle);
+        esp_timer_delete(timer->handle);
     }
     
-    // ✅ ĐỢI callback chạy xong (nếu đang chạy)
-    vTaskDelay(pdMS_TO_TICKS(50));
-    
-    // ✅ XÓA TIMER
-    if (timer->handle) {
-        xTimerDelete(timer->handle, pdMS_TO_TICKS(100));
-        timer->handle = NULL;
-    }
-    
-    // ✅ XÓA MUTEX và FREE
-    if (timer->mutex) {
-        vSemaphoreDelete(timer->mutex);
-    }
     free(timer);
-    
-    ESP_LOGD(TAG, "Timer deleted: %p", timer);
+    ESP_LOGI(TAG, "✅ Timer deleted");
 }
 
 static uint32_t 
 esp32_timer_get_ms(void) {
-    return xTaskGetTickCount() * portTICK_PERIOD_MS;
+    return esp_timer_get_time() / 1000ULL;
 }
