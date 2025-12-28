@@ -319,3 +319,29 @@ bool
 modbus_master_is_running(void) {
     return modbus_master_ctx.running;
 }
+
+esp_err_t
+modbus_master_reset(void) {
+    if (!modbus_master_ctx.initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    esp_err_t err = modbus_master_lock();
+    if (err != ESP_OK) {
+        return err;
+    }
+
+    // Stop và restart stack
+    mbc_master_stop(modbus_master_ctx.master_handle);
+    vTaskDelay(pdMS_TO_TICKS(100));
+    
+    err = mbc_master_start(modbus_master_ctx.master_handle);
+    
+    modbus_master_unlock();
+    
+    if (err == ESP_OK) {
+        ESP_LOGI(TAG, "Modbus stack reset successfully");
+    }
+    
+    return err;
+}

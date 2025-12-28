@@ -148,11 +148,11 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
                 me->bms_data[4].stack_volt/10.0
             };
             float percents[5] = {
-                me->bms_data[0].pin_percent/10.0, 
-                me->bms_data[1].pin_percent/10.0, 
-                me->bms_data[2].pin_percent/10.0, 
-                me->bms_data[3].pin_percent/10.0, 
-                me->bms_data[4].pin_percent/10.0
+                me->bms_data[0].pin_percent, 
+                me->bms_data[1].pin_percent, 
+                me->bms_data[2].pin_percent, 
+                me->bms_data[3].pin_percent, 
+                me->bms_data[4].pin_percent
             };
             scrmainbatslotscontainer_update(slots, voltages, percents);
             scrmainlasttimelabel_update(me->last_time_run);
@@ -201,6 +201,7 @@ app_state_manual1_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY: 
+        ESP_LOGI(TAG, "Entered Manual1 State");
             break;
         case HSM_EVENT_EXIT: 
             break;
@@ -222,9 +223,36 @@ static hsm_event_t
 app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
-        case HSM_EVENT_ENTRY: 
+        case HSM_EVENT_ENTRY:   
+            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
+            hsm_timer_start(timer_update);
+            ESP_LOGI(TAG, "Entered Manual2 State");
             break;
         case HSM_EVENT_EXIT: 
+            break;
+        case HEVT_TIMER_UPDATE:
+        bool slots[5] = {
+                me->bms_info.slot_state[0], 
+                me->bms_info.slot_state[1], 
+                me->bms_info.slot_state[2], 
+                me->bms_info.slot_state[3], 
+                me->bms_info.slot_state[4]
+            };
+            float voltages[5] = {
+                me->bms_data[0].stack_volt/10.0, 
+                me->bms_data[1].stack_volt/10.0, 
+                me->bms_data[2].stack_volt/10.0, 
+                me->bms_data[3].stack_volt/10.0, 
+                me->bms_data[4].stack_volt/10.0
+            };
+            float percents[5] = {
+                me->bms_data[0].pin_percent, 
+                me->bms_data[1].pin_percent, 
+                me->bms_data[2].pin_percent, 
+                me->bms_data[3].pin_percent, 
+                me->bms_data[4].pin_percent
+            };
+            scrmanual2slotinfolabel_update(slots, voltages, percents);
             break;
         case HEVT_MANUAL2_SELECT_SLOT1:
             me->bms_info.manual_swap_request = (me->manual_robot_bat_select - 1)*5 + 1;

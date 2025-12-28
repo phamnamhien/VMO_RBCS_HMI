@@ -126,6 +126,13 @@ esp_err_t modbus_master_write_single_coil(uint8_t slave_addr, uint16_t coil_addr
  * @return true if running
  */
 bool modbus_master_is_running(void);
+/**
+ * @brief Reset Modbus Master stack (khi mất kết nối)
+ * 
+ * @return ESP_OK if successful
+ */
+esp_err_t modbus_master_reset(void);
+
 
 #ifdef __cplusplus
 }
