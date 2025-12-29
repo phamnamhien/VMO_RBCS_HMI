@@ -48,16 +48,6 @@ modbus_data_received(uint8_t slave_addr, uint8_t reg_type, uint16_t reg_addr, ui
 
 static void
 modbus_battery_sync_data(app_state_hsm_t* me, uint16_t* dat, uint8_t slot_index) {
-    // ✅ THÊM LOG ĐỂ KIỂM TRA
-    ESP_LOGI(TAG, "📥 Syncing data TO slot_index=%d", slot_index);
-    ESP_LOGI(TAG, "   Raw data[0]=%d, data[8]=%d", dat[0], dat[8]);
-
-    // ✅ KIỂM TRA THỨ TỰ: Slot 1 phải có volt thấp nhất
-    uint16_t expected_min = (slot_index + 1) * 100; // 100, 200, 300, 400, 500
-    if (dat[8] != expected_min) {
-        ESP_LOGW(TAG, "⚠️  Data mismatch! Expected ~%d but got %d for slot %d", expected_min, dat[8], slot_index + 1);
-    }
-
     me->bms_data[slot_index].bms_state = dat[0];
     me->bms_data[slot_index].ctrl_request = dat[1];
     me->bms_data[slot_index].ctrl_response = dat[2];
@@ -103,14 +93,6 @@ modbus_battery_sync_data(app_state_hsm_t* me, uint16_t* dat, uint8_t slot_index)
 
     me->bms_data[slot_index].cell_resistance = dat[45];
     me->bms_data[slot_index].single_parallel = dat[49];
-
-    // ✅ IN RA SAU KHI SYNC
-    ESP_LOGI(TAG, "   Stored in bms_data[%d].stack_volt = %d", slot_index, me->bms_data[slot_index].stack_volt);
-
-    // ✅ SAU ĐÓ MỚI VALIDATION
-    if (dat[8] == 0) {
-        ESP_LOGW(TAG, "⚠️  stack_volt = 0 for slot %d", slot_index);
-    }
 }
 
 static void
@@ -248,7 +230,7 @@ static void
 lcd_lvgl_flush_cb(lv_disp_drv_t* drv, const lv_area_t* area, lv_color_t* color_map) {
     esp_lcd_panel_handle_t panel_handle = (esp_lcd_panel_handle_t)drv->user_data;
     int offsetx1 = area->x1;
-    int offsety1 = area->y1;
+    int offsety1 = area->y1;  
     int offsetx2 = area->x2;
     int offsety2 = area->y2;
 
