@@ -22,15 +22,15 @@ extern void ui_event_scrmanual2backtomainbutton(lv_event_t * e);
 extern lv_obj_t * ui_scrmanual2backtomainbutton;
 extern lv_obj_t * ui_scrmanual2btgrpcontainer;
 extern lv_obj_t * ui_chooses1container;
-extern void ui_event_chooses1container_button(lv_event_t * e);
+extern void ui_event_chooses1container_chooses1container_slot1button(lv_event_t * e);
 extern lv_obj_t * ui_chooses2container;
-extern void ui_event_chooses2container_button(lv_event_t * e);
+extern void ui_event_chooses2container_chooses2container_slot2button(lv_event_t * e);
 extern lv_obj_t * ui_chooses3container;
-extern void ui_event_chooses3container_button(lv_event_t * e);
+extern void ui_event_chooses3container_chooses3container_slot3button(lv_event_t * e);
 extern lv_obj_t * ui_chooses4container;
-extern void ui_event_chooses4container_button(lv_event_t * e);
+extern void ui_event_chooses4container_chooses4container_slot4button(lv_event_t * e);
 extern lv_obj_t * ui_chooses5container;
-extern void ui_event_chooses5container_button(lv_event_t * e);
+extern void ui_event_chooses5container_chooses5container_slot5button(lv_event_t * e);
 extern lv_obj_t * ui_scrmanual2slotinfolabel;
 // CUSTOM VARIABLES
 

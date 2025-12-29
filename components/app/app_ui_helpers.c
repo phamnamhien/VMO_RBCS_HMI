@@ -191,7 +191,7 @@ void scrdetailslotssttcontainer_update(
         int width, height;
 
         if (state[i] == BMS_SLOT_CONNECTED) {
-            if (data[i].faults != 0 || data[i].alarm_bits != 0) {
+            if (data[i].faults != 0) {
                 color = lv_color_hex(0xEE3A29); // Đỏ - lỗi
             } else {
                 color = lv_color_hex(0x46A279); // Xanh - bình thường
@@ -436,7 +436,7 @@ void scrprocessslotssttcontainer_update(
         lv_color_t color;
 
         if (state[i] == BMS_SLOT_CONNECTED) {
-            if (data[i].faults != 0 || data[i].alarm_bits != 0) {
+            if (data[i].faults != 0) {
                 color = lv_color_hex(0xEE3A29);
             } else {
                 color = lv_color_hex(0x46A279);

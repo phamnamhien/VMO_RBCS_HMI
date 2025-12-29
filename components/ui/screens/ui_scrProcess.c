@@ -195,8 +195,6 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_y(ui_scrprocessslotssttslot1panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot1panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot1panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot1panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot1panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_set_style_shadow_color(ui_scrprocessslotssttslot1panel, lv_color_hex(0x000000),
                                   LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
@@ -209,8 +207,6 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_y(ui_scrprocessslotssttslot2panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot2panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot2panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot2panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot2panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_scrprocessslotssttslot3panel = lv_obj_create(ui_scrprocessslotssttcontainer);
     lv_obj_set_width(ui_scrprocessslotssttslot3panel, 20);
@@ -219,8 +215,6 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_y(ui_scrprocessslotssttslot3panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot3panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot3panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot3panel, lv_color_hex(0x46A279), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot3panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_scrprocessslotssttslot4panel = lv_obj_create(ui_scrprocessslotssttcontainer);
     lv_obj_set_width(ui_scrprocessslotssttslot4panel, 20);
@@ -229,8 +223,6 @@ void ui_scrProcess_screen_init(void)
     lv_obj_set_y(ui_scrprocessslotssttslot4panel, -12);
     lv_obj_set_align(ui_scrprocessslotssttslot4panel, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_scrprocessslotssttslot4panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_scrprocessslotssttslot4panel, lv_color_hex(0xEE3A29), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_scrprocessslotssttslot4panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_scrprocessslotssttslot5panel = lv_obj_create(ui_scrprocessslotssttcontainer);
     lv_obj_set_width(ui_scrprocessslotssttslot5panel, 20);

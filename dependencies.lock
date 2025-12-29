@@ -1,4 +1,22 @@
 dependencies:
+  HSM:
+    component_hash: b8dc66acc44551db7c97ef785616a5fd547d61a7740202fae9a53def6664a98f
+    dependencies:
+    - name: idf
+      version: '>=4.4'
+    source:
+      git: https://github.com/phamnamhien/HSM.git
+      path: .
+      type: git
+    targets:
+    - esp32
+    - esp32s2
+    - esp32s3
+    - esp32c3
+    - esp32c2
+    - esp32c6
+    - esp32h2
+    version: 449fdc4144c4d6878c7423aeb835a61d20de7aac
   espressif/esp-modbus:
     component_hash: f8d6417c4eaf86ba927d3922dff13bd20b15ff8356586062505ee56e713848c6
     dependencies:
@@ -44,30 +62,12 @@ dependencies:
       registry_url: https://components.espressif.com/
       type: service
     version: 8.3.11
-  phamnamhien/HSM:
-    component_hash: 6c304327c4970757bde32f95897e58b3a63e795e4d1d9e78c2b989f11708465d
-    dependencies:
-    - name: idf
-      version: '>=4.4'
-    source:
-      git: https://github.com/phamnamhien/HSM.git
-      path: .
-      type: git
-    targets:
-    - esp32
-    - esp32s2
-    - esp32s3
-    - esp32c3
-    - esp32c2
-    - esp32c6
-    - esp32h2
-    version: f62738dc82cf1d95737d6bf513017de2cfca77bc
 direct_dependencies:
+- HSM
 - espressif/esp-modbus
 - espressif/esp_lcd_touch_gt911
 - idf
 - lvgl/lvgl
-- phamnamhien/HSM
-manifest_hash: 46bca8fc064927de5dad12caf6d33436e55fff83ebe373d2a00d88dc32441af9
+manifest_hash: c765850e2d70d136d913689e26b2dc88602e22f8601501b94bc77d9e17fcf451
 target: esp32s3
 version: 2.0.0

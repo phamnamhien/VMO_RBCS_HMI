@@ -2275,6 +2275,13 @@ CONFIG_WIFI_PROV_STA_ALL_CHANNEL_SCAN=y
 # end of Wi-Fi Provisioning Manager
 
 #
+# HSM Configuration
+#
+CONFIG_HSM_MAX_DEPTH=8
+CONFIG_HSM_HISTORY=y
+# end of HSM Configuration
+
+#
 # Modbus configuration
 #
 CONFIG_FMB_COMM_MODE_TCP_EN=y
@@ -2629,13 +2636,6 @@ CONFIG_LV_USE_SNAPSHOT=y
 # CONFIG_LV_USE_DEMO_MUSIC is not set
 # end of Demos
 # end of LVGL configuration
-
-#
-# HSM Configuration
-#
-CONFIG_HSM_MAX_DEPTH=8
-CONFIG_HSM_HISTORY=y
-# end of HSM Configuration
 # end of Component config
 
 # CONFIG_IDF_EXPERIMENTAL_FEATURES is not set

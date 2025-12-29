@@ -14,10 +14,9 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
 static hsm_event_t app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data);
 
 
-static void esp32_timer_callback(void* arg);
-static void* esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_t repeat);
-static void esp32_timer_stop(void* timer_handle);
-static uint32_t esp32_timer_get_ms(void);
+static void timer_loading_callback(void* arg);
+static void timer_update_callback(void* arg);
+static void timer_clock_callback(void* arg);
 
 /* States */
 static hsm_state_t app_state_loading;
@@ -31,12 +30,33 @@ static hsm_state_t app_state_process;
 static hsm_state_t app_state_setting;
 
 /* Timers */
-static hsm_timer_t *timer_loading;
-static hsm_timer_t *timer_update;
-static hsm_timer_t *timer_clock;
+
+esp_timer_handle_t timer_loading;
+esp_timer_handle_t timer_update;
+esp_timer_handle_t timer_clock;
 
 void
 app_state_hsm_init(app_state_hsm_t* me) {
+    /* Create timer */
+    const esp_timer_create_args_t timer_loading_args = {
+        .callback = &timer_loading_callback,
+        .arg = me,
+        .name = "t_loading"
+    };
+    const esp_timer_create_args_t timer_update_args = {
+        .callback = &timer_update_callback,
+        .arg = me,
+        .name = "t_update"
+    };
+    const esp_timer_create_args_t timer_clock_args = {
+        .callback = &timer_clock_callback,
+        .arg = me,
+        .name = "t_clock"
+    };
+    ESP_ERROR_CHECK(esp_timer_create(&timer_loading_args, &timer_loading));
+    ESP_ERROR_CHECK(esp_timer_create(&timer_update_args, &timer_update));
+    ESP_ERROR_CHECK(esp_timer_create(&timer_clock_args, &timer_clock));
+
     /* Create states */
     hsm_state_create(&app_state_loading, "s_loading", app_state_loading_handler, NULL);
     hsm_state_create(&app_state_main_common, "s_main_com", app_state_main_common_handler, NULL);
@@ -47,14 +67,8 @@ app_state_hsm_init(app_state_hsm_t* me) {
     hsm_state_create(&app_state_process, "s_process", app_state_process_handler, &app_state_main_common);
     hsm_state_create(&app_state_setting, "s_setting", app_state_setting_handler, NULL);
 
-    static const hsm_timer_if_t esp32_timer_if = {
-        .start = esp32_timer_start,
-        .stop = esp32_timer_stop,
-        .get_ms = esp32_timer_get_ms
-    };
-
     /* Init HSM */
-    hsm_init((hsm_t *)me, "app", &app_state_loading, &esp32_timer_if);
+    hsm_init((hsm_t *)me, "app", &app_state_loading);
 }
 
 static hsm_event_t
@@ -65,15 +79,14 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     switch (event) {
         case HSM_EVENT_ENTRY: 
             loading_count = 0; 
-            hsm_timer_create(&timer_loading, hsm, HEVT_TIMER_LOADING, LOADING_1PERCENT_MS, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_loading);
+            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_loading, LOADING_1PERCENT_MS*1000));
             ESP_LOGI(TAG, "Loading: ENTRY");
             break;
             
         case HSM_EVENT_EXIT:
             ESP_LOGI(TAG, "Loading: EXIT");
             loading_count = 0;
-            hsm_timer_stop(timer_loading);
+            ESP_ERROR_CHECK(esp_timer_stop(timer_loading));
             break;
             
         case HEVT_TIMER_LOADING:
@@ -125,14 +138,13 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_load_screen(ui_scrMain);
-            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_update);
+            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
             me->last_time_run = me->time_run;
             me->time_run = 0;
             ESP_LOGI(TAG, "Entered Main State");
             break;
         case HSM_EVENT_EXIT: 
-            hsm_timer_stop(timer_update);
+            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
             break;
         case HEVT_TIMER_UPDATE:
             bool slots[5] = {
@@ -179,12 +191,11 @@ static hsm_event_t app_state_detail_handler(hsm_t* hsm, hsm_event_t event, void*
     
     switch (event) {
         case HSM_EVENT_ENTRY:
-            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_update);
+            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
             ESP_LOGI(TAG, "Entered Detail State");
             break;
         case HSM_EVENT_EXIT: 
-            hsm_timer_stop(timer_update);
+            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
             break;
         case HEVT_TIMER_UPDATE:
             scrdetaildataslottitlelabel_update(me->present_slot_display);
@@ -242,12 +253,11 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:   
-            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_update);
+            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
             ESP_LOGI(TAG, "Entered Manual2 State");
             break;
         case HSM_EVENT_EXIT:    
-            hsm_timer_stop(timer_update);
+            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
             break;
         case HEVT_TIMER_UPDATE:
         bool slots[5] = {
@@ -332,14 +342,12 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
     static bool is_paused = false;
     switch (event) {
         case HSM_EVENT_ENTRY: 
-            hsm_timer_create(&timer_update, hsm, HEVT_TIMER_UPDATE, UPDATE_SCREEN_VALUE_MS, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_update);
-            hsm_timer_create(&timer_clock, hsm, HEVT_TIMER_CLOCK, 1000, HSM_TIMER_PERIODIC);
-            hsm_timer_start(timer_clock);
+            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
+            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_clock, 1000*1000));
             break;
         case HSM_EVENT_EXIT: 
-            hsm_timer_stop(timer_update); 
-            hsm_timer_stop(timer_clock);
+            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
+            ESP_ERROR_CHECK(esp_timer_stop(timer_clock));
             is_paused = false;
             break;
         case HEVT_TIMER_UPDATE:
@@ -371,13 +379,13 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
                 is_paused = true;
                 lv_obj_set_style_bg_color(button, lv_color_hex(0x1A6538), LV_PART_MAIN);
                 lv_label_set_text(label, "resume");
-                hsm_timer_stop(timer_clock);
+                ESP_ERROR_CHECK(esp_timer_stop(timer_clock));
             } else {
                 // Resume
                 is_paused = false;
                 lv_obj_set_style_bg_color(button, lv_color_hex(0x2095F6), LV_PART_MAIN);
                 lv_label_set_text(label, "pause");
-                hsm_timer_start(timer_clock);
+                ESP_ERROR_CHECK(esp_timer_start_periodic(timer_clock, 1000*1000));
             }
 
             modbus_master_write_single_register(
@@ -418,78 +426,16 @@ app_state_setting_handler(hsm_t* hsm, hsm_event_t event, void* data) {
 }
 
 
-
-
-static void 
-esp32_timer_callback(void* arg) {
-    esp32_timer_t* timer = (esp32_timer_t*)arg;
-    if (timer && timer->active && timer->callback) {
-        timer->callback(timer->arg);
-    }
+// Timer callback function
+static void timer_loading_callback(void* arg) {
+    hsm_t* me = (hsm_t *)arg;
+    hsm_dispatch(me, HEVT_TIMER_LOADING, NULL);
 }
-
-static void* 
-esp32_timer_start(void (*callback)(void*), void* arg, uint32_t period_ms, uint8_t repeat) {
-    esp32_timer_t* timer = malloc(sizeof(esp32_timer_t));
-    if (!timer) return NULL;
-    
-    timer->callback = callback;
-    timer->arg = arg;
-    timer->active = 1;
-    
-    static uint32_t timer_id = 0;
-    char timer_name[16];
-    snprintf(timer_name, sizeof(timer_name), "hsm_%lu", timer_id++);
-    
-    esp_timer_create_args_t timer_args = {
-        .callback = esp32_timer_callback,
-        .arg = timer,
-        .name = timer_name,
-        .dispatch_method = ESP_TIMER_TASK
-    };
-    
-    if (esp_timer_create(&timer_args, &timer->handle) != ESP_OK) {
-        free(timer);
-        return NULL;
-    }
-    
-    esp_err_t err;
-    if (repeat) {
-        err = esp_timer_start_periodic(timer->handle, period_ms * 1000ULL);
-    } else {
-        err = esp_timer_start_once(timer->handle, period_ms * 1000ULL);
-    }
-    
-    if (err != ESP_OK) {
-        esp_timer_delete(timer->handle);
-        free(timer);
-        return NULL;
-    }
-    
-    ESP_LOGI(TAG, "✅ Timer started: %s, period=%lums, repeat=%d", timer_name, period_ms, repeat);
-    return timer;
+static void timer_update_callback(void* arg) {
+    hsm_t* me = (hsm_t *)arg;
+    hsm_dispatch(me, HEVT_TIMER_UPDATE, NULL);
 }
-
-static void 
-esp32_timer_stop(void* timer_handle) {
-    esp32_timer_t* timer = (esp32_timer_t*)timer_handle;
-    if (!timer) return;
-    
-    ESP_LOGI(TAG, "🛑 Timer stopping: %p", timer);
-    
-    timer->active = 0;
-    timer->callback = NULL;
-    
-    if (timer->handle) {
-        esp_timer_stop(timer->handle);
-        esp_timer_delete(timer->handle);
-    }
-    
-    free(timer);
-    ESP_LOGI(TAG, "✅ Timer deleted");
-}
-
-static uint32_t 
-esp32_timer_get_ms(void) {
-    return esp_timer_get_time() / 1000ULL;
+static void timer_clock_callback(void* arg) {
+    hsm_t* me = (hsm_t *)arg;
+    hsm_dispatch(me, HEVT_TIMER_CLOCK, NULL);
 }

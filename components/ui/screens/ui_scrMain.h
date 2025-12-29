@@ -40,6 +40,7 @@ extern lv_obj_t * ui_scrmainstateofchargercontainer;
 extern lv_obj_t * ui_scrmainstateofchargerpanel;
 extern lv_obj_t * ui_scrmainstateofchargerlabel;
 extern lv_obj_t * ui_scrmainstateofchargervalue;
+extern void ui_event_scrmainbatslotscontainer(lv_event_t * e);
 extern lv_obj_t * ui_scrmainbatslotscontainer;
 extern lv_obj_t * ui_scrmainbatslotspanel;
 extern lv_obj_t * ui_scrmainbatslotstitlelabel;

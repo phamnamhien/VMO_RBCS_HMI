@@ -724,7 +724,10 @@ void fnscrmainbatterybuttonclicked(lv_event_t * e) {
     ESP_LOGI(TAG, "Main Goto Detail Screen");
     hsm_dispatch((hsm_t *)&device, HEVT_TRANS_MAIN_TO_DETAIL, NULL);
 }
-
+void scrmainbatslotsclicked(lv_event_t * e) {
+    ESP_LOGI(TAG, "Main Goto Detail Screen");
+    hsm_dispatch((hsm_t *)&device, HEVT_TRANS_MAIN_TO_DETAIL, NULL);
+}    
 void fnscrmainmanualbuttonclicked(lv_event_t * e) {
     ESP_LOGI(TAG, "Main Goto Manual 1 Screen");
     hsm_dispatch((hsm_t *)&device, HEVT_TRANS_MAIN_TO_MANUAL1, NULL);

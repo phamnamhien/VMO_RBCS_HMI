@@ -39,7 +39,7 @@ void ui_event_scrmanual2backtomainbutton(lv_event_t * e)
     }
 }
 
-void ui_event_chooses1container_button(lv_event_t * e)
+void ui_event_chooses1container_chooses1container_slot1button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -49,7 +49,7 @@ void ui_event_chooses1container_button(lv_event_t * e)
     }
 }
 
-void ui_event_chooses2container_button(lv_event_t * e)
+void ui_event_chooses2container_chooses2container_slot2button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -59,7 +59,7 @@ void ui_event_chooses2container_button(lv_event_t * e)
     }
 }
 
-void ui_event_chooses3container_button(lv_event_t * e)
+void ui_event_chooses3container_chooses3container_slot3button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -69,7 +69,7 @@ void ui_event_chooses3container_button(lv_event_t * e)
     }
 }
 
-void ui_event_chooses4container_button(lv_event_t * e)
+void ui_event_chooses4container_chooses4container_slot4button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -79,7 +79,7 @@ void ui_event_chooses4container_button(lv_event_t * e)
     }
 }
 
-void ui_event_chooses5container_button(lv_event_t * e)
+void ui_event_chooses5container_chooses5container_slot5button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -191,15 +191,15 @@ void ui_scrManualControl22_screen_init(void)
 
     lv_obj_add_event_cb(ui_scrmanual2backtomainbutton, ui_event_scrmanual2backtomainbutton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooses1container, UI_COMP_BUTTONCONTAINER_BUTTON),
-                        ui_event_chooses1container_button, LV_EVENT_ALL, NULL);
+                        ui_event_chooses1container_chooses1container_slot1button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooses2container, UI_COMP_BUTTONCONTAINER_BUTTON),
-                        ui_event_chooses2container_button, LV_EVENT_ALL, NULL);
+                        ui_event_chooses2container_chooses2container_slot2button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooses3container, UI_COMP_BUTTONCONTAINER_BUTTON),
-                        ui_event_chooses3container_button, LV_EVENT_ALL, NULL);
+                        ui_event_chooses3container_chooses3container_slot3button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooses4container, UI_COMP_BUTTONCONTAINER_BUTTON),
-                        ui_event_chooses4container_button, LV_EVENT_ALL, NULL);
+                        ui_event_chooses4container_chooses4container_slot4button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_comp_get_child(ui_chooses5container, UI_COMP_BUTTONCONTAINER_BUTTON),
-                        ui_event_chooses5container_button, LV_EVENT_ALL, NULL);
+                        ui_event_chooses5container_chooses5container_slot5button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrManualControl22, ui_event_scrManualControl22, LV_EVENT_ALL, NULL);
 
 }

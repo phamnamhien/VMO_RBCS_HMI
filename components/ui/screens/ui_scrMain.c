@@ -91,6 +91,15 @@ void ui_event_scrmainmanualbutton(lv_event_t * e)
     }
 }
 
+void ui_event_scrmainbatslotscontainer(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        scrmainbatslotsclicked(e);
+    }
+}
+
 // build funtions
 
 void ui_scrMain_screen_init(void)
@@ -534,6 +543,7 @@ void ui_scrMain_screen_init(void)
     lv_obj_add_event_cb(ui_scrmainbatterybutton, ui_event_scrmainbatterybutton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrmainsettingbutton, ui_event_scrmainsettingbutton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrmainmanualbutton, ui_event_scrmainmanualbutton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_scrmainbatslotscontainer, ui_event_scrmainbatslotscontainer, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_scrMain, ui_event_scrMain, LV_EVENT_ALL, NULL);
 
 }
