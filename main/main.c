@@ -789,7 +789,7 @@ void fnscrmanual1selectbat1(lv_event_t * e) {
     hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT1, NULL);
 }
 void fnscrmanual1selectbat2(lv_event_t * e) {
-    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT1, NULL);
+    hsm_dispatch((hsm_t *)&device, HEVT_MANUAL1_SELECT_BAT2, NULL);
 }
 void fnscrmanual1selectslot1(lv_event_t * e) {
     hsm_dispatch((hsm_t *)&device, HEVT_MANUAL2_SELECT_SLOT1, NULL);

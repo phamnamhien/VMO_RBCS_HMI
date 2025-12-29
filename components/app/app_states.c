@@ -143,11 +143,11 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
                 me->bms_info.slot_state[4]
             };
             float voltages[5] = {
-                me->bms_data[0].stack_volt/10.0, 
-                me->bms_data[1].stack_volt/10.0, 
-                me->bms_data[2].stack_volt/10.0, 
-                me->bms_data[3].stack_volt/10.0, 
-                me->bms_data[4].stack_volt/10.0
+                me->bms_data[0].stack_volt/1000.0, 
+                me->bms_data[1].stack_volt/1000.0, 
+                me->bms_data[2].stack_volt/1000.0, 
+                me->bms_data[3].stack_volt/1000.0, 
+                me->bms_data[4].stack_volt/1000.0
             };
             float percents[5] = {
                 me->bms_data[0].pin_percent, 
@@ -258,11 +258,11 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
                 me->bms_info.slot_state[4]
             };
             float voltages[5] = {
-                me->bms_data[0].stack_volt/10.0, 
-                me->bms_data[1].stack_volt/10.0, 
-                me->bms_data[2].stack_volt/10.0, 
-                me->bms_data[3].stack_volt/10.0, 
-                me->bms_data[4].stack_volt/10.0
+                me->bms_data[0].stack_volt/1000.0, 
+                me->bms_data[1].stack_volt/1000.0, 
+                me->bms_data[2].stack_volt/1000.0, 
+                me->bms_data[3].stack_volt/1000.0, 
+                me->bms_data[4].stack_volt/1000.0
             };
             float percents[5] = {
                 me->bms_data[0].pin_percent, 
