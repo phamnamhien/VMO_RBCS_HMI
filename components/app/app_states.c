@@ -53,9 +53,9 @@ app_state_hsm_init(app_state_hsm_t* me) {
         .arg = me,
         .name = "t_clock"
     };
-    ESP_ERROR_CHECK(esp_timer_create(&timer_loading_args, &timer_loading));
-    ESP_ERROR_CHECK(esp_timer_create(&timer_update_args, &timer_update));
-    ESP_ERROR_CHECK(esp_timer_create(&timer_clock_args, &timer_clock));
+    esp_timer_create(&timer_loading_args, &timer_loading);
+    esp_timer_create(&timer_update_args, &timer_update);
+    esp_timer_create(&timer_clock_args, &timer_clock);
 
     /* Create states */
     hsm_state_create(&app_state_loading, "s_loading", app_state_loading_handler, NULL);
@@ -79,14 +79,14 @@ app_state_loading_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     switch (event) {
         case HSM_EVENT_ENTRY: 
             loading_count = 0; 
-            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_loading, LOADING_1PERCENT_MS*1000));
+            esp_timer_start_periodic(timer_loading, LOADING_1PERCENT_MS*1000);
             ESP_LOGI(TAG, "Loading: ENTRY");
             break;
             
         case HSM_EVENT_EXIT:
             ESP_LOGI(TAG, "Loading: EXIT");
             loading_count = 0;
-            ESP_ERROR_CHECK(esp_timer_stop(timer_loading));
+            esp_timer_stop(timer_loading);
             break;
             
         case HEVT_TIMER_LOADING:
@@ -138,13 +138,13 @@ app_state_main_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     switch (event) {
         case HSM_EVENT_ENTRY:
             ui_load_screen(ui_scrMain);
-            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
+            esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000);
             me->last_time_run = me->time_run;
             me->time_run = 0;
             ESP_LOGI(TAG, "Entered Main State");
             break;
         case HSM_EVENT_EXIT: 
-            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
+            esp_timer_stop(timer_update);
             break;
         case HEVT_TIMER_UPDATE:
             bool slots[5] = {
@@ -191,11 +191,11 @@ static hsm_event_t app_state_detail_handler(hsm_t* hsm, hsm_event_t event, void*
     
     switch (event) {
         case HSM_EVENT_ENTRY:
-            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
+            esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000);
             ESP_LOGI(TAG, "Entered Detail State");
             break;
         case HSM_EVENT_EXIT: 
-            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
+            esp_timer_stop(timer_update);
             break;
         case HEVT_TIMER_UPDATE:
             scrdetaildataslottitlelabel_update(me->present_slot_display);
@@ -253,11 +253,11 @@ app_state_manual2_handler(hsm_t* hsm, hsm_event_t event, void* data) {
     app_state_hsm_t* me = (app_state_hsm_t *)hsm;
     switch (event) {
         case HSM_EVENT_ENTRY:   
-            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
+            esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000);
             ESP_LOGI(TAG, "Entered Manual2 State");
             break;
         case HSM_EVENT_EXIT:    
-            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
+            esp_timer_stop(timer_update);
             break;
         case HEVT_TIMER_UPDATE:
         bool slots[5] = {
@@ -342,12 +342,12 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
     static bool is_paused = false;
     switch (event) {
         case HSM_EVENT_ENTRY: 
-            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000));
-            ESP_ERROR_CHECK(esp_timer_start_periodic(timer_clock, 1000*1000));
+            esp_timer_start_periodic(timer_update, UPDATE_SCREEN_VALUE_MS*1000);
+            esp_timer_start_periodic(timer_clock, 1000*1000);
             break;
         case HSM_EVENT_EXIT: 
-            ESP_ERROR_CHECK(esp_timer_stop(timer_update));
-            ESP_ERROR_CHECK(esp_timer_stop(timer_clock));
+            esp_timer_stop(timer_update);
+            esp_timer_stop(timer_clock);
             is_paused = false;
             break;
         case HEVT_TIMER_UPDATE:
@@ -379,13 +379,13 @@ static hsm_event_t app_state_process_handler(hsm_t* hsm, hsm_event_t event, void
                 is_paused = true;
                 lv_obj_set_style_bg_color(button, lv_color_hex(0x1A6538), LV_PART_MAIN);
                 lv_label_set_text(label, "resume");
-                ESP_ERROR_CHECK(esp_timer_stop(timer_clock));
+                esp_timer_stop(timer_clock);
             } else {
                 // Resume
                 is_paused = false;
                 lv_obj_set_style_bg_color(button, lv_color_hex(0x2095F6), LV_PART_MAIN);
                 lv_label_set_text(label, "pause");
-                ESP_ERROR_CHECK(esp_timer_start_periodic(timer_clock, 1000*1000));
+                esp_timer_start_periodic(timer_clock, 1000*1000);
             }
 
             modbus_master_write_single_register(
